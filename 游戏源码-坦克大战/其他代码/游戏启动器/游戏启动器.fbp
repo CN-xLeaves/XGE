@@ -1,0 +1,45 @@
+[Project]
+Version=3
+Description=游戏启动器
+Api=fb (FreeBASIC),win (Windows)
+Grouping=1
+AddMainFiles=1
+AddModuleFiles=1
+ResExport=
+CompileIfNewer=0
+IncVersion=0
+RunCmd=0
+[Make]
+Module=Module Build,fbc -c
+Recompile=2
+Current=2
+1=Windows Console,fbc -s console
+2=Windows GUI,fbc -s gui
+Output=..\..\发布目录\xywhTank.exe
+Run=
+Delete=
+[TabOrder]
+TabOrder=1,2,3,4,5,6,7
+[File]
+1=游戏启动器.bas
+2=游戏启动器.rc
+3=Inc\FindFile.bi
+4=Inc\xywhBSMM.bi
+5=Inc\xywhGUI.bi
+6=Inc\xywhSDK.bi
+7=Inc\File.bi
+[BreakPoint]
+1=
+3=
+4=
+5=
+6=
+7=
+[FileInfo]
+1=0,51,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2=0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3=0,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+4=0,161,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+5=0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+6=0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+7=0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

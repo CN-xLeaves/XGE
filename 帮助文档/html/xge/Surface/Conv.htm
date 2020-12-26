@@ -1,0 +1,46 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Conv</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: 宋体, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+</style>
+
+</head>
+
+<body>
+<P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=1 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>xge::Surface* Conv(int b, int s = 1);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Function Conv(b As Integer, s As Integer = 1) As xge.Surface Ptr<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>功能</FONT></P></TD>
+    <TD width=680><FONT size=2><br>从当前图像创建一份拷贝，并转换为另一种颜色深度。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>b：</FONT></STRONG><br>新的颜色深度，可以指定为 
+      16 或 32，对应16位色深和32位色深。<br><br><STRONG><FONT color=#0000ff>s：</FONT></STRONG><br>是否反转颜色[RGB to 
+      BGR]。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>成功返回新的 Surface 对象指针，失败返回 NULL。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>最好能够在游戏开发阶段确定主要使用哪一种色深，色深变化涉及到资源能够使用，需要慎重考虑。<br>同色深图像工作效率更高，所以此函数仅在必要时使用[例如运行时调整屏幕色深后转换资源]。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>使用范例</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE></P></body></HTML>

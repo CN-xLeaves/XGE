@@ -1,0 +1,78 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>引擎初始化</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: 宋体, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+</style>
+
+</head>
+
+<body>
+<P><FONT size=3>引擎初始化定义表：</FONT></P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=1 width=800>
+  <TR>
+    <TD width=160>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=80>
+      <P align=center><FONT size=2>值</FONT></P></TD>
+    <TD width=560>
+      <P align=center><FONT size=2>解释</FONT></P></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_window</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_0</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;窗口模式</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_fullscreen</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_1</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;全屏模式</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_noswitch</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_4</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;不允许 Alt + Enter 切换窗口/全屏</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_noframe</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_8</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;窗口没有边框</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_postop</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_20</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;窗口置顶</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_alpha</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_40</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;使所有操作都支持Alpha通道</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_highpriority</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_80</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;更高的优先级给图像处理</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_sync</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_10000</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;是否开启垂直同步 (可以预防画面抖动、撕裂，牺牲性能提升画面稳定性)</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_nullaplha</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_20000</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;允许全透明绘制&nbsp;(将关闭透明通道检查)&nbsp;[目前只针对GdiSurface]</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_noinitbass</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_40000</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;不初始化声音模块 [要自己初始化bass，否则声音无法使用]</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_noinitgdi</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_80000</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;不初始化Gdi+模块 
+      [要自己初始化GDI+环境，否则xge.GdiSurface无法使用]</FONT></TD></TR>
+  <TR>
+    <TD width=160><FONT size=2>&nbsp;xge_noinitddt</FONT></TD>
+    <TD width=80><FONT size=2>&nbsp;H_100000</FONT></TD>
+    <TD width=560><FONT size=2>&nbsp;不按照场景大小初始化ddt模块 
+  [ddt需要单独初始化后才能使用]</FONT></TD></TR>
+</TABLE><br></TABLE></TABLE></body></HTML>

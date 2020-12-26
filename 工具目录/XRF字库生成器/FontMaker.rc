@@ -1,0 +1,277 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\FontMaker.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""afxres.rc""     // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\FontMaker.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAIN DIALOGEX 0, 0, 347, 253
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "xywhRasterFont Maker"
+FONT 9, "宋体", 400, 0, 0x86
+BEGIN
+    COMBOBOX        IDC_LIST_FONT_NAME,252,13,88,183,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT_FONT_SIZE,252,31,28,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN5,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,260,31,11,14
+    LTEXT           "字形:",IDC_STATIC,283,34,20,8
+    COMBOBOX        IDC_LIST_FONT_STYLE,306,31,34,51,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "标准字库",IDC_BTN_STD,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,249,163,48,10
+    COMBOBOX        IDC_LIST_CHARSET,252,147,88,30,CBS_DROPDOWNLIST | CBS_SORT | NOT WS_VISIBLE | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "用户定义",IDC_BTN_USER,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,249,178,48,10
+    PUSHBUTTON      "编辑码表",IDC_BTN_EDIT,273,190,67,13,NOT WS_VISIBLE
+    EDITTEXT        IDC_EDIT_WIDTH,303,85,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN1,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,322,85,11,14
+    EDITTEXT        IDC_EDIT_HEIGHT,303,121,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN3,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,322,121,11,14
+    EDITTEXT        IDC_EDIT_HORZ,299,161,30,14,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_VISIBLE
+    CONTROL         "",IDC_SPIN2,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | NOT WS_VISIBLE,329,161,11,14
+    EDITTEXT        IDC_EDIT_VERT,299,176,30,14,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_VISIBLE
+    CONTROL         "",IDC_SPIN4,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | NOT WS_VISIBLE,329,176,11,14
+    DEFPUSHBUTTON   "保存字库",IDC_BTN_SAVE,216,228,129,22
+    EDITTEXT        IDC_EDIT_INDEX,6,236,201,14,ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    CONTROL         "",IDC_SPIN6,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,199,235,11,14
+    GROUPBOX        "字体设置",IDC_STATIC,216,1,130,68
+    LTEXT           "字体：",IDC_STATIC,222,15,26,8
+    LTEXT           "字号：",IDC_STATIC,222,34,28,8
+    GROUPBOX        "点阵大小",IDC_STATIC,216,73,124,70
+    LTEXT           "UNICODE字符宽度：",IDC_STATIC,222,88,69,8
+    LTEXT           "字符高度：",IDC_STATIC,222,124,41,8
+    GROUPBOX        "预览",IDC_STATIC,1,1,211,251
+    CONTROL         "",IDC_BITMAP,"Static",SS_BLACKRECT | WS_TABSTOP,6,11,201,217
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,2,232,210,1
+    LTEXT           "编码：",IDC_STATIC,222,52,29,8
+    LTEXT           "ANSI字符宽度：",IDC_STATIC,222,105,57,8
+    EDITTEXT        IDC_EDIT_WIDTH2,303,103,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN7,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,322,103,11,14
+    COMBOBOX        IDC_LIST_CHARSETS,252,49,88,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_EDIT DIALOGEX 0, 0, 314, 189
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 9, "宋体", 400, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_EDIT_TABLE,0,0,314,164,ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | WS_VSCROLL,WS_EX_ACCEPTFILES
+    PUSHBUTTON      "载入文件",IDC_BTN_LOAD,2,169,50,14
+    PUSHBUTTON      "保存文件",IDC_BTN_SAVE,54,169,50,14
+    PUSHBUTTON      "插入数字",IDC_BTN_NUM,106,169,50,14
+    PUSHBUTTON      "插入字母",IDC_BTN_LETTER,158,169,50,14
+    PUSHBUTTON      "完成",IDOK,262,169,50,14
+    PUSHBUTTON      "文字去重",IDC_BTN_DEDUP,210,169,50,14
+END
+
+IDD_ABOUT DIALOGEX 0, 0, 197, 141
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 9, "宋体", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,72,120,50,14
+    CONTROL         IDB_BITMAP1,IDC_STATIC,"Static",SS_BITMAP,0,0,64,67
+    EDITTEXT        IDC_EDIT1,66,0,129,67,ES_MULTILINE | ES_READONLY | ES_WANTRETURN
+    EDITTEXT        IDC_EDIT2,0,69,195,47,ES_MULTILINE | ES_READONLY | ES_WANTRETURN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,2,0,0
+ PRODUCTVERSION 1,2,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "446252221@qq.com"
+            VALUE "FileDescription", "点阵字库生成工具"
+            VALUE "FileVersion", "1.2.0"
+            VALUE "InternalName", "FontMaker.exe"
+            VALUE "LegalCopyright", "星沉地动,保留所有权利。"
+            VALUE "OriginalFilename", "FontMaker.exe"
+            VALUE "ProductName", "FontMaker"
+            VALUE "ProductVersion", "1.2.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_MAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 340
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 246
+    END
+
+    IDD_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 307
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 182
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 190
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 134
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_MAIN DLGINIT
+BEGIN
+    IDC_LIST_FONT_STYLE, 0x403, 5, 0
+0xa3b3, 0xe6b9, "\000" 
+    IDC_LIST_FONT_STYLE, 0x403, 5, 0
+0xd6b4, 0xe5cc, "\000" 
+    IDC_LIST_FONT_STYLE, 0x403, 5, 0
+0xb1d0, 0xe5cc, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "res\\logo.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_MAIN AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_ABOUT AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\FontMaker.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "afxres.rc"     // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

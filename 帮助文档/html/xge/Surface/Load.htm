@@ -1,0 +1,44 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Load</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: 宋体, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+</style>
+
+</head>
+
+<body>
+<P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=1 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>int Load(char* f);<br>int Load(void* p, int s, int w, int h, int b);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Function Load(f As ZString Ptr) As Integer<br>Function Load(p As Any Ptr, s As Integer, w As Integer, h As Integer, b As Integer) As Integer<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>功能</FONT></P></TD>
+    <TD width=680><FONT size=2><br>释放旧的图像，并从文件中载入图像。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>f：</FONT></STRONG><br>从文件加载图像时指定图像路径。<br><br><STRONG><FONT color=#0000ff>p：</FONT></STRONG><br>从内存加载图像数据时指定图像数据的内存指针。<br><br><STRONG><FONT color=#0000ff>s：</FONT></STRONG><br>从内存加载图像数据时指定图像数据的大小。<br><br><STRONG><FONT color=#0000ff>w：</FONT></STRONG><br>要加载或创建的图像宽度。<br><br><STRONG><FONT color=#0000ff>h：</FONT></STRONG><br>要加载或创建的图像高度。<br><br><STRONG><FONT color=#0000ff>b：</FONT></STRONG><br>从内存加载图像数据时指定图像数据的位深。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>成功返回 -1[True] 失败返回 0[False]。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>第一个是从文件中加载图像，第二个从内存中加载图像。<br>从文件中加载图像目前仅支持bmp格式，如果需要加载其它格式图像，请使用 GdiSurface。<br>从内存中加载图像使用的并非bmp格式的内存首地址指针，而是BitMap数据指针。<br>如果需要从内存中直接加载文件首地址的方式加载图像，请使用GdiSurface。<br>相对于GdiSurface来讲，Surface类支持更多的渲染方式，以及更快的速度。<br>一个小技巧，使用GdiSurface加载图像后，绘制到Surface表面，SurfaceManage已内置此技巧。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>使用范例</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>参考开发包范例文件夹 3.绘制图片。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>参考开发包范例文件夹 3.绘制图片。</FONT></TD></TR></TABLE></P></body></HTML>

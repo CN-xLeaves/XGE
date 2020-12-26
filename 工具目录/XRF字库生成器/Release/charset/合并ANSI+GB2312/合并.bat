@@ -1,0 +1,1 @@
+copy /b ANSI.cst+GB2312_only.cst GB2312.cst

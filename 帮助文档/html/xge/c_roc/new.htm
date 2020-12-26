@@ -1,0 +1,45 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>构造 (初始化)</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=1 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>RenderObject();<br>RenderObject(xge::Surface* sf, int px, int py, int pl = 0, xge::Surface* p = NULL);<br>RenderObject(char* f, int px, int py, int pl = 0, xge::Surface* p = NULL);<br>RenderObject(int w, int h, int px, int py, int pl =                                                                                                                                             0, xge::Surface* p = NULL);<br>RenderObject(void* dp, int ds, int dw, int dh, int db, int px, int py, int pl = 0, xge::Surface* p = NULL);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Constructor()<br>Constructor(sf As xge.Surface Ptr, px As Integer, py As Integer, pl As Integer = 0, p As xge.Surface Ptr = NULL)<br>Constructor(f As ZString Ptr, px As Integer, py As Integer, pl As Integer = 0, p As xge.Surface Ptr = NULL)<br>Constructor(w As Integer, h As Integer, px 
+      As Integer, py As Integer, pl As Integer =       
+         0, p As xge.Surface Ptr =       
+                                    NULL)<br>Constructor(dp As Any Ptr, ds As Integer, dw As Integer, dh As Integer, db As Integer, px As Integer, py As Integer, pl As Integer = 0, p As xge.Surface Ptr = NULL)<br><br><STRONG><FONT color=#0000ff>SDK：</FONT></STRONG><br>SDK版本不支持构造特性。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>功能</FONT></P></TD>
+    <TD width=680><FONT size=2><br>渲染对象创建时初始化图像及其他参数。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>sf：</FONT></STRONG><br>直接使用现有的Surface时传入此参数。<br><br><STRONG><FONT color=#0000ff>f：</FONT></STRONG><br>从文件创建Surface并设置为渲染对象图像时传入此参数。<br><br><STRONG><FONT color=#0000ff>w、h：</FONT></STRONG><br>创建一个指定大小的空 Surface 并设置为渲染对象图像时传入此参数。<br><br><STRONG><FONT color=#0000ff>dp、ds、dw、dh、db：</FONT></STRONG><br>从内存中载入 bitmap 数据创建 Surface 并设置为渲染对象图像时传入此参数。<br><br><STRONG><FONT color=#0000ff>px：</FONT></STRONG><br>渲染位置横座标。<br><br><STRONG><FONT color=#0000ff>py：</FONT></STRONG><br>渲染位置纵座标。<br><br><STRONG><FONT color=#0000ff>pl：</FONT></STRONG><br>渲染优先级（相当于基类的 Priority 属性）。<br><br><STRONG><FONT color=#0000ff>p：</FONT></STRONG><br>渲染到父对象，传递为 
+      NULL 则渲染到主场景。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>第一种构造方式是空构造，初始化时不执行任何操作。<br>第二种构造方式使用现有的 Surface 作为渲染对象的图像，渲染对象释放时不会释放 
+      Surface。<br>第三种构造方式在渲染对象创建时载入一张图片作为渲染图像，渲染对象释放时会将这幅图像一起释放。<br>第四种构造方式在渲染对象创建时创建一幅空白图像作为渲染图像，渲染对象释放时会将这幅图像一起释放。<br>第五种构造方式在渲染对象创建时载入一幅内存图像作为渲染图像，渲染对象释放时会将这幅图像一起释放。<br>创建图像相关参数解释请参考：<A href="../Surface/new.htm" >xge::Surface.构造</A>。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>使用范例</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE></P></body></HTML>

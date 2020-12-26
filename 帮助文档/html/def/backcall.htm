@@ -1,0 +1,110 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>回调函数</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: 宋体, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+</style>
+
+</head>
+
+<body>
+<P><FONT size=3>场景回调函数 [与事件拦截器通用]：</FONT></P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=2 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>typedef int (CALLBACK *xge_screen_func)(int msg, int param, xge_event *eve);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Type xge_screen_func As Function(msg As Integer, param As Integer, eve As xge_event Ptr) As Integer<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>msg：</FONT></STRONG><br>消息ID。<br><br><STRONG><FONT color=#0000ff>param：</FONT></STRONG><br>附加参数。<br><br><STRONG><FONT color=#0000ff>eve：</FONT></STRONG><br>附加事件结构数据。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>返回 非0值 退出场景，返回值作为退出代码，返回 0 继续运行场景。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>无。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>回调模版</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE>
+<P><FONT size=3> 消息分发器回调函数：</FONT></P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=2 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>typedef void (CALLBACK *xge_event_func)(xge_event *eve);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Type xge_event_func As Sub(eve As xge_event)<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>eve：</FONT></STRONG><br>事件结构数据，消息分发器会根据这个事件来决定如何向场景发送消息。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>无返回值。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>无。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>回调模版</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE>
+<P><FONT size=3> 自定义混合回调函数：</FONT></P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=2 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>typedef void (CALLBACK *xge_blend_func)(void* SrcAddr, int SrcPitch, int SrcLineS, void* DstAddr, int DstPitch, int DstLineS, int w, int h, int bpp, int param);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Type xge_blend_func As Sub(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, bpp As Integer, param As Integer)<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>SrcAddr：</FONT></STRONG><br>源图像像素数据起始位置[渲染第一行开始的像素数据指针]。<br><br><STRONG><FONT color=#0000ff>SrcPitch：</FONT></STRONG><br>源图像每扫描行数据长度。<br><br><STRONG><FONT color=#0000ff>SrcLines：</FONT></STRONG><br>源图像每行数据起始偏移。<br><br><STRONG><FONT color=#0000ff>DstAddr：</FONT></STRONG><br>目标图像像素数据起始位置[渲染第一行开始的像素数据指针]。<br><br><STRONG><FONT color=#0000ff>DstPitch：</FONT></STRONG><br>目标图像没扫描行数据长度。<br><br><STRONG><FONT color=#0000ff>DstLines：</FONT></STRONG><br>目标图像每行数据起始偏移。<br><br><STRONG><FONT color=#0000ff>w：</FONT></STRONG><br>渲染的像素宽度。<br><br><STRONG><FONT color=#0000ff>h：</FONT></STRONG><br>渲染的像素高度。<br><br><STRONG><FONT color=#0000ff>bpp：</FONT></STRONG><br>混合时使用的色深，完善的混合应能够适应32位和16位两种色深。<br><br><STRONG><FONT color=#0000ff>param：</FONT></STRONG><br>自定义混合算法的附加参数。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>无返回值。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>无。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>回调模版</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE>
+<P><FONT size=3> 自定义像素混合回调函数：</FONT></P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=2 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>typedef unsigned int (CALLBACK *xge_custom_func)(unsigned int spix, unsigned int dpix, void* param);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Type xge_custom_func As Function(spix As UInteger, dpix As UInteger, param As Any Ptr) As UInteger<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>spix：</FONT></STRONG><br>源像素颜色值。<br><br><STRONG><FONT color=#0000ff>dpix：</FONT></STRONG><br>目标像素颜色值。<br><br><STRONG><FONT color=#0000ff>param：</FONT></STRONG><br>自定义像素混合算法的附加参数。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>返回混合后的像素颜色值。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>和Blend方式相比，自定义像素混合更简单易用，不涉及直接的内存操作。<br>也不需要关心16位和32位色深下算法适应的问题，但需要注意的是，这种方法相对效率也较低。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>回调模版</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE>
+</body></HTML>

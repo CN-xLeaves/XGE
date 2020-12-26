@@ -1,0 +1,42 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>构造 (初始化)</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: 宋体, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+</style>
+
+</head>
+
+<body>
+<P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=1 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>Sound();<br>Sound(int tpe, char* file, int flag, int max = 65535);<br>Sound(int tpe, void* addr, int size, int flag, int max = 65535);<br>Sound(char* url, int flag);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Constructor()<br>Constructor(tpe 
+      As Integer, file As ZString Ptr, flag As Integer, max As Integer = 
+                                65535)<br>Constructor(tpe As Integer, addr As Any Ptr, size As Integer, flag As Integer, max As Integer = 65535)<br>Constructor(url As ZString Ptr, flag As Integer)<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>功能</FONT></P></TD>
+    <TD width=680><FONT size=2><br>指定一种类初始化时声音加载方式<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>tpe：</FONT></STRONG><br>要载入的音频文件类型，分为：音乐、流媒体、小样三种，可参考：<A href="../../def/soundfile.htm">数据参考.音频文件类型</A>。<br><br><STRONG><FONT color=#0000ff>file：</FONT></STRONG><br>加载音频的文件路径。<br><br><STRONG><FONT color=#0000ff>flag：</FONT></STRONG><br>加载文件时，可以指定一组标记确定音频的特征，可参考：<A href="../../def/soundload.htm">数据参考.音频加载标记</A>。<br><br><STRONG><FONT color=#0000ff>max：</FONT></STRONG><br>仅加载小样时生效，指定小样最多可创建多少份副本。<br><br><STRONG><FONT color=#0000ff>addr：</FONT></STRONG><br>从内存加载音频文件时，指定内存地址。<br><br><STRONG><FONT color=#0000ff>size：</FONT></STRONG><br>从内存加载音频文件时，指定内存大小。<br><br><STRONG><FONT color=#0000ff>url：</FONT></STRONG><br>加载流媒体的url链接地址。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>第一种构造方式是空构造，初始化时不执行任何操作。<br>第二种构造方式会从文件中加载音频。<br>第三种构造方式会从内存中加载音频。<br>第四种构造方式会从在线url连接中加载流媒体音频。<br>更多信息请参照：<A href="Load.htm">Load</A>。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>使用范例</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE></P></body></HTML>

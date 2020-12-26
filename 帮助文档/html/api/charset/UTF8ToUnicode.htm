@@ -1,0 +1,46 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>UTF8ToUnicode</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: 宋体, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+</style>
+
+</head>
+
+<body>
+<P>
+<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 
+borderColor=#000000 cellPadding=1 width=800>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>定义</FONT></P></TD>
+    <TD width=680><FONT size=2><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>wchar_t* UTF8ToUnicode(char* UTF8Ptr, unsigned int UTF8Len = 0);<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>Function UTF8ToUnicode(UTF8Ptr As ZString Ptr,UTF8Len As UInteger) As Any Ptr<br><br><STRONG><FONT color=#0000ff>SDK_C：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_BASIC：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_Pascal：</FONT></STRONG><br>暂未公布<br><br><STRONG><FONT color=#0000ff>SDK_易语言：</FONT></STRONG><br>暂未公布<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>功能</FONT></P></TD>
+    <TD width=680><FONT size=2><br>将 Utf-8 字符串转换为&nbsp;Unicode 字符串。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>参数</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>UTF8Ptr：</FONT></STRONG><br> 
+      Utf-8&nbsp;字符串指针。<br><br><STRONG><FONT color=#0000ff>UTF8Len：</FONT></STRONG><br>字符串数据长度，传递 0 则自动计算字符串长度。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>返回值</FONT></P></TD>
+    <TD width=680><FONT size=2><br>返回转换后的字符串，如果转换失败，返回 NULL。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>补充说明</FONT></P></TD>
+    <TD width=680><FONT size=2><br>使用此函数转换字符集，返回的字符串指针不用时需要释放，否则会造成内存泄漏。<br><br></FONT></TD></TR>
+  <TR>
+    <TD width=120>
+      <P align=center><FONT size=2>使用范例</FONT></P></TD>
+    <TD width=680><FONT size=2><br><STRONG><FONT color=#0000ff>C++：</FONT></STRONG><br>无范例。<br><br><STRONG><FONT color=#0000ff>FreeBasic：</FONT></STRONG><br>无范例。</FONT></TD></TR></TABLE></P>
+</body>
