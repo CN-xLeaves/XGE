@@ -1,0 +1,30 @@
+[Project]
+Version=3
+Description=Game
+Api=fb (FreeBASIC),win (Windows)
+Grouping=1
+AddMainFiles=1
+AddModuleFiles=1
+ResExport=
+CompileIfNewer=0
+IncVersion=0
+RunCmd=0
+[Make]
+Module=Module Build,fbc -c
+Recompile=2
+Current=1
+1=Windows Console,fbc -s console
+2=Windows GUI,fbc -s gui
+Output=..\bin\280.Scene Stack.exe
+Run=
+Delete=
+[TabOrder]
+TabOrder=1,0
+[File]
+1=Game.bas
+2=Game.rc
+[BreakPoint]
+1=
+[FileInfo]
+1=0,58,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

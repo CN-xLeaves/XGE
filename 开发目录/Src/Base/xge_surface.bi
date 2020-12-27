@@ -27,7 +27,7 @@ Extern XGE_EXTERNCLASS
 	
 	' 构造 [空]
 	Constructor Surface() XGE_EXPORT_OBJ
-		
+		img = NULL
 	End Constructor
 	
 	' 构造 [创建]

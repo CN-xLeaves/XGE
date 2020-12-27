@@ -101,8 +101,8 @@ Dim Shared xge_global_scrpitch As UInteger
 Dim Shared xge_global_scene_stack As xStack = xStack(XGE_MAX_SCENE, SizeOf(XGE_SCENE))
 Dim Shared xge_global_scene_cur As XGE_SCENE
 Dim Shared xge_global_scene_run As Integer
-Dim Shared xge_global_scene_end As Integer
 Dim Shared xge_global_scene_fps As UInteger
+Dim Shared xge_global_scene_stopall As Integer
 
 
 ' -------------------------- 事件数据

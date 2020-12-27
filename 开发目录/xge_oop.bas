@@ -51,6 +51,7 @@
 #Define XGE_EXPORT_Scene_State			State
 #Define XGE_EXPORT_Scene_Resume			Resume
 #Define XGE_EXPORT_Scene_FPS			FPS
+#Define XGE_EXPORT_Scene_SetFPS			SetFPS
 #Define XGE_EXPORT_Scene_Stack			Stack
 
 #Define XGE_EXPORT_Hook_SetDelayProc	SetDelayProc

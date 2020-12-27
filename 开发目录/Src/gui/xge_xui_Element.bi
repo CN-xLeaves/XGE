@@ -37,7 +37,9 @@ Namespace xui
 	
 	' 析构函数
 	Destructor Element() XGE_EXPORT_OBJ
-		Delete Image
+		If Image Then
+			Delete Image
+		EndIf
 	End Destructor
 	
 	' 应用布局

@@ -361,7 +361,7 @@
 			Private:
 				Dim pMaxCount As UInteger
 				Dim pUnitSize As UInteger
-				Dim pStackMem As UByte Ptr
+				Dim pStackMem As Any Ptr
 				Dim pStackTop As UInteger
 		End Type
 		
@@ -469,12 +469,13 @@
 			Namespace Scene
 				Declare Function Start(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer
 				Declare Function Cut(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer
-				Declare Sub Stop(sc As Integer = 0)
-				Declare Sub StopAll(sc As Integer = 0)
+				Declare Sub Stop()
+				Declare Sub StopAll()
 				Declare Sub Pause(flag As Integer = XGE_PAUSE_DRAW Or XGE_PAUSE_FRAME)
 				Declare Function State() As Integer
 				Declare Sub Resume()
 				Declare Function FPS() As UInteger
+				Declare Sub SetFPS(nv As UInteger)
 				Declare Function Stack() As xStack Ptr
 			End Namespace
 			
@@ -791,6 +792,7 @@
 				Declare Function InsElement(elePtr As Any Ptr, iPos As Integer) As Integer
 				Declare Function GetElement(iPos As Integer) As Any Ptr
 				Declare Function DelElement(iPos As Integer) As Integer
+				Declare Sub Clear()
 				Declare Function Count() As UInteger
 			End Type
 			

@@ -20,4 +20,4 @@
 
 
 ' -------------------------- 场景栈最大层数
-#Define XGE_MAX_SCENE		64
+#Define XGE_MAX_SCENE		256

@@ -7,18 +7,14 @@
 
 
 
-Extern XGE_EXTERNCLASS
-	Namespace xui
-		Declare Function EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
-	End Namespace
-End Extern
+Declare Function xui_EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 
 
 
 ' 消息拦截器
 Function xge_proc_scmsg(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	' GUI系统的消息优先级最高，不会被拦截，且可以决定是否将消息吃掉
-	If xui.EventProc(msg, param, eve) Then
+	If xui_EventProc(msg, param, eve) Then
 		return 0
 	EndIf
 	' 消息拦截器和场景机制 [消息拦截器可以决定消息是否发送给场景]
@@ -105,54 +101,83 @@ End Sub
 ' 场景驱动器
 Sub xge_proc_scene()
 	Do
-		' 计算FPS值
-		xge_global_fps_newtick = GetTickCount()
-		If xge_global_fps_newtick > (xge_global_fps_oldtick + 1000) Then
-			xge_global_fps_oldtick = xge_global_fps_newtick
-			xge_global_scene_fps = xge_global_fps_count
-			xge_global_fps_count = 0
+		' 场景循环
+		Do
+			' 计算FPS值
+			xge_global_fps_newtick = GetTickCount()
+			If xge_global_fps_newtick > (xge_global_fps_oldtick + 1000) Then
+				xge_global_fps_oldtick = xge_global_fps_newtick
+				xge_global_scene_fps = xge_global_fps_count
+				xge_global_fps_count = 0
+			Else
+				xge_global_fps_count += 1
+			EndIf
+			' 消息处理
+			Dim eve As XGE_EVENT
+			Do While ScreenEvent(@eve)
+				xge_global_eveproc(@eve)
+				If xge_global_scene_run = FALSE Then
+					Exit Do
+				EndIf
+			Loop
+			If xge_global_scene_run Then
+				' 框架处理
+				If (xge_global_scene_cur.pause And XGE_PAUSE_FRAME) = 0 Then
+					xge_proc_scmsg(XGE_MSG_FRAME, 0, 0)
+				EndIf
+				' FPS处理
+				If xge_global_scene_cur.Lockfps Then
+					Do While (xge_global_fps_newtick-xge_global_fps_oldtick) < ((1000/xge_global_scene_cur.Lockfps)*xge_global_fps_count)
+						xge_global_dlyproc(1)
+						xge_global_fps_newtick = GetTickCount()
+					Loop
+				EndIf
+				' 绘制处理
+				If (xge_global_scene_cur.pause And XGE_PAUSE_DRAW) = 0 Then
+					If xge_global_scene_cur.sync Then
+						ScreenSync()
+					EndIf
+					ScreenLock()
+					xge_proc_scmsg(XGE_MSG_DRAW,0 , 0)
+					ScreenUnLock()
+				EndIf
+			EndIf
+		Loop While xge_global_scene_run
+		' 发送释放资源消息
+		xge_proc_scmsg(XGE_MSG_FREERES, 0, NULL)
+		If xge_global_scene_stopall Then
+			' 退出全部场景，遍历场景发送资源释放消息
+			Dim sCount As UInteger = xge_global_scene_stack.Count()
+			Dim Scenes As XGE_SCENE Ptr = xge_global_scene_stack.Pop(sCount)
+			If Scenes Then
+				For i As Integer = 0 To sCount - 1
+					xge_global_scene_cur = Scenes[i]
+					xge_proc_scmsg(XGE_MSG_FREERES, 0, NULL)
+				Next
+			EndIf
+			Exit Do
 		Else
-			xge_global_fps_count += 1
-		EndIf
-		' 消息处理
-		Dim eve As XGE_EVENT
-		Do While ScreenEvent(@eve)
-			xge_global_eveproc(@eve)
-			If xge_global_scene_run = FALSE Then
+			' 只退出当前场景，场景栈循环 (恢复上一个场景的数据)
+			If xge_global_scene_stack.Count > 0 Then
+				Dim ts As XGE_SCENE Ptr = xge_global_scene_stack.Pop(1)
+				If ts Then
+					xge_global_scene_run = TRUE
+					xge_global_scene_cur = *ts
+				EndIf
+			Else
 				Exit Do
 			EndIf
-		Loop
-		If xge_global_scene_run Then
-			' 框架处理
-			If (xge_global_scene_cur.pause And XGE_PAUSE_FRAME) = 0 Then
-				xge_proc_scmsg(XGE_MSG_FRAME, 0, 0)
-			EndIf
-			' FPS处理
-			If xge_global_scene_cur.Lockfps Then
-				Do While (xge_global_fps_newtick-xge_global_fps_oldtick) < ((1000/xge_global_scene_cur.Lockfps)*xge_global_fps_count)
-					xge_global_dlyproc(1)
-					xge_global_fps_newtick = GetTickCount()
-				Loop
-			EndIf
-			' 绘制处理
-			If (xge_global_scene_cur.pause And XGE_PAUSE_DRAW) = 0 Then
-				If xge_global_scene_cur.sync Then
-					ScreenSync()
-				EndIf
-				ScreenLock()
-				xge_proc_scmsg(XGE_MSG_DRAW,0 , 0)
-				ScreenUnLock()
-			EndIf
 		EndIf
-	Loop While xge_global_scene_run
-	' 恢复上一个场景的数据
-	If xge_global_scene_stack.Count > 0 Then
-		Dim ts As XGE_SCENE Ptr = xge_global_scene_stack.Pop(1)
-		If ts Then
-			xge_global_scene_run = TRUE
-			xge_global_scene_cur = *ts
-		EndIf
-	EndIf
+	Loop
+	' 所有场景都退出后重置数据
+	xge_global_scene_run = FALSE
+	xge_global_scene_stopall = FALSE
+	xge_global_scene_fps = 0
+	xge_global_scene_cur.proc = NULL
+	xge_global_scene_cur.Lockfps = 0
+	xge_global_scene_cur.sync = 0
+	xge_global_scene_cur.pause = 0
+	xge_global_scene_stack.Init(XGE_MAX_SCENE, SizeOf(XGE_SCENE))
 End Sub
 
 
@@ -166,72 +191,76 @@ Extern XGE_EXTERNMODULE
 	' 启动场景
 	Function XGE_EXPORT_Scene_Start(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer XGE_EXPORT_ALL
 		If proc Then
-			' 将之前的场景压栈
 			If xge_global_scene_cur.proc Then
+				' 有旧场景，将之前的场景压栈
 				If xge_global_scene_stack.Push(@xge_global_scene_cur) = FALSE Then
 					Return 0
 				EndIf
+				' 设置新场景数据
+				xge_global_scene_cur.proc = proc
+				xge_global_scene_cur.Lockfps = lfps
+				xge_global_scene_cur.sync = sync
+				xge_global_scene_cur.pause = 0
+				' 发送资源加载消息
+				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
+			Else
+				' 没有旧场景，启动一个新的场景
+				xge_global_scene_cur.proc = proc
+				xge_global_scene_cur.Lockfps = lfps
+				xge_global_scene_cur.sync = sync
+				xge_global_scene_cur.pause = 0
+				' 发送资源加载消息
+				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
+				' 启动场景循环
+				xge_global_scene_run = TRUE
+				xge_proc_scene()
 			EndIf
-			' 设置新场景数据
-			xge_global_scene_cur.proc = proc
-			xge_global_scene_cur.Lockfps = lfps
-			xge_global_scene_cur.sync = sync
-			xge_global_scene_cur.pause = 0
-			' 发送资源加载消息
-			xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
-			' 启动场景驱动器
-			xge_global_scene_end = 0
-			xge_global_scene_run = TRUE
-			xge_proc_scene()
-			Return xge_global_scene_end
+			Return TRUE
 		EndIf
+		Return FALSE
 	End Function
 	
 	' 切换场景
 	Function XGE_EXPORT_Scene_Cut(proc As XGE_SCENE_PROC, lfps As UInteger, sync As Integer, param As Integer = 0) As Integer XGE_EXPORT_ALL
 		If proc Then
-			' 发送资源释放消息
-			xge_proc_scmsg(XGE_MSG_FREERES, param, NULL)
-			' 设置新场景数据
-			xge_global_scene_cur.proc = proc
-			xge_global_scene_cur.Lockfps = lfps
-			xge_global_scene_cur.sync = sync
-			xge_global_scene_cur.pause = 0
-			' 发送资源加载消息
-			xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
-			' 启动场景驱动器
-			xge_global_scene_end = 0
-			xge_global_scene_run = TRUE
-			xge_proc_scene()
-			Return xge_global_scene_end
+			If xge_global_scene_cur.proc Then
+				' 有旧场景，直接覆盖 (发送释放资源消息)
+				xge_proc_scmsg(XGE_MSG_FREERES, param, NULL)
+				' 设置新场景数据
+				xge_global_scene_cur.proc = proc
+				xge_global_scene_cur.Lockfps = lfps
+				xge_global_scene_cur.sync = sync
+				xge_global_scene_cur.pause = 0
+				' 发送资源加载消息
+				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
+			Else
+				' 没有旧场景，启动一个新的场景
+				xge_global_scene_cur.proc = proc
+				xge_global_scene_cur.Lockfps = lfps
+				xge_global_scene_cur.sync = sync
+				xge_global_scene_cur.pause = 0
+				' 发送资源加载消息
+				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
+				' 启动场景循环
+				xge_global_scene_run = TRUE
+				xge_proc_scene()
+			EndIf
+			Return TRUE
 		EndIf
+		Return FALSE
 	End Function
 	
 	' 结束场景
-	Sub XGE_EXPORT_Scene_Stop(sc As Integer = 0) XGE_EXPORT_ALL
-		' 发送资源释放消息
-		xge_proc_scmsg(XGE_MSG_FREERES, sc, NULL)
-		' 设置结束标记和退出代码
-		xge_global_scene_end = sc
+	Sub XGE_EXPORT_Scene_Stop() XGE_EXPORT_ALL
+		' 设置结束标记
 		xge_global_scene_run = FALSE
 	End Sub
 	
 	' 结束所有场景
-	Sub XGE_EXPORT_Scene_StopAll(sc As Integer = 0) XGE_EXPORT_ALL
-		' 给当前场景发送资源释放消息
-		xge_proc_scmsg(XGE_MSG_FREERES, sc, NULL)
-		' 遍历场景发送资源释放消息
-		Dim sCount As UInteger = xge_global_scene_stack.Count()
-		Dim Scenes As XGE_SCENE Ptr = xge_global_scene_stack.Pop(sCount)
-		If Scenes Then
-			For i As Integer = 0 To sCount - 1
-				xge_global_scene_cur = Scenes[i]
-				xge_proc_scmsg(XGE_MSG_FREERES, sc, NULL)
-			Next
-		EndIf
-		' 设置结束标记和退出代码
-		xge_global_scene_end = sc
+	Sub XGE_EXPORT_Scene_StopAll() XGE_EXPORT_ALL
+		' 设置结束标记
 		xge_global_scene_run = FALSE
+		xge_global_scene_stopall = TRUE
 	End Sub
 	
 	' 暂停场景
@@ -256,7 +285,7 @@ Extern XGE_EXTERNMODULE
 	
 	' 设置场景帧率
 	Sub XGE_EXPORT_Scene_SetFPS(nv As UInteger) XGE_EXPORT_ALL
-		xge_global_scene_fps = nv
+		xge_global_scene_cur.Lockfps = nv
 	End Sub
 	
 	' 返回场景栈对象

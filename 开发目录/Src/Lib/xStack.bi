@@ -50,7 +50,7 @@
 		Function xStack.Push(dat As Any Ptr) As Integer XGE_EXPORT_LIB
 			If pStackMem Then
 				If pStackTop < pMaxCount Then
-					CopyMemory(@pStackMem[pStackTop], dat, pUnitSize)
+					CopyMemory(pStackMem + (pStackTop * pUnitSize), dat, pUnitSize)
 					pStackTop += 1
 					Return TRUE
 				EndIf
@@ -62,7 +62,7 @@
 			If pStackMem Then
 				If pStackTop >= c Then
 					pStackTop -= c
-					Return @pStackMem[pStackTop]
+					Return pStackMem + (pStackTop * pUnitSize)
 				EndIf
 			EndIf
 		End Function
@@ -71,7 +71,7 @@
 		Function xStack.Top() As Any Ptr XGE_EXPORT_LIB
 			If pStackMem Then
 				If pStackTop > 0 Then
-					Return @pStackMem[pStackTop-1]
+					Return pStackMem + ((pStackTop - 1) * pUnitSize)
 				EndIf
 			EndIf
 		End Function

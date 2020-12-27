@@ -11,6 +11,100 @@ Extern XGE_EXTERNCLASS
 
 
 
+' GUI系统的消息拦截器，负责将消息分发给对应的控件 [返回0表示消息没有被拦截]
+Function xui_EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
+	Select Case msg
+		Case XGE_MSG_MOUSE_MOVE			' 鼠标移动
+			' 优先通知给被激活的元素
+			If xge_xui_element_active Then
+				If xge_xui_element_active->ClassEvent.OnMouseMove Then
+					If xge_xui_element_active->ClassEvent.OnMouseMove(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+			' 判断鼠标是否脱离了热点元素
+			If xge_xui_element_hot Then
+				If ((eve->x >= xge_xui_element_hot->Layout.ScreenCoord.x) And (eve->y >= xge_xui_element_hot->Layout.ScreenCoord.y) And (eve->x < xge_xui_element_hot->Layout.ScreenCoord.x + xge_xui_element_hot->Layout.Rect.w) And (eve->y < xge_xui_element_hot->Layout.ScreenCoord.y + xge_xui_element_hot->Layout.Rect.h)) = FALSE Then
+					If xge_xui_element_hot->ClassEvent.OnMouseLeave Then
+						xge_xui_element_hot->ClassEvent.OnMouseLeave(xge_xui_element_hot)
+					EndIf
+					xge_xui_element_hot = NULL
+				EndIf
+			EndIf
+			Return xge_xui_element_root->EventLink(msg, param, eve)
+		Case XGE_MSG_MOUSE_DOWN			' 鼠标按下
+			' 如果没有元素处理这个事件，则取消被激活的元素，避免干扰到其他流程
+			Dim RetInt As Integer = xge_xui_element_root->EventLink(msg, param, eve)
+			If (RetInt = 0) And (xge_xui_element_active <> 0) Then
+				xui.ActiveElement(NULL)
+			EndIf
+			Return RetInt
+		Case XGE_MSG_MOUSE_UP			' 鼠标弹起
+			' 优先通知给被激活的元素
+			If xge_xui_element_active Then
+				If xge_xui_element_active->ClassEvent.OnMouseUp Then
+					If xge_xui_element_active->ClassEvent.OnMouseUp(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y, eve->button) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+			Return xge_xui_element_root->EventLink(msg, param, eve)
+		Case XGE_MSG_MOUSE_CLICK		' 鼠标单击
+			Return xge_xui_element_root->EventLink(msg, param, eve)
+		Case XGE_MSG_MOUSE_DCLICK		' 鼠标双击
+			Return xge_xui_element_root->EventLink(msg, param, eve)
+		Case XGE_MSG_MOUSE_WHELL		' 鼠标滚轮滚动
+			' 优先通知给热点元素，其次通知给被激活的元素
+			If xge_xui_element_hot Then
+				If xge_xui_element_hot->ClassEvent.OnMouseWhell Then
+					If xge_xui_element_hot->ClassEvent.OnMouseWhell(xge_xui_element_hot, eve->x, eve->y, eve->z, eve->nz) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+			If xge_xui_element_active Then
+				If xge_xui_element_active->ClassEvent.OnMouseWhell Then
+					If xge_xui_element_active->ClassEvent.OnMouseWhell(xge_xui_element_active, eve->x, eve->y, eve->z, eve->nz) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+		Case XGE_MSG_KEY_DOWN			' 键盘按下
+			' 只有被激活的元素才能收到这个消息
+			If xge_xui_element_active Then
+				If xge_xui_element_active->ClassEvent.OnKeyDown Then
+					If xge_xui_element_active->ClassEvent.OnKeyDown(xge_xui_element_active, eve->scancode, eve->ascii) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+		Case XGE_MSG_KEY_UP				' 键盘弹起
+			' 只有被激活的元素才能收到这个消息
+			If xge_xui_element_active Then
+				If xge_xui_element_active->ClassEvent.OnKeyUp Then
+					If xge_xui_element_active->ClassEvent.OnKeyUp(xge_xui_element_active, eve->scancode, eve->ascii) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+		Case XGE_MSG_KEY_REPEAT			' 按键重复按下
+			' 只有被激活的元素才能收到这个消息
+			If xge_xui_element_active Then
+				If xge_xui_element_active->ClassEvent.OnKeyRepeat Then
+					If xge_xui_element_active->ClassEvent.OnKeyRepeat(xge_xui_element_active, eve->scancode, eve->ascii) Then
+						Return -1
+					EndIf
+				EndIf
+			EndIf
+		Case XGE_MSG_LOSTFOCUS			' 失去焦点 [取消激活的元素]
+			xui.ActiveElement(NULL)
+	End Select
+	Return 0
+End Function
+
+
+
 Namespace xui
 	
 	
@@ -63,100 +157,6 @@ Namespace xui
 		xge_xui_element_active = ele
 	End Sub
 	
-	
-	
-	' GUI系统的消息拦截器，负责将消息分发给对应的控件 [返回0表示消息没有被拦截]
-	Function EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
-		Select Case msg
-			Case XGE_MSG_MOUSE_MOVE			' 鼠标移动
-				' 优先通知给被激活的元素
-				If xge_xui_element_active Then
-					If xge_xui_element_active->ClassEvent.OnMouseMove Then
-						If xge_xui_element_active->ClassEvent.OnMouseMove(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-				' 判断鼠标是否脱离了热点元素
-				If xge_xui_element_hot Then
-					If ((eve->x >= xge_xui_element_hot->Layout.ScreenCoord.x) And (eve->y >= xge_xui_element_hot->Layout.ScreenCoord.y) And (eve->x < xge_xui_element_hot->Layout.ScreenCoord.x + xge_xui_element_hot->Layout.Rect.w) And (eve->y < xge_xui_element_hot->Layout.ScreenCoord.y + xge_xui_element_hot->Layout.Rect.h)) = FALSE Then
-						If xge_xui_element_hot->ClassEvent.OnMouseLeave Then
-							xge_xui_element_hot->ClassEvent.OnMouseLeave(xge_xui_element_hot)
-						EndIf
-						xge_xui_element_hot = NULL
-					EndIf
-				EndIf
-				Return xge_xui_element_root->EventLink(msg, param, eve)
-			Case XGE_MSG_MOUSE_DOWN			' 鼠标按下
-				' 如果没有元素处理这个事件，则取消被激活的元素，避免干扰到其他流程
-				Dim RetInt As Integer = xge_xui_element_root->EventLink(msg, param, eve)
-				If (RetInt = 0) And (xge_xui_element_active <> 0) Then
-					ActiveElement(NULL)
-				EndIf
-				Return RetInt
-			Case XGE_MSG_MOUSE_UP			' 鼠标弹起
-				' 优先通知给被激活的元素
-				If xge_xui_element_active Then
-					If xge_xui_element_active->ClassEvent.OnMouseUp Then
-						If xge_xui_element_active->ClassEvent.OnMouseUp(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y, eve->button) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-				Return xge_xui_element_root->EventLink(msg, param, eve)
-			Case XGE_MSG_MOUSE_CLICK		' 鼠标单击
-				Return xge_xui_element_root->EventLink(msg, param, eve)
-			Case XGE_MSG_MOUSE_DCLICK		' 鼠标双击
-				Return xge_xui_element_root->EventLink(msg, param, eve)
-			Case XGE_MSG_MOUSE_WHELL		' 鼠标滚轮滚动
-				' 优先通知给热点元素，其次通知给被激活的元素
-				If xge_xui_element_hot Then
-					If xge_xui_element_hot->ClassEvent.OnMouseWhell Then
-						If xge_xui_element_hot->ClassEvent.OnMouseWhell(xge_xui_element_hot, eve->x, eve->y, eve->z, eve->nz) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-				If xge_xui_element_active Then
-					If xge_xui_element_active->ClassEvent.OnMouseWhell Then
-						If xge_xui_element_active->ClassEvent.OnMouseWhell(xge_xui_element_active, eve->x, eve->y, eve->z, eve->nz) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-			Case XGE_MSG_KEY_DOWN			' 键盘按下
-				' 只有被激活的元素才能收到这个消息
-				If xge_xui_element_active Then
-					If xge_xui_element_active->ClassEvent.OnKeyDown Then
-						If xge_xui_element_active->ClassEvent.OnKeyDown(xge_xui_element_active, eve->scancode, eve->ascii) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-			Case XGE_MSG_KEY_UP				' 键盘弹起
-				' 只有被激活的元素才能收到这个消息
-				If xge_xui_element_active Then
-					If xge_xui_element_active->ClassEvent.OnKeyUp Then
-						If xge_xui_element_active->ClassEvent.OnKeyUp(xge_xui_element_active, eve->scancode, eve->ascii) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-			Case XGE_MSG_KEY_REPEAT			' 按键重复按下
-				' 只有被激活的元素才能收到这个消息
-				If xge_xui_element_active Then
-					If xge_xui_element_active->ClassEvent.OnKeyRepeat Then
-						If xge_xui_element_active->ClassEvent.OnKeyRepeat(xge_xui_element_active, eve->scancode, eve->ascii) Then
-							Return -1
-						EndIf
-					EndIf
-				EndIf
-			Case XGE_MSG_LOSTFOCUS			' 失去焦点 [取消激活的元素]
-				ActiveElement(NULL)
-		End Select
-		Return 0
-	End Function
-	
 End Namespace
 
 
@@ -194,6 +194,11 @@ End Function
 Function xui.ElementList.DelElement(iPos As Integer) As Integer XGE_EXPORT_OBJ
 	Return DeleteStruct(iPos)
 End Function
+
+' 清空元素
+Sub xui.ElementList.Clear()
+	ReInitManage()
+End Sub
 
 ' 获取元素数量
 Function xui.ElementList.Count() As UInteger XGE_EXPORT_OBJ
