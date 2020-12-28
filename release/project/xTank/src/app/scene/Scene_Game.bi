@@ -29,7 +29,7 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			GameObject.RunAll()
 			' 检测玩家死亡
 			If GameObject.Tank.Player.stk = 0 Then
-				xge.Scene.Stop()
+				xge.Scene.Cut(@PauseScene, 40, FALSE, Cast(Integer, img_EndImage))
 			EndIf
 			' 检测AI
 			If GameObject.Map.Info.NumAI <= 0 Then
@@ -37,7 +37,11 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 					' 给通关奖励
 					GameObject.Tank.Player.Exp += GameObject.Map.Info.PassExp
 					Module.CurMapID += 1
-					xge.Scene.Stop()
+					If Module.CurMapID > Module.MapCount Then
+						xge.Scene.Cut(@PauseScene, 40, FALSE, Cast(Integer, img_PassImage))
+					Else
+						xge.Scene.Cut(@GameScene, 40)
+					EndIf
 				EndIf
 			EndIf
 		Case XGE_MSG_DRAW				' draw
@@ -61,33 +65,44 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			xge.Text.DrawA(NULL, 500, 380, "AI : ", &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 524, 400, "活跃 : " & GameObject.Tank.GetCountAI, &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 524, 420, "剩余 : " & GameObject.Map.Info.NumAI, &HFFFFFFFF)
-		Case XGE_MSG_KEY_DOWN			' keyboard down
-			/'
+			xge.Text.DrawA(NULL, 500, 220, "操作 :", &HFFFFFFFF)
+			xge.Text.DrawA(NULL, 524, 240, "F2 显示血条", &HFFFFFFFF)
+			xge.Text.DrawA(NULL, 524, 260, "F3 显示等级", &HFFFFFFFF)
+			xge.Text.DrawA(NULL, 524, 280, "F4 显示血量", &HFFFFFFFF)
 			If CheatMode Then
-				If eve->scancode = SC_F1 Then			' 秘籍 F1 : 玩家1升级
+				xge.Text.DrawA(NULL, 524, 300, "F5 玩家升级", &HFFFFFFFF)
+				xge.Text.DrawA(NULL, 524, 320, "F6 添加敌人", &HFFFFFFFF)
+				xge.Text.DrawA(NULL, 524, 340, "F7 恢复血量", &HFFFFFFFF)
+			EndIf
+		Case XGE_MSG_KEY_DOWN			' keyboard down
+			If eve->scancode = SC_F2 Then				' 显示血条
+				ViewHP = IIf(ViewHP, FALSE, TRUE)
+			EndIf
+			If eve->scancode = SC_F3 Then				' 显示等级
+				ViewLevel = IIf(ViewLevel, FALSE, TRUE)
+			EndIf
+			If eve->scancode = SC_F4 Then				' 数字显血
+				ViewHP_Value = IIf(ViewHP_Value, FALSE, TRUE)
+			EndIf
+			If CheatMode Then
+				If eve->scancode = SC_F5 Then			' 秘籍 F1 : 玩家1升级
 					GameObject.Tank.LevelUP(@GameObject.Tank.Player,-1)
 				EndIf
-				/'
-				If eve->scancode = SC_F2 Then			' 秘籍 F2 : 玩家2升级
-					GameObject.Tank.LevelUP(@GameObject.Tank.Player,-1)
+				If eve->scancode = SC_F6 Then			' 秘籍 F3 : 添加AI
+					Dim TankObj As TankItem Ptr = GameObject.Tank.NewTankEx(GetRand(0,3), GameObject.Tank.Player.lv)
+					If TankObj Then
+						TankObj->x = GameObject.Map.Info.PointAI(GameObject.AddrPointAI).x
+						TankObj->y = GameObject.Map.Info.PointAI(GameObject.AddrPointAI).y
+						TankObj->dt = GameObject.Map.Info.PointAI(GameObject.AddrPointAI).dt
+						GameObject.AddrPointAI += 1
+						If GameObject.AddrPointAI = GameObject.Map.Info.PointNum Then
+							GameObject.AddrPointAI = 0
+						EndIf
+					EndIf
 				EndIf
-				'/
-				If eve->scancode = SC_F3 Then			' 秘籍 F3 : 添加AI
-					GameObject.Tank.NewTankEx(GetRand(0, 3), 10)
-				EndIf
-				If eve->scancode = SC_F4 Then			' 秘籍 F4 : 玩家满状态
+				If eve->scancode = SC_F7 Then			' 秘籍 F4 : 玩家满状态
 					GameObject.Tank.Player.hp = GameObject.Tank.Player.hpmax
 				EndIf
-			EndIf
-			'/
-			If eve->scancode = SC_F5 Then				' 显示血条
-				ViewHP = Not(ViewHP)
-			EndIf
-			If eve->scancode = SC_F6 Then				' 显示等级
-				ViewLevel = Not(ViewLevel)
-			EndIf
-			If eve->scancode = SC_F7 Then				' 数字显血
-				ViewHP_Value = Not(ViewHP_Value)
 			EndIf
 		Case XGE_MSG_LOADRES			' load resources
 			' 载入地图、初始化游戏数据
@@ -118,7 +133,7 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 				GameObject.Tank.Player.y = GameObject.Map.Info.Player.y
 				GameObject.Tank.Player.dt = GameObject.Map.Info.Player.dt
 			Else
-				xge.Scene.Stop()
+				xge.Scene.StopAll()
 			EndIf
 		Case XGE_MSG_CLOSE				' window closing
 			Return -1

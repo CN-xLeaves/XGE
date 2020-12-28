@@ -26,8 +26,8 @@
 
 ' Import scene [develop good classification habits]
 #Include "src\app\scene\Scene_Logo.bi"
-#Include "src\app\scene\Scene_Game.bi"
 #Include "src\app\scene\Scene_Pause.bi"
+#Include "src\app\scene\Scene_Game.bi"
 #Include "src\app\scene\Scene_Menu.bi"
 
 

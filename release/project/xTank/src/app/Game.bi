@@ -18,6 +18,7 @@ Function LoadRes() As Integer
 	img_Tank3 = New xge.Surface(ResPath & "tank03.bmp", 0)
 	img_Tank4 = New xge.Surface(ResPath & "tank04.bmp", 0)
 	img_BackImage = New xge.Surface(ResPath & Module.BackImage, 0)
+	img_PassImage = New xge.Surface(ResPath & "Pass.bmp", 0)
 	img_EndImage = New xge.Surface(ResPath & "End.bmp", 0)
 	
 	se_Boom = New xge.Sound(XGE_SOUND_SAMPLE, 0, ResPath & "boom.ogg", 0)
@@ -25,6 +26,13 @@ Function LoadRes() As Integer
 	
 	xge.Text.LoadFont(ResPath & "simsun_12px_gb2312.xrf", 0)
 	xge.Text.LoadFont(ResPath & "simsun_16px_gb2312.xrf", 0)
+	
+	' ‘ÿ»Î…Ë÷√
+	ViewHP = xIni.GetInt(ExePath & "\setup.ini", "option", "ViewHP")
+	ViewLevel = xIni.GetInt(ExePath & "\setup.ini", "option", "ViewLevel")
+	ViewHP_Value = xIni.GetInt(ExePath & "\setup.ini", "option", "ViewHP_Value")
+	CheatMode = xIni.GetInt(ExePath & "\setup.ini", "option", "CheatMode")
+	
 	Return -1
 End Function
 
@@ -40,6 +48,7 @@ Sub FreeRes()
 	Delete img_Tank3
 	Delete img_Tank4
 	Delete img_BackImage
+	Delete img_PassImage
 	Delete img_EndImage
 	
 	Delete se_Boom

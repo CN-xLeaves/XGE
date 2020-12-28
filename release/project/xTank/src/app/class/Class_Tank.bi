@@ -96,9 +96,9 @@ Function TankManage.NewTankEx(ByVal theType As Integer,ByVal Level As Integer) A
 	Dim idx As Integer = AppendStruct()
 	Dim TankObj As TankItem Ptr = GetPtrStruct(idx)
 	If TankObj Then
-		IntData(TankObj,theType)
+		IntData(TankObj, theType)
 		If Level > 1 Then
-			RndData(TankObj,Level)
+			RndData(TankObj, Level)
 		EndIf
 		Return TankObj
 	EndIf
