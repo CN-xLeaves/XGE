@@ -7,18 +7,6 @@
 
 
 
-#Inclib "lz4"
-
-
-
-Extern "Windows-MS"
-	Declare Function LZ4_compress_HC(src As ZString Ptr, dst As ZString Ptr, srcSize As Integer, maxDstSize As Integer, compressionLevel As Integer) As Integer
-	Declare Function LZ4_decompress_safe(source As ZString Ptr, dest As ZString Ptr, compressedSize As Integer, maxDecompressedSize As Integer) As Integer
-	Declare Function LZ4_compressBound(inputSize As Integer) As Integer
-End Extern
-
-
-
 ' xgi ÎÄ¼þÍ·
 Type xywhGameImage_Head Field = 1
 	MagicNumber As UShort		' xi = &H6978

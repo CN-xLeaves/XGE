@@ -69,15 +69,6 @@
 #Define EVENT_MOUSE_HWHEEL			14
 
 
-' -------------------------- 场景结构
-Type XGE_SCENE
-	proc As XGE_SCENE_PROC
-	pause As Integer
-	sync As Integer
-	Lockfps As UInteger
-End Type
-
-
 ' -------------------------- 数学常数
 #Define PI		3.1415926535898
 
@@ -144,7 +135,6 @@ Dim Shared xge_fontlist As xBsmm = xBsmm(SizeOf(xge.Text.FontDriver), 8)
 
 
 ' -------------------------- XUI系统数据
-Dim Shared xge_xui_element_root As xui.Element Ptr = NULL
 Dim Shared xge_xui_element_active As xui.Element Ptr = NULL
 Dim Shared xge_xui_element_hot As xui.Element Ptr = NULL
 

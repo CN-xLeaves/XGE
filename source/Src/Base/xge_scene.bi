@@ -7,15 +7,17 @@
 
 
 
-Declare Function xui_EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
+Declare Function xui_EventProc(root As xui.Element Ptr, msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 
 
 
 ' 消息拦截器
 Function xge_proc_scmsg(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	' GUI系统的消息优先级最高，不会被拦截，且可以决定是否将消息吃掉
-	If xui_EventProc(msg, param, eve) Then
-		return 0
+	If xge_global_scene_cur.RootElement Then
+		If xui_EventProc(xge_global_scene_cur.RootElement, msg, param, eve) Then
+			return 0
+		EndIf
 	EndIf
 	' 消息拦截器和场景机制 [消息拦截器可以决定消息是否发送给场景]
 	If xge_global_msgproc Then
@@ -145,6 +147,7 @@ Sub xge_proc_scene()
 		Loop While xge_global_scene_run
 		' 发送释放资源消息
 		xge_proc_scmsg(XGE_MSG_FREERES, 0, NULL)
+		Delete xge_global_scene_cur.RootElement
 		If xge_global_scene_stopall Then
 			' 退出全部场景，遍历场景发送资源释放消息
 			Dim sCount As UInteger = xge_global_scene_stack.Count()
@@ -153,6 +156,7 @@ Sub xge_proc_scene()
 				For i As Integer = 0 To sCount - 1
 					xge_global_scene_cur = Scenes[i]
 					xge_proc_scmsg(XGE_MSG_FREERES, 0, NULL)
+					Delete xge_global_scene_cur.RootElement
 				Next
 			EndIf
 			Exit Do
@@ -177,6 +181,7 @@ Sub xge_proc_scene()
 	xge_global_scene_cur.Lockfps = 0
 	xge_global_scene_cur.sync = 0
 	xge_global_scene_cur.pause = 0
+	xge_global_scene_cur.RootElement = NULL
 	xge_global_scene_stack.Init(XGE_MAX_SCENE, SizeOf(XGE_SCENE))
 End Sub
 
@@ -201,6 +206,7 @@ Extern XGE_EXTERNMODULE
 				xge_global_scene_cur.Lockfps = lfps
 				xge_global_scene_cur.sync = sync
 				xge_global_scene_cur.pause = 0
+				xge_global_scene_cur.RootElement = New xui.Element(XUI_LAYOUT_RULER_PIXEL, 0, 0, xge_global_width, xge_global_height, XUI_LAYOUT_COORD, "xui_Desktop")
 				' 发送资源加载消息
 				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
 			Else
@@ -209,6 +215,7 @@ Extern XGE_EXTERNMODULE
 				xge_global_scene_cur.Lockfps = lfps
 				xge_global_scene_cur.sync = sync
 				xge_global_scene_cur.pause = 0
+				xge_global_scene_cur.RootElement = New xui.Element(XUI_LAYOUT_RULER_PIXEL, 0, 0, xge_global_width, xge_global_height, XUI_LAYOUT_COORD, "xui_Desktop")
 				' 发送资源加载消息
 				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
 				' 启动场景循环
@@ -226,11 +233,13 @@ Extern XGE_EXTERNMODULE
 			If xge_global_scene_cur.proc Then
 				' 有旧场景，直接覆盖 (发送释放资源消息)
 				xge_proc_scmsg(XGE_MSG_FREERES, param, NULL)
+				Delete xge_global_scene_cur.RootElement
 				' 设置新场景数据
 				xge_global_scene_cur.proc = proc
 				xge_global_scene_cur.Lockfps = lfps
 				xge_global_scene_cur.sync = sync
 				xge_global_scene_cur.pause = 0
+				xge_global_scene_cur.RootElement = New xui.Element(XUI_LAYOUT_RULER_PIXEL, 0, 0, xge_global_width, xge_global_height, XUI_LAYOUT_COORD, "xui_Desktop")
 				' 发送资源加载消息
 				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
 			Else
@@ -239,6 +248,7 @@ Extern XGE_EXTERNMODULE
 				xge_global_scene_cur.Lockfps = lfps
 				xge_global_scene_cur.sync = sync
 				xge_global_scene_cur.pause = 0
+				xge_global_scene_cur.RootElement = New xui.Element(XUI_LAYOUT_RULER_PIXEL, 0, 0, xge_global_width, xge_global_height, XUI_LAYOUT_COORD, "xui_Desktop")
 				' 发送资源加载消息
 				xge_proc_scmsg(XGE_MSG_LOADRES, param, NULL)
 				' 启动场景循环

@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1609097877 source:c:\users\administrator\desktop\cityhash\city.c
+	"config.h"
+	"city.h"
+	<algorithm>
+	<string.h>
+	<stdlib.h>
+	<stdlib.h>
+	<libkern/OSByteOrder.h>
+	<sys/byteorder.h>
+	<sys/endian.h>
+	<sys/types.h>
+	<sys/types.h>
+	<machine/bswap.h>
+	<byteswap.h>
+
+1608544462 c:\users\administrator\desktop\cityhash\config.h
+
+1608544462 c:\users\administrator\desktop\cityhash\city.h
+	<stdlib.h>
+	<stdint.h>
+	<utility>
+

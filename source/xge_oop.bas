@@ -131,6 +131,8 @@
 #Include "Src\LIB\Iocp.bi"
 #Include "Src\Lib\xBsmm.bi"
 #Include "Src\Lib\Split.bi"
+#Include "Src\Lib\Lz4.bi"
+#Include "Src\Lib\LZMA.bi"
 
 
 ' xywh Game Engine “˝«Ê∫À–ƒ≈‰÷√

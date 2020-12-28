@@ -77,6 +77,6 @@ End Function
 
 ' 释放应用资源
 Sub AppUint()
-	'FreeRes()
+	FreeRes()
 	xge.Unit()
 End Sub

@@ -16,11 +16,11 @@ Function LogoScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
 			If IsHide=0 Then
-				AlphaValue += 9
+				AlphaValue += 6
 				img->Draw_Alpha2(LogoX, LogoY, AlphaValue)
 				If AlphaValue > 250 Then IsHide = -1
 			Else
-				AlphaValue -= 9
+				AlphaValue -= 12
 				img->Draw_Alpha2(LogoX, LogoY, AlphaValue)
 				If AlphaValue < 5 Then xge.Scene.Stop()
 			EndIf

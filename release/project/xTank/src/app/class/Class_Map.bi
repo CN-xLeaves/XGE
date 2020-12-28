@@ -73,7 +73,6 @@ End Constructor
 
 
 Function Tank_Map.LoadToFile(ByVal MapFile As ZString Ptr) As Integer
-	Print *MapFile
 	xFile.Read(MapFile, @Info, 0, SizeOf(MapFileHdr))
 	If Info.FileHead="xtm" Then
 		DeAllocate(tk)

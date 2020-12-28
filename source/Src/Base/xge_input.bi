@@ -9,8 +9,7 @@
 
 Extern XGE_EXTERNMODULE
 	#Ifdef XGE_BUILD_USEOOP
-		Namespace xge
-			Namespace xInput
+		Namespace xInput
 	#EndIf
 	
 	
@@ -110,6 +109,5 @@ Extern XGE_EXTERNMODULE
 	
 	#Ifdef XGE_BUILD_USEOOP
 			End Namespace
-		End Namespace
 	#EndIf
 End Extern

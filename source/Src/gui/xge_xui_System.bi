@@ -12,7 +12,7 @@ Extern XGE_EXTERNCLASS
 
 
 ' GUI系统的消息拦截器，负责将消息分发给对应的控件 [返回0表示消息没有被拦截]
-Function xui_EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
+Function xui_EventProc(root As xui.Element Ptr, msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	Select Case msg
 		Case XGE_MSG_MOUSE_MOVE			' 鼠标移动
 			' 优先通知给被激活的元素
@@ -32,10 +32,10 @@ Function xui_EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) A
 					xge_xui_element_hot = NULL
 				EndIf
 			EndIf
-			Return xge_xui_element_root->EventLink(msg, param, eve)
+			Return root->EventLink(msg, param, eve)
 		Case XGE_MSG_MOUSE_DOWN			' 鼠标按下
 			' 如果没有元素处理这个事件，则取消被激活的元素，避免干扰到其他流程
-			Dim RetInt As Integer = xge_xui_element_root->EventLink(msg, param, eve)
+			Dim RetInt As Integer = root->EventLink(msg, param, eve)
 			If (RetInt = 0) And (xge_xui_element_active <> 0) Then
 				xui.ActiveElement(NULL)
 			EndIf
@@ -49,11 +49,11 @@ Function xui_EventProc(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) A
 					EndIf
 				EndIf
 			EndIf
-			Return xge_xui_element_root->EventLink(msg, param, eve)
+			Return root->EventLink(msg, param, eve)
 		Case XGE_MSG_MOUSE_CLICK		' 鼠标单击
-			Return xge_xui_element_root->EventLink(msg, param, eve)
+			Return root->EventLink(msg, param, eve)
 		Case XGE_MSG_MOUSE_DCLICK		' 鼠标双击
-			Return xge_xui_element_root->EventLink(msg, param, eve)
+			Return root->EventLink(msg, param, eve)
 		Case XGE_MSG_MOUSE_WHELL		' 鼠标滚轮滚动
 			' 优先通知给热点元素，其次通知给被激活的元素
 			If xge_xui_element_hot Then
@@ -111,7 +111,7 @@ Namespace xui
 	
 	' 获取根元素 (Desktop元素)
 	Function GetRootElement() As xui.Element Ptr XGE_EXPORT_ALL
-		Return xge_xui_element_root
+		Return xge_global_scene_cur.RootElement
 	End Function
 	
 	' 获取被激活的元素
@@ -124,9 +124,28 @@ Namespace xui
 		Return xge_xui_element_hot
 	End Function
 	
+	' 清空某个元素下的所有子元素 (默认清空Desktop元素)
+	Sub FreeChilds(ui As xui.Element Ptr = NULL) XGE_EXPORT_ALL
+		If ui = NULL Then
+			ui = xge_global_scene_cur.RootElement
+		EndIf
+		If ui Then
+			Dim ele As xui.Element Ptr
+			For i As Integer = 1 To ui->Childs.Count
+				ele = ui->Childs.GetElement(i)
+				If (ele <> NULL) And (ele <> xge_global_scene_cur.RootElement) Then
+					FreeChilds(ele)
+					Delete ele
+				EndIf
+			Next
+		EndIf
+	End Sub
+	
 	' 应用布局
 	Sub LayoutApply() XGE_EXPORT_ALL
-		xge_xui_element_root->LayoutApply()
+		If xge_global_scene_cur.RootElement Then
+			xge_global_scene_cur.RootElement->LayoutApply()
+		EndIf
 	End Sub
 	
 	

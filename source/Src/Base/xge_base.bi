@@ -67,14 +67,14 @@ Extern XGE_EXTERNMODULE
 			xge_global_scrptr = ScreenPtr
 			xge_global_scrsize = w * h * 4
 			xge_global_scrpitch = w * 4
-			' 初始化 XUI 数据
-			If xge_xui_element_root = NULL Then
-				xge_xui_element_root = New xui.Element(XUI_LAYOUT_RULER_PIXEL, 0, 0, w, h, XUI_LAYOUT_COORD, "xui_Desktop")
+			' 重新排版UI
+			If xge_global_scene_cur.proc Then
+				xge_global_scene_cur.RootElement->Layout.Rect.x = 0
+				xge_global_scene_cur.RootElement->Layout.Rect.y = 0
+				xge_global_scene_cur.RootElement->Layout.Rect.w = w
+				xge_global_scene_cur.RootElement->Layout.Rect.h = h
+				xge_global_scene_cur.RootElement->LayoutApply()
 			EndIf
-			xge_xui_element_root->Layout.Rect.x = 0
-			xge_xui_element_root->Layout.Rect.y = 0
-			xge_xui_element_root->Layout.Rect.w = w
-			xge_xui_element_root->Layout.Rect.h = h
 			Return TRUE
 		EndIf
 	End Function

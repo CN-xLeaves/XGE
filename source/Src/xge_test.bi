@@ -46,10 +46,10 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_12px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("F:\字体\思源屏显臻宋.ttf", 0)
-			xge.Text.LoadFont("D:\Git\XGE\发布目录\res\font\ttf\DroidSans.ttf", 0)
+			xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\DroidSans.ttf", 0)
 			'xge.Text.LoadFont("C:\windows\fonts\simsun.ttc", 0)
 			
-			pic1 = New xge.Surface("D:\Git\XGE\发布目录\res\back.xgi", 0)
+			pic1 = New xge.Surface("D:\Git\XGE\release\res\back.xgi", 0)
 			'pic1->Create(800, 600)
 			/'
 			xge.Text.Draw(pic1, 0, 100, A2W("Draw  渲染 ANSI 字符串 [UNICODE->ANSI]"), &HFF00)

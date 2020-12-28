@@ -29,9 +29,14 @@ Function InitModuleSystem() As Integer
 		Module.TankModel = xIni.GetInt(@Module.File, "option", "TankModel")
 		Module.SpawnTime = xIni.GetInt(@Module.File, "option", "SpawnTime")
 		Module.AddHPTime = xIni.GetInt(@Module.File, "option", "AddHPTime")
-		Print Module.BackImage
 		If Module.BackImage = "" Then
 			Module.BackImage = "back.bmp"
+		EndIf
+		If Module.SpawnTime < 2000 Then
+			Module.SpawnTime = 2000
+		EndIf
+		If Module.AddHPTime < 5000 Then
+			Module.AddHPTime = 5000
 		EndIf
 	Else
 		Return FALSE

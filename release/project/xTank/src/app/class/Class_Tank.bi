@@ -313,18 +313,18 @@ Sub TankManage.DrawTank(ByVal TankObj As TankItem Ptr)
 			tr.right = tr.left + 32
 			tr.bottom = tr.top + 12
 			If ViewLevel Then
-				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 32, "Lv." & TankObj->lv, &HFFFFFFFF)
+				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 12, "Lv." & TankObj->lv, &HFFFFFFFF)
 			EndIf
 			' »­ÑªÌõ
 			If ViewHP Then
-				Line (((TankObj->x-1)*16)+TankObj->px,((TankObj->y-1)*16)+TankObj->py+13)-Step(32,4),&HFF0000,BF
-				Line (((TankObj->x-1)*16)+TankObj->px+1,((TankObj->y-1)*16)+TankObj->py+14)-Step((TankObj->hp * 30) \ TankObj->hpmax,2),&HFF00,BF
+				xge.Shape.RectFull(((TankObj->x-1)*16)+TankObj->px, ((TankObj->y-1)*16)+TankObj->py+13, ((TankObj->x-1)*16)+TankObj->px + 32, ((TankObj->y-1)*16)+TankObj->py+13 + 4, &HFFFF0000)
+				xge.Shape.RectFull(((TankObj->x-1)*16)+TankObj->px+1, ((TankObj->y-1)*16)+TankObj->py+14, ((TankObj->x-1)*16)+TankObj->px+1 + ((TankObj->hp * 30) \ TankObj->hpmax), ((TankObj->y-1)*16)+TankObj->py+14 + 2, &HFF00FF00)
 			EndIf
 			' »­ÑªÁ¿
 			tr.top = tr.bottom+5
 			tr.bottom = tr.top + 12
 			If ViewHP_Value Then
-				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 32, TankObj->hp & "/" & TankObj->hpmax, &HFFFFFFFF)
+				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 12, TankObj->hp & "/" & TankObj->hpmax, &HFFFFFFFF)
 			EndIf
 		EndIf
 	EndIf

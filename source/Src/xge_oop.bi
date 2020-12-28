@@ -488,23 +488,23 @@
 				Declare Sub SetImageLoadProc(proc As XGE_BLOAD_PROC)
 				Declare Sub SetFontLoadProc(proc As XGE_FLOAD_PROC)
 			End Namespace
-			
-			
-			/' -------------------------- 输入库 -------------------------- '/
-			Namespace xInput
-				Declare Function KeyStatus(k As Integer) As Integer
-				Declare Sub MouseStatus(x As Integer Ptr, y As Integer Ptr, w As Integer Ptr, b As Integer Ptr)
-				Declare Function JoyStatus(id As Integer, btn As Integer Ptr, a1 As Single Ptr, a2 As Single Ptr, a3 As Single Ptr, a4 As Single Ptr, a5 As Single Ptr, a6 As Single Ptr, a7 As Single Ptr, a8 As Single Ptr) As Integer
-				Declare Function GetMousePos() As Integer
-				Declare Function SetMousePos(x As Integer, y As Integer) As Integer
-				Declare Function GetMouseX() As Integer
-				Declare Function GetMouseY() As Integer
-				Declare Function GetMouseBtn() As Integer
-				Declare Function GetMouseBtnL() As Integer
-				Declare Function GetMouseBtnR() As Integer
-				Declare Function GetMouseBtnM() As Integer
-				Declare Function GetMouseWhell() As Integer
-			End Namespace
+		End Namespace
+		
+		
+		/' -------------------------- 输入库 -------------------------- '/
+		Namespace xInput
+			Declare Function KeyStatus(k As Integer) As Integer
+			Declare Sub MouseStatus(x As Integer Ptr, y As Integer Ptr, w As Integer Ptr, b As Integer Ptr)
+			Declare Function JoyStatus(id As Integer, btn As Integer Ptr, a1 As Single Ptr, a2 As Single Ptr, a3 As Single Ptr, a4 As Single Ptr, a5 As Single Ptr, a6 As Single Ptr, a7 As Single Ptr, a8 As Single Ptr) As Integer
+			Declare Function GetMousePos() As Integer
+			Declare Function SetMousePos(x As Integer, y As Integer) As Integer
+			Declare Function GetMouseX() As Integer
+			Declare Function GetMouseY() As Integer
+			Declare Function GetMouseBtn() As Integer
+			Declare Function GetMouseBtnL() As Integer
+			Declare Function GetMouseBtnR() As Integer
+			Declare Function GetMouseBtnM() As Integer
+			Declare Function GetMouseWhell() As Integer
 		End Namespace
 		
 		
@@ -871,6 +871,9 @@
 			' 获取鼠标指针下的热点元素
 			Declare Function GetHotElement() As xui.Element Ptr
 			
+			' 释放某个元素下的所有子元素 (默认清空Desktop元素)
+			Declare Sub FreeChilds(ui As xui.Element Ptr = NULL)
+			
 			' 应用布局
 			Declare Sub LayoutApply()
 			
@@ -1131,6 +1134,17 @@
 			
 		End Namespace
 	End Extern
+	
+	
+	
+	' -------------------------- 场景结构体 -------------------------- '/
+	Type XGE_SCENE
+		proc As XGE_SCENE_PROC
+		pause As Integer
+		sync As Integer
+		Lockfps As UInteger
+		RootElement As xui.Element Ptr
+	End Type
 	
 	
 	

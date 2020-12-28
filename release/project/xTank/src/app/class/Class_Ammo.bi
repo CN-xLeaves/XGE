@@ -72,25 +72,25 @@ Sub Tank_AmmoManage.DrawAmmo(ByVal AmmoObj As Tank_AmmoItem Ptr)
 	If AmmoObj->stk Then
 		Select Case AmmoObj->dt
 			Case 1			' вС
-				Line ((AmmoObj->x-1)*16,(AmmoObj->y-1)*16+15)-Step(2,2),&HFF0000,BF
-				Line ((AmmoObj->x-1)*16+2,(AmmoObj->y-1)*16+15)-Step(4,2),&HFF5555,BF
-				Line ((AmmoObj->x-1)*16+6,(AmmoObj->y-1)*16+15)-Step(5,2),&HFFAAAA,BF
-				Line ((AmmoObj->x-1)*16+11,(AmmoObj->y-1)*16+15)-Step(5,2),&HFFFFFF,BF
+				xge.Shape.RectFull((AmmoObj->x-1)*16, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16 + 2, (AmmoObj->y-1)*16+15 + 2, &HFFFF0000)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+2, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+2 + 2, (AmmoObj->y-1)*16+15 + 2, &HFFFF5555)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+6, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+6 + 2, (AmmoObj->y-1)*16+15 + 2, &HFFFFAAAA)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+11, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+11 + 2, (AmmoObj->y-1)*16+15 + 2, &HFFFFFFFF)
 			Case 2			' ср
-				Line ((AmmoObj->x-1)*16+31,(AmmoObj->y-1)*16+15)-Step(-2,2),&HFF0000,BF
-				Line ((AmmoObj->x-1)*16+29,(AmmoObj->y-1)*16+15)-Step(-4,2),&HFF5555,BF
-				Line ((AmmoObj->x-1)*16+24,(AmmoObj->y-1)*16+15)-Step(-5,2),&HFFAAAA,BF
-				Line ((AmmoObj->x-1)*16+19,(AmmoObj->y-1)*16+15)-Step(-5,2),&HFFFFFF,BF
+				xge.Shape.RectFull((AmmoObj->x-1)*16+31, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+31 - 2, (AmmoObj->y-1)*16+15 + 2, &HFFFF0000)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+29, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+29 - 4, (AmmoObj->y-1)*16+15 + 2, &HFFFF5555)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+24, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+24 - 5, (AmmoObj->y-1)*16+15 + 2, &HFFFFAAAA)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+19, (AmmoObj->y-1)*16+15, (AmmoObj->x-1)*16+19 - 5, (AmmoObj->y-1)*16+15 + 2, &HFFFFFFFF)
 			Case 3			' ио
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16)-Step(2,2),&HFF0000,BF
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+2)-Step(2,4),&HFF5555,BF
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+6)-Step(2,5),&HFFAAAA,BF
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+11)-Step(2,5),&HFFFFFF,BF
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16 + 2, &HFFFF0000)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+2, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+2 + 4, &HFFFF5555)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+6, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+6 + 5, &HFFFFAAAA)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+11, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+11 + 5, &HFFFFFFFF)
 			Case Else		' об
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+31)-Step(2,2),&HFF0000,BF
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+29)-Step(2,4),&HFF5555,BF
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+24)-Step(2,5),&HFFAAAA,BF
-				Line ((AmmoObj->x-1)*16+15,(AmmoObj->y-1)*16+19)-Step(2,5),&HFFFFFF,BF
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+31, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+31 + 2, &HFFFF0000)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+29, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+29 + 4, &HFFFF5555)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+24, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+24 + 5, &HFFFFAAAA)
+				xge.Shape.RectFull((AmmoObj->x-1)*16+15, (AmmoObj->y-1)*16+19, (AmmoObj->x-1)*16+15 + 2, (AmmoObj->y-1)*16+19 + 5, &HFFFFFFFF)
 		End Select
 	Else
 		If AmmoObj->boom Then

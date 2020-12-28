@@ -46,31 +46,23 @@ Function MenuScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			img->Draw(0, 0)
 			ui->Draw(NULL)
 		Case XGE_MSG_LOADRES			' load resources
-			Print 1
 			img = Cast(Any Ptr, param)
 			ui = xui.GetRootElement()
-			Print 1
 			Btn_NewGame  = xui.CreateButton(XUI_LAYOUT_RULER_PIXEL, 240, 280, 160, 40, !"开始游戏\n(New Game)")
-			Print 1
 			Btn_LoadGame = xui.CreateButton(XUI_LAYOUT_RULER_PIXEL, 240, 340, 160, 40, !"载入存档\n(Load)")
-			Print 1
 			Btn_ExitGame = xui.CreateButton(XUI_LAYOUT_RULER_PIXEL, 240, 400, 160, 40, !"退出游戏\n(Exit)")
-			Print 1, Btn_NewGame, Btn_LoadGame, Btn_ExitGame
 			Btn_NewGame->CaptionFont  = 2
 			Btn_LoadGame->CaptionFont = 2
 			Btn_ExitGame->CaptionFont = 2
 			Btn_NewGame->Event.OnClick  = Cast(Any Ptr, @NewGame_OnClick )
 			Btn_LoadGame->Event.OnClick = Cast(Any Ptr, @LoadGame_OnClick)
 			Btn_ExitGame->Event.OnClick = Cast(Any Ptr, @ExitGame_OnClick)
-			Print 2
 			ui->Childs.AddElement(Btn_NewGame )
 			ui->Childs.AddElement(Btn_LoadGame)
 			ui->Childs.AddElement(Btn_ExitGame)
-			Print 2
 			xui.LayoutApply()
-			Print 2
 		Case XGE_MSG_FREERES			' unload resources
-			
+			xui.FreeChilds(ui)
 		Case XGE_MSG_CLOSE				' window closing
 			Return -1
 	End Select
