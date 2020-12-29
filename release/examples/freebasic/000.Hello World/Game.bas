@@ -9,7 +9,7 @@ xge.Init(800, 600, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE - Hello
 
 ' load font
 xge.Text.LoadFont("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
-xge.Text.LoadFont("c:\windows\fonts\simsun.ttc", 0)
+xge.Text.LoadFont("..\..\..\res\font\ttf\cn_zk_happy_2016.ttf", 0)
 
 ' change font size
 xge.Text.SetFontSize(2, 32)

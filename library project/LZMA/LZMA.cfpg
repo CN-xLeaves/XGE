@@ -1,0 +1,15 @@
+<Projects version="2.0">
+	<Project active="1">LZMA.cfp</Project>
+	<File active="0">LzmaDec.c</File>
+	<File active="0">Precomp.h</File>
+	<File active="0">LzmaDec.h</File>
+	<File active="0">LzmaEnc.c</File>
+	<File active="0">LzFindMt.h</File>
+	<File active="0">LzmaEnc.h</File>
+	<File active="0">LzmaLib.c</File>
+	<File active="0">LzmaLib.h</File>
+	<File active="0">D:\Git\XGE\library project\lzma1900\C\LzmaLib.h</File>
+	<File active="0">Alloc.c</File>
+	<File active="0">LzFind.c</File>
+	<File active="1">LzFindMt.c</File>
+</Projects>

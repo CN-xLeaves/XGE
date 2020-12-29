@@ -23,7 +23,7 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 		Case XGE_MSG_MOUSE_UP			' 鼠标弹起
 			
 		Case XGE_MSG_MOUSE_CLICK		' 鼠标单击
-			Print 123
+			
 		Case XGE_MSG_MOUSE_DCLICK		' 鼠标双击
 			
 		Case XGE_MSG_MOUSE_WHELL		' 鼠标滚轮滚动
@@ -46,7 +46,9 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_12px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("F:\字体\思源屏显臻宋.ttf", 0)
-			xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\DroidSans.ttf", 0)
+			xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\Roboto-Light.ttf", 0)
+			xge.Text.LoadFont("F:\字体\庞门正道标题体2.0增强版.ttf", 0)
+			xge.Text.SetFontSize(2, 12)
 			'xge.Text.LoadFont("C:\windows\fonts\simsun.ttc", 0)
 			
 			pic1 = New xge.Surface("D:\Git\XGE\release\res\back.xgi", 0)
@@ -65,7 +67,8 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			pic1->Draw_Alpha(200, 0)
 			'/
 			xge.Text.DrawA(pic1, 0, 140, "x x我x", &HFF00, 1)
-			pic1->Draw_Alpha(200, 0)
+			'xge.Text.DrawRectA(pic1, 0, 200, 400, 300, !"我想回到过去\n沉默着欢喜\n天空之城在哭泣\n越来越远的你", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 0, 0)
+			pic1->Draw_Alpha(NULL, 200, 0)
 		Case XGE_MSG_FREERES			' 卸载资源
 			
 		Case XGE_MSG_CLOSE				' 窗口关闭

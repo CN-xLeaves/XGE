@@ -13,9 +13,9 @@
 		#Define XGE_SOURCE_NOLIB
 		#Inclib "xge"
 	#EndIf
-	#Define XGE_EXTERNCLASS "Windows"					' Class 导出方式
+	#Define XGE_EXTERNCLASS "Windows"				' Class 导出方式
 	#Define XGE_EXTERNMODULE "Windows"				' NameSpace 导出方式
-	#Define XGE_EXTERNSTDEXT "Windows"			' 普通函数导出方式
+	#Define XGE_EXTERNSTDEXT "Windows"				' 普通函数导出方式
 	
 	
 	
@@ -581,34 +581,34 @@
 				Declare Function Copy(x As Integer, y As Integer, w As Integer, h As Integer) As xge.Surface Ptr
 				
 				' 绘制
-				Declare Sub Draw(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Add(x As Integer, y As Integer, mul As Integer = 255, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Add(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mul As Integer = 255, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Alpha(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Alpha(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Alpha2(x As Integer, y As Integer, a As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Alpha2(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, a As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Trans(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Trans(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_And(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_And(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Or(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Or(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_PSet(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_PSet(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Xor(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Xor(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Gray(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Gray(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Mirr(x As Integer, y As Integer, flag As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Mirr(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, flag As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Shade(x As Integer, y As Integer, mask As UByte, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Shade(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mask As UByte, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Custom(x As Integer, y As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Custom(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL, sf As xge.Surface Ptr = NULL)
-				Declare Sub Draw_Blend(x As Integer, y As Integer, bk As Any Ptr, param As Integer = 0, sf As xge.Surface Ptr = NULL)
-				Declare Sub DrawEx_Blend(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As Any Ptr, param As Integer = 0, sf As xge.Surface Ptr = NULL)
+				Declare Sub Draw(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_Add(sf As xge.Surface Ptr, x As Integer, y As Integer, mul As Integer = 255)
+				Declare Sub DrawEx_Add(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mul As Integer = 255)
+				Declare Sub Draw_Alpha(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_Alpha(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_Alpha2(sf As xge.Surface Ptr, x As Integer, y As Integer, a As Integer)
+				Declare Sub DrawEx_Alpha2(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, a As Integer)
+				Declare Sub Draw_Trans(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_Trans(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_And(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_And(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_Or(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_Or(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_PSet(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_PSet(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_Xor(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_Xor(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_Gray(sf As xge.Surface Ptr, x As Integer, y As Integer)
+				Declare Sub DrawEx_Gray(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer)
+				Declare Sub Draw_Mirr(sf As xge.Surface Ptr, x As Integer, y As Integer, flag As Integer)
+				Declare Sub DrawEx_Mirr(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, flag As Integer)
+				Declare Sub Draw_Shade(sf As xge.Surface Ptr, x As Integer, y As Integer, mask As UByte)
+				Declare Sub DrawEx_Shade(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mask As UByte)
+				Declare Sub Draw_Custom(sf As xge.Surface Ptr, x As Integer, y As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL)
+				Declare Sub DrawEx_Custom(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL)
+				Declare Sub Draw_Blend(sf As xge.Surface Ptr, x As Integer, y As Integer, bk As Any Ptr, param As Integer = 0)
+				Declare Sub DrawEx_Blend(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As Any Ptr, param As Integer = 0)
 			End Type
 			
 			
@@ -820,7 +820,7 @@
 				Declare Destructor()
 				
 				Declare Sub LayoutApply()
-				Declare Sub Draw(sf As xge.Surface Ptr, px As Integer = 0, py As Integer = 0)
+				Declare Sub Draw(sf As xge.Surface Ptr = NULL, px As Integer = 0, py As Integer = 0)
 				Declare Function EventLink(msg As Integer,param As Integer,eve As xge_event Ptr) As Integer
 				
 				' 画参考线
@@ -1050,6 +1050,9 @@
 				' 清理字库(删除字库的时候用，比如释放内存之类的)
 				FreeFont As Sub(fd As FontDriver Ptr)
 				
+				' 设置字体大小
+				SetFontSize As Sub(fd As FontDriver Ptr, size As UInteger)
+				
 				' 输出一行文字
 				DrawLine_Fast As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As WString Ptr, iColor As Integer, Style As Integer, wd As Integer)
 				DrawLineA_Fast As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, wd As Integer)
@@ -1086,12 +1089,12 @@
 				Declare Sub SetFontSize(idx As UInteger, size As UInteger)
 				
 				' 写字
-				Declare Sub Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
-				Declare Sub DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
+				Declare Sub Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
+				Declare Sub DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
 				
 				' 矩形格式化写字 [ align:对其方式、wd:字间距、ld:行间距 ]
-				Declare Sub DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0)
-				Declare Sub DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0)
+				Declare Sub DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0)
+				Declare Sub DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0)
 				
 			End Namespace
 			
@@ -1099,7 +1102,7 @@
 			/' -------------------------- 辅助库 -------------------------- '/
 			Namespace Aux
 				Declare Function ScreenShot() As xge.Surface Ptr
-				Declare Function GetPixel(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) As UInteger
+				Declare Function GetPixel(sf As xge.Surface Ptr, x As Integer, y As Integer) As UInteger
 				Declare Function RGB2BGR(c As UInteger) As UInteger
 				Declare Sub SetTitle(title As ZString Ptr)
 				Declare Sub SetView(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, f As Integer)
@@ -1116,19 +1119,19 @@
 			
 			/' -------------------------- 图形库 -------------------------- '/
 			Namespace Shape
-				Declare Sub Pixel(x As Integer, y As Integer, c As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Lines(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub LinesEx(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Rect(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub RectEx(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub RectFull(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub Circ(x As Integer, y As Integer, r As Integer, c As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub CircFull(x As Integer, y As Integer, r As Integer, c As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub CircEx(x As Integer, y As Integer, r As Integer, c As Integer, a As Single, sf As xge.Surface Ptr = NULL)
-				Declare Sub CircFullEx(x As Integer, y As Integer, r As Integer, c As Integer, a As Single, sf As xge.Surface Ptr = NULL)
-				Declare Sub CircArc(x As Integer, y As Integer, r As Integer, c As Integer, s As Integer, e As Integer, a As Single, sf As xge.Surface Ptr = NULL)
-				Declare Sub Full(x As Integer, y As Integer, c As Integer, f As Integer, sf As xge.Surface Ptr = NULL)
-				Declare Sub FullEx(x As Integer, y As Integer, p As ZString Ptr, f As Integer, sf As xge.Surface Ptr = NULL)
+				Declare Sub Pixel(sf As xge.Surface Ptr, x As Integer, y As Integer, c As Integer)
+				Declare Sub Lines(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
+				Declare Sub LinesEx(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer)
+				Declare Sub Rect(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
+				Declare Sub RectEx(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer)
+				Declare Sub RectFull(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
+				Declare Sub Circ(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer)
+				Declare Sub CircFull(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer)
+				Declare Sub CircEx(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, a As Single)
+				Declare Sub CircFullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, a As Single)
+				Declare Sub CircArc(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, s As Integer, e As Integer, a As Single)
+				Declare Sub Full(sf As xge.Surface Ptr, x As Integer, y As Integer, c As Integer, f As Integer)
+				Declare Sub FullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, p As ZString Ptr, f As Integer)
 			End Namespace
 			
 			

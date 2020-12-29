@@ -69,19 +69,16 @@ Extern XGE_EXTERNMODULE
 		Sub SetFontSize(idx As UInteger, size As UInteger) XGE_EXPORT_ALL
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(idx)
 			If fd Then
-				Dim ascent As Integer
-				stbtt_GetFontVMetrics(fd->Font, @ascent, 0, 0)
-				fd->FontSizeInt   = size
-				fd->HeightInt     = size
-				fd->FontSizeFloat = stbtt_ScaleForPixelHeight(fd->Font, size)
-				fd->TagFloat      = ascent * fd->FontSizeFloat		' 这里保存字体的基线
+				If fd->SetFontSize Then
+					fd->SetFontSize(fd, size)
+				EndIf
 			EndIf
 		End Sub
 		
 		
 		
 		' 写字
-		Sub Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) XGE_EXPORT_ALL
+		Sub Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) XGE_EXPORT_ALL
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If (iColor And &HFF000000) = 0 Then
@@ -103,7 +100,7 @@ Extern XGE_EXTERNMODULE
 				EndIf
 			EndIf
 		End Sub
-		Sub DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) XGE_EXPORT_ALL
+		Sub DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) XGE_EXPORT_ALL
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If (iColor And &HFF000000) = 0 Then
@@ -134,7 +131,7 @@ Extern XGE_EXTERNMODULE
 		End Sub
 		
 		' 矩形格式化写字 [ align:对其方式、wd:字间距、ld:行间距 ]
-		Sub DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) XGE_EXPORT_ALL
+		Sub DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) XGE_EXPORT_ALL
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If fd->DrawRect_Fast Then
@@ -212,7 +209,7 @@ Extern XGE_EXTERNMODULE
 				EndIf
 			EndIf
 		End Sub
-		Sub DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, iColor As UInteger, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) XGE_EXPORT_ALL
+		Sub DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) XGE_EXPORT_ALL
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If fd->DrawRectA_Fast Then

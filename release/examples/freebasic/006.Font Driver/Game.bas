@@ -23,7 +23,7 @@ Sub DrawWord_ANSI(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As In
 	img->PrintText(0, 0, 100, 100, "Arial", 32, XGE_ALIGN_LEFT Or XGE_ALIGN_TOP, iColor, Chr(iCode))
 	
 	' then draw the contents of the image onto the target image
-	img->Draw(px, py, sf)
+	img->Draw(sf, px, py)
 	
 	' free memory it's a good habit
 	Delete img
@@ -70,7 +70,7 @@ Function MyFontLoad(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As
 End Function
 
 ' Everything is ready, let XGE try the new font loader
-xge.Hook.SetFontLoadProc(@MyFontLoad)
+xge.Hook.SetFontLoadProc(Cast(Any Ptr, @MyFontLoad))
 
 ' create a font, enter as long as the font does not exist, so that the built-in loader cannot work
 xge.Text.LoadFont("it's just something that doesn't exist anyway", 0)

@@ -15,7 +15,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			xge.aux.SetCoodr(x, y, x+640, y+480)
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			img->Draw(0,0)
+			img->Draw(NULL, 0, 0)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			
 		Case XGE_MSG_MOUSE_DOWN			' mouse down
@@ -41,7 +41,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			' Note: only XGE_MSG_DRAW event will automatically lock screen
 			' Other events require manually locking the screen to avoid tearing the image
 			xge.Lock()
-				img->Draw_Gray(0,0)
+				img->Draw_Gray(NULL, 0, 0)
 				xge.Text.DrawRectA(NULL, 0, 0, 640, 480, "The game has been suspended", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 			xge.UnLock()
 			xge.Scene.Pause()

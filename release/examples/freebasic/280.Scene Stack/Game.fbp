@@ -19,12 +19,12 @@ Output=..\bin\280.Scene Stack.exe
 Run=
 Delete=
 [TabOrder]
-TabOrder=1,0
+TabOrder=1
 [File]
 1=Game.bas
 2=Game.rc
 [BreakPoint]
 1=
 [FileInfo]
-1=0,58,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1=0,17,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

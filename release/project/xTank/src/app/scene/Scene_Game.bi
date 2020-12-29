@@ -32,10 +32,10 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 				xge.Scene.Cut(@PauseScene, 40, FALSE, Cast(Integer, img_EndImage))
 			EndIf
 			' 检测AI
-			If GameObject.Map.Info.NumAI <= 0 Then
+			If GameObject.Map.HeadInfo.NumAI <= 0 Then
 				If GameObject.Tank.GetCountAI = 0 Then
 					' 给通关奖励
-					GameObject.Tank.Player.Exp += GameObject.Map.Info.PassExp
+					GameObject.Tank.Player.Exp += GameObject.Map.HeadInfo.PassExp
 					Module.CurMapID += 1
 					If Module.CurMapID > Module.MapCount Then
 						xge.Scene.Cut(@PauseScene, 40, FALSE, Cast(Integer, img_PassImage))
@@ -46,8 +46,8 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			EndIf
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			xge.Shape.RectFull(480, 0, 640, 452, &HFF444444)
-			xge.Shape.RectFull(480, 452, 640, 480, &HFF666666)
+			xge.Shape.RectFull(NULL, 480, 0, 640, 452, &HFF444444)
+			xge.Shape.RectFull(NULL, 480, 452, 640, 480, &HFF666666)
 			' 绘制信息文字
 			xge.Text.DrawRectA(NULL, 480, 452, 160, 28, "fps : " & xge.Scene.FPS, &HFFFFFFFF)
 			' 绘制坦克、地图、子弹等
@@ -64,7 +64,7 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			xge.Text.DrawA(NULL, 524, 180, "防御 : " & GameObject.Tank.Player.dlv, &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 500, 380, "AI : ", &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 524, 400, "活跃 : " & GameObject.Tank.GetCountAI, &HFFFFFFFF)
-			xge.Text.DrawA(NULL, 524, 420, "剩余 : " & GameObject.Map.Info.NumAI, &HFFFFFFFF)
+			xge.Text.DrawA(NULL, 524, 420, "剩余 : " & GameObject.Map.HeadInfo.NumAI, &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 500, 220, "操作 :", &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 524, 240, "F2 显示血条", &HFFFFFFFF)
 			xge.Text.DrawA(NULL, 524, 260, "F3 显示等级", &HFFFFFFFF)
@@ -91,11 +91,11 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 				If eve->scancode = SC_F6 Then			' 秘籍 F3 : 添加AI
 					Dim TankObj As TankItem Ptr = GameObject.Tank.NewTankEx(GetRand(0,3), GameObject.Tank.Player.lv)
 					If TankObj Then
-						TankObj->x = GameObject.Map.Info.PointAI(GameObject.AddrPointAI).x
-						TankObj->y = GameObject.Map.Info.PointAI(GameObject.AddrPointAI).y
-						TankObj->dt = GameObject.Map.Info.PointAI(GameObject.AddrPointAI).dt
+						TankObj->x = GameObject.Map.HeadInfo.PointAI(GameObject.AddrPointAI).x
+						TankObj->y = GameObject.Map.HeadInfo.PointAI(GameObject.AddrPointAI).y
+						TankObj->dt = GameObject.Map.HeadInfo.PointAI(GameObject.AddrPointAI).dt
 						GameObject.AddrPointAI += 1
-						If GameObject.AddrPointAI = GameObject.Map.Info.PointNum Then
+						If GameObject.AddrPointAI = GameObject.Map.HeadInfo.PointNum Then
 							GameObject.AddrPointAI = 0
 						EndIf
 					EndIf
@@ -106,13 +106,13 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			EndIf
 		Case XGE_MSG_LOADRES			' load resources
 			' 载入地图、初始化游戏数据
-			If GameObject.Map.Load() Then
+			If GameObject.Map.Load(Module.Path & Module.CurMapID & ".map") Then
 				GameObject.Tank.ReInitManage
 				' 判断是否需要初始化玩家数据
 				If Module.CurMapID = 1 Then
 					GameObject.Tank.InitPlayer()
 				Else
-					If GameObject.Map.Info.ClearPlayer Then
+					If GameObject.Map.HeadInfo.ClearPlayer Then
 						GameObject.Tank.InitPlayer()
 					EndIf
 				EndIf
@@ -129,9 +129,9 @@ Function GameScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 					Case Else
 						GameObject.Tank.Player.img = img_Tank1
 				End Select
-				GameObject.Tank.Player.x = GameObject.Map.Info.Player.x
-				GameObject.Tank.Player.y = GameObject.Map.Info.Player.y
-				GameObject.Tank.Player.dt = GameObject.Map.Info.Player.dt
+				GameObject.Tank.Player.x = GameObject.Map.HeadInfo.Player.x
+				GameObject.Tank.Player.y = GameObject.Map.HeadInfo.Player.y
+				GameObject.Tank.Player.dt = GameObject.Map.HeadInfo.Player.dt
 			Else
 				xge.Scene.StopAll()
 			EndIf

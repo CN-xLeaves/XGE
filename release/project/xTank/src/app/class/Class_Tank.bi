@@ -305,7 +305,7 @@ Sub TankManage.DrawTank(ByVal TankObj As TankItem Ptr)
 				EndIf
 			EndIf
 			' 画坦克
-			TankObj->img->DrawEx_Trans(((TankObj->x-1)*16)+TankObj->px, ((TankObj->y-1)*16)+TankObj->py, TankObj->stp*32, TankObj->dt*32, 31, 31)
+			TankObj->img->DrawEx_Trans(NULL, ((TankObj->x-1)*16)+TankObj->px, ((TankObj->y-1)*16)+TankObj->py, TankObj->stp*32, TankObj->dt*32, 31, 31)
 			' 画等级
 			Dim tr As RECT
 			tr.left = ((TankObj->x-1)*16)+TankObj->px
@@ -317,8 +317,8 @@ Sub TankManage.DrawTank(ByVal TankObj As TankItem Ptr)
 			EndIf
 			' 画血条
 			If ViewHP Then
-				xge.Shape.RectFull(((TankObj->x-1)*16)+TankObj->px, ((TankObj->y-1)*16)+TankObj->py+13, ((TankObj->x-1)*16)+TankObj->px + 32, ((TankObj->y-1)*16)+TankObj->py+13 + 4, &HFFFF0000)
-				xge.Shape.RectFull(((TankObj->x-1)*16)+TankObj->px+1, ((TankObj->y-1)*16)+TankObj->py+14, ((TankObj->x-1)*16)+TankObj->px+1 + ((TankObj->hp * 30) \ TankObj->hpmax), ((TankObj->y-1)*16)+TankObj->py+14 + 2, &HFF00FF00)
+				xge.Shape.RectFull(NULL, ((TankObj->x-1)*16)+TankObj->px, ((TankObj->y-1)*16)+TankObj->py+13, ((TankObj->x-1)*16)+TankObj->px + 32, ((TankObj->y-1)*16)+TankObj->py+13 + 4, &HFFFF0000)
+				xge.Shape.RectFull(NULL, ((TankObj->x-1)*16)+TankObj->px+1, ((TankObj->y-1)*16)+TankObj->py+14, ((TankObj->x-1)*16)+TankObj->px+1 + ((TankObj->hp * 30) \ TankObj->hpmax), ((TankObj->y-1)*16)+TankObj->py+14 + 2, &HFF00FF00)
 			EndIf
 			' 画血量
 			tr.top = tr.bottom+5

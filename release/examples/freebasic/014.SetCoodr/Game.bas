@@ -14,7 +14,7 @@ Dim pic1 As xge.Surface Ptr = New xge.Surface("..\..\..\res\back.bmp", 0)
 xge.aux.SetCoodr(-320, -240, 320, 240)
 
 ' draw image
-pic1->Draw(0,0)
+pic1->Draw(NULL, 0, 0)
 
 ' wait 1s
 Sleep 1000
@@ -23,7 +23,7 @@ Sleep 1000
 xge.aux.ReSetCoodr()
 
 ' draw image
-pic1->Draw(0,0)
+pic1->Draw(NULL, 0, 0)
 
 ' free memory it's a good habit
 Delete pic1

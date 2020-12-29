@@ -21,7 +21,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			backimg->Draw(0,0)
+			backimg->Draw(NULL, 0, 0)
 			ui->Draw(NULL)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			

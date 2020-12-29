@@ -118,6 +118,18 @@ End Sub
 
 
 
+' ttf 设置字体大小
+Sub SetFontSize_ttf(fd As xge.Text.FontDriver Ptr, size As UInteger)
+	Dim ascent As Integer
+	stbtt_GetFontVMetrics(fd->Font, @ascent, 0, 0)
+	fd->FontSizeInt   = size
+	fd->HeightInt     = size
+	fd->FontSizeFloat = stbtt_ScaleForPixelHeight(fd->Font, size)
+	fd->TagFloat      = ascent * fd->FontSizeFloat		' 这里保存字体的基线
+End Sub
+
+
+
 ' ttf 字库加载器
 Function xLoad_ttf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As UInteger, param As Integer) As Integer
 	Dim IsMemoryFree As Integer
@@ -154,11 +166,12 @@ Function xLoad_ttf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As 
 	fd->HeightInt     = 36
 	fd->FontSizeFloat = stbtt_ScaleForPixelHeight(font, 36)
 	fd->TagFloat      = ascent * fd->FontSizeFloat		' 这里保存字体的基线
-	fd->DrawWord  = Cast(Any Ptr, @xFont_DrawWord_ttf)
-	fd->DrawWordA = Cast(Any Ptr, @xFont_DrawWord_ttf_ansi)
-	fd->WordInfo  = Cast(Any Ptr, @xFont_WordInfo_ttf)
-	fd->WordInfoA = Cast(Any Ptr, @xFont_WordInfo_ttf_ansi)
-	fd->FreeFont  = Cast(Any Ptr, @xFree_ttf)
+	fd->DrawWord    = Cast(Any Ptr, @xFont_DrawWord_ttf)
+	fd->DrawWordA   = Cast(Any Ptr, @xFont_DrawWord_ttf_ansi)
+	fd->WordInfo    = Cast(Any Ptr, @xFont_WordInfo_ttf)
+	fd->WordInfoA   = Cast(Any Ptr, @xFont_WordInfo_ttf_ansi)
+	fd->FreeFont    = Cast(Any Ptr, @xFree_ttf)
+	fd->SetFontSize = Cast(Any Ptr, @SetFontSize_ttf)
 	fd->DrawLine_Fast  = NULL	'Cast(Any Ptr, @DrawLine_Fast_ttf)
 	fd->DrawLineA_Fast = NULL
 	fd->DrawRect_Fast  = NULL	'Cast(Any Ptr, @DrawRect_Fast_ttf)

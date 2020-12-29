@@ -15,7 +15,7 @@ xge.Init(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE - Draw 
 Dim img As xge.Surface Ptr = New xge.Surface("..\..\..\res\back.xgi", 0)
 
 ' draw image
-img->Draw(0,0)
+img->Draw(NULL, 0, 0)
 
 ' free memory it's a good habit
 Delete img

@@ -156,14 +156,14 @@ Extern XGE_EXTERNCLASS
 	
 	
 	' 绘制图像 [默认方法Alpha]
-	Sub Surface.Draw(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Alpha
 		Else
 			Put (x,y), img, Alpha
 		EndIf
 	End Sub
-	Sub Surface.DrawEx(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Alpha
 		Else
@@ -172,14 +172,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [饱和加法]
-	Sub Surface.Draw_Add(x As Integer, y As Integer, mul As Integer = 255, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Add(sf As xge.Surface Ptr, x As Integer, y As Integer, mul As Integer = 255) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Add, mul
 		Else
 			Put (x,y), img, Add, mul
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_Add(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mul As Integer = 255, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Add(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mul As Integer = 255) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Add, mul
 		Else
@@ -188,14 +188,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [使用半透明通道绘制]
-	Sub Surface.Draw_Alpha(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Alpha(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Alpha
 		Else
 			Put (x,y), img, Alpha
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_Alpha(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Alpha(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Alpha
 		Else
@@ -204,14 +204,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [半透明绘制]
-	Sub Surface.Draw_Alpha2(x As Integer, y As Integer, a As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Alpha2(sf As xge.Surface Ptr, x As Integer, y As Integer, a As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Alpha, a
 		Else
 			Put (x,y), img, Alpha, a
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_Alpha2(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, a As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Alpha2(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, a As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Alpha, a
 		Else
@@ -220,14 +220,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [掩膜颜色]
-	Sub Surface.Draw_Trans(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Trans(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Trans
 		Else
 			Put (x,y), img, Trans
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_Trans(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Trans(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Trans
 		Else
@@ -236,14 +236,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [与运算]
-	Sub Surface.Draw_And(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_And(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, And
 		Else
 			Put (x,y), img, And
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_And(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_And(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), And
 		Else
@@ -252,14 +252,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [或运算]
-	Sub Surface.Draw_Or(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Or(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Or
 		Else
 			Put (x,y), img, Or
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_Or(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Or(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Or
 		Else
@@ -268,14 +268,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [原图不处理]
-	Sub Surface.Draw_PSet(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_PSet(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, PSet
 		Else
 			Put (x,y), img, PSet
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_PSet(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_PSet(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), PSet
 		Else
@@ -284,14 +284,14 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [异或]
-	Sub Surface.Draw_Xor(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Xor(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Xor
 		Else
 			Put (x,y), img, Xor
 		EndIf
 	End Sub
-	Sub Surface.DrawEx_Xor(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Xor(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Xor
 		Else
@@ -300,7 +300,7 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [自定义算法]
-	Sub Surface.Draw_Custom(x As Integer, y As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Custom(sf As xge.Surface Ptr, x As Integer, y As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, Custom, bk, param
 		Else
@@ -308,7 +308,7 @@ Extern XGE_EXTERNCLASS
 		EndIf
 	End Sub
 	
-	Sub Surface.DrawEx_Custom(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Custom(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As XGE_DRAW_CUSTOM, param As Any Ptr = NULL) XGE_EXPORT_OBJ
 		If sf Then
 			Put sf->img, (x,y), img, (cx,cy)-Step(cw,ch), Custom, bk, param
 		Else
@@ -317,34 +317,34 @@ Extern XGE_EXTERNCLASS
 	End Sub
 	
 	' 绘制图像 [灰度]
-	Sub Surface.Draw_Gray(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Gray(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, @Blend_Gray, 0)
 	End Sub
-	Sub Surface.DrawEx_Gray(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Gray(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, @Blend_Gray, 0)
 	End Sub
 	
 	' 绘制图像 [镜像]
-	Sub Surface.Draw_Mirr(x As Integer, y As Integer, flag As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Mirr(sf As xge.Surface Ptr, x As Integer, y As Integer, flag As Integer) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, @Blend_Mirr, flag)
 	End Sub
-	Sub Surface.DrawEx_Mirr(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, flag As Integer, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Mirr(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, flag As Integer) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, @Blend_Mirr, flag)
 	End Sub
 	
 	' 绘制图像 [过渡]
-	Sub Surface.Draw_Shade(x As Integer, y As Integer, mask As UByte, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Shade(sf As xge.Surface Ptr, x As Integer, y As Integer, mask As UByte) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, @Blend_Shade, mask)
 	End Sub
-	Sub Surface.DrawEx_Shade(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mask As UByte, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Shade(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mask As UByte) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, @Blend_Shade, mask)
 	End Sub
 	
 	' 绘制图像 [自定义混合算法(XGE)]
-	Sub Surface.Draw_Blend(x As Integer, y As Integer, bk As Any Ptr, param As Integer = 0, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.Draw_Blend(sf As xge.Surface Ptr, x As Integer, y As Integer, bk As Any Ptr, param As Integer = 0) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, bk, param)
 	End Sub
-	Sub Surface.DrawEx_Blend(x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As Any Ptr, param As Integer = 0, sf As xge.Surface Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Surface.DrawEx_Blend(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As Any Ptr, param As Integer = 0) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, bk, param)
 	End Sub
 	

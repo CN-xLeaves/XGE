@@ -6,6 +6,7 @@
 
 ' Import SDK [develop good classification habits]
 #Include "src\sdk\Public.bi"
+#Include "src\sdk\InputBox.bi"
 
 
 
@@ -29,6 +30,7 @@
 #Include "src\app\scene\Scene_Pause.bi"
 #Include "src\app\scene\Scene_Game.bi"
 #Include "src\app\scene\Scene_Menu.bi"
+#Include "src\app\scene\Scene_MapEdit.bi"
 
 
 

@@ -21,7 +21,7 @@ Function PauseScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 	Select Case msg
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			img->Draw_Trans(0, 0)
+			img->Draw_Trans(NULL, 0, 0)
 			ui->Draw(NULL)
 		Case XGE_MSG_LOADRES			' load resources
 			img = Cast(Any Ptr, param)

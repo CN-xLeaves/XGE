@@ -26,7 +26,7 @@ Extern XGE_EXTERNMODULE
 	End Function
 	
 	' ȡɫ
-	Function XGE_EXPORT_Aux_GetPixel(x As Integer, y As Integer, sf As xge.Surface Ptr = NULL) As UInteger XGE_EXPORT_ALL
+	Function XGE_EXPORT_Aux_GetPixel(sf As xge.Surface Ptr, x As Integer, y As Integer) As UInteger XGE_EXPORT_ALL
 		If sf Then
 			Return Point(x, y, sf->img)
 		Else

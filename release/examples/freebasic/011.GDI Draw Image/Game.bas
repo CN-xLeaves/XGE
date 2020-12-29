@@ -19,7 +19,7 @@ img->PrintImageZoom(0, 0, 320, 240, "..\..\..\res\back.bmp", 0)
 ' However, these methods are not efficient and are not recommended for large-scale use in games.
 
 ' draw image
-img->Draw(0,0)
+img->Draw(NULL, 0, 0)
 
 ' free memory it's a good habit
 Delete img

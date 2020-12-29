@@ -15,7 +15,7 @@ Function Scene1(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integ
 	Select Case msg
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			img->Draw(0,0)
+			img->Draw(NULL, 0, 0)
 			xge.Text.DrawRectA(NULL, 0, 0, 640, 480, !"Press [Space] to enter the next scene\n\nPress [Esc] to exit the current scene", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_KEY_DOWN			' mouse down
 			If eve->scancode = SC_ESCAPE Then
@@ -40,7 +40,7 @@ Function Scene2(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integ
 	Select Case msg
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			img->Draw(0,0)
+			img->Draw(NULL, 0, 0)
 			xge.Text.DrawRectA(NULL, 0, 0, 640, 480, !"Press [Space] to cut the next scene\n\nPress [Esc] to return the previous scene", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_KEY_DOWN			' mouse down
 			If eve->scancode = SC_ESCAPE Then
@@ -65,7 +65,7 @@ Function Scene3(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integ
 	Select Case msg
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			img->Draw(0,0)
+			img->Draw(NULL, 0, 0)
 			xge.Text.DrawRectA(NULL, 0, 0, 640, 480, !"Press [Esc] to return the previous scene", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_KEY_DOWN			' mouse down
 			If eve->scancode = SC_ESCAPE Then

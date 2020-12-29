@@ -6,33 +6,33 @@
 
 ' draw a red dot in the upper right corner of the button
 Sub OnUserDraw(ele As xui.Button Ptr)
-	xge.Shape.CircFull(ele->Layout.Rect.w - 12, 12, 5, &HFFFF0000, ele->image)
+	xge.Shape.CircFull(ele->image, ele->Layout.Rect.w - 12, 12, 5, &HFFFF0000)
 End Sub
 
 ' Completely redraw the button, the drawing code of xui.CheckBox is used here
 Sub OnDraw(ele As xui.Button Ptr)
 	Select Case ele->private_Status
 		Case 1
-			xge.shape.Rect(2, 2, 18, 18, ele->HotBack.BorderColor, ele->Image)
-			xge.shape.Rect(3, 3, 17, 17, ele->HotBack.BorderColor, ele->Image)
-			xge.shape.RectFull(4, 4, 16, 16, (ele->HotBack.FillColor And &H00FFFFFF) Or &H40000000, ele->Image)
+			xge.shape.Rect(ele->image, 2, 2, 18, 18, ele->HotBack.BorderColor)
+			xge.shape.Rect(ele->image, 3, 3, 17, 17, ele->HotBack.BorderColor)
+			xge.shape.RectFull(ele->image, 4, 4, 16, 16, (ele->HotBack.FillColor And &H00FFFFFF) Or &H40000000)
 			xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->HotBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case 2
-			xge.shape.Rect(2, 2, 18, 18, ele->PressBack.BorderColor, ele->Image)
-			xge.shape.Rect(3, 3, 17, 17, ele->PressBack.BorderColor, ele->Image)
-			xge.shape.RectFull(4, 4, 16, 16, ele->PressBack.FillColor, ele->Image)
+			xge.shape.Rect(ele->image, 2, 2, 18, 18, ele->PressBack.BorderColor)
+			xge.shape.Rect(ele->image, 3, 3, 17, 17, ele->PressBack.BorderColor)
+			xge.shape.RectFull(ele->image, 4, 4, 16, 16, ele->PressBack.FillColor)
 			xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->PressBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' judging the selected state
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
-				xge.shape.Rect(2, 2, 18, 18, ele->CheckBack.FillColor, ele->Image)
-				xge.shape.Rect(3, 3, 17, 17, ele->CheckBack.FillColor, ele->Image)
-				xge.shape.RectFull(7, 7, 13, 13, ele->CheckBack.BorderColor, ele->Image)
+				xge.shape.Rect(ele->image, 2, 2, 18, 18, ele->CheckBack.FillColor)
+				xge.shape.Rect(ele->image, 3, 3, 17, 17, ele->CheckBack.FillColor)
+				xge.shape.RectFull(ele->image, 7, 7, 13, 13, ele->CheckBack.BorderColor)
 				xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->CheckBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			Else
-				xge.shape.Rect(2, 2, 18, 18, ele->NormalBack.BorderColor, ele->Image)
-				xge.shape.Rect(3, 3, 17, 17, ele->NormalBack.BorderColor, ele->Image)
-				xge.shape.RectFull(4, 4, 16, 16, (ele->NormalBack.FillColor And &H00FFFFFF) Or &H40000000, ele->Image)
+				xge.shape.Rect(ele->image, 2, 2, 18, 18, ele->NormalBack.BorderColor)
+				xge.shape.Rect(ele->image, 3, 3, 17, 17, ele->NormalBack.BorderColor)
+				xge.shape.RectFull(ele->image, 4, 4, 16, 16, (ele->NormalBack.FillColor And &H00FFFFFF) Or &H40000000)
 				xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->NormalBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select
@@ -50,7 +50,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			backimg->Draw(0,0)
+			backimg->Draw(NULL, 0, 0)
 			ui->Draw(NULL)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			

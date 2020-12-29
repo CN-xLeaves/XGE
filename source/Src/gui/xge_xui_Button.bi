@@ -4,10 +4,10 @@
 ' 根据参数绘制按钮背景
 Sub DrawBackImage(ele As xui.Element Ptr, bi As xui.BackImage Ptr, sCaption As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr)
 	If bi->Image Then
-		bi->Image->Draw(0, 0, ele->Image)
+		bi->Image->Draw(ele->Image, 0, 0)
 	Else
-		xge.shape.Rect(0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, bi->BorderColor, ele->Image)
-		xge.shape.RectFull(1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bi->FillColor, ele->Image)
+		xge.shape.Rect(ele->Image, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, bi->BorderColor)
+		xge.shape.RectFull(ele->Image, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bi->FillColor)
 	EndIf
 	xge.Text.DrawRectA(ele->Image, CaptionOffset->x, CaptionOffset->y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, sCaption, bi->TextColor, fontid, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 End Sub
@@ -37,26 +37,26 @@ End Sub
 Sub xui_class_CheckBox_OnDraw(ele As xui.Button Ptr)
 	Select Case ele->private_Status
 		Case 1
-			xge.shape.Rect(2, 2, 18, 18, ele->HotBack.BorderColor, ele->Image)
-			xge.shape.Rect(3, 3, 17, 17, ele->HotBack.BorderColor, ele->Image)
-			xge.shape.RectFull(4, 4, 16, 16, (ele->HotBack.FillColor And &H00FFFFFF) Or &H40000000, ele->Image)
+			xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->HotBack.BorderColor)
+			xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->HotBack.BorderColor)
+			xge.shape.RectFull(ele->Image, 4, 4, 16, 16, (ele->HotBack.FillColor And &H00FFFFFF) Or &H40000000)
 			xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->HotBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case 2
-			xge.shape.Rect(2, 2, 18, 18, ele->PressBack.BorderColor, ele->Image)
-			xge.shape.Rect(3, 3, 17, 17, ele->PressBack.BorderColor, ele->Image)
-			xge.shape.RectFull(4, 4, 16, 16, ele->PressBack.FillColor, ele->Image)
+			xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->PressBack.BorderColor)
+			xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->PressBack.BorderColor)
+			xge.shape.RectFull(ele->Image, 4, 4, 16, 16, ele->PressBack.FillColor)
 			xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->PressBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' 处理选中的状态
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
-				xge.shape.Rect(2, 2, 18, 18, ele->CheckBack.FillColor, ele->Image)
-				xge.shape.Rect(3, 3, 17, 17, ele->CheckBack.FillColor, ele->Image)
-				xge.shape.RectFull(7, 7, 13, 13, ele->CheckBack.BorderColor, ele->Image)
+				xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->CheckBack.FillColor)
+				xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->CheckBack.FillColor)
+				xge.shape.RectFull(ele->Image, 7, 7, 13, 13, ele->CheckBack.BorderColor)
 				xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->CheckBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			Else
-				xge.shape.Rect(2, 2, 18, 18, ele->NormalBack.BorderColor, ele->Image)
-				xge.shape.Rect(3, 3, 17, 17, ele->NormalBack.BorderColor, ele->Image)
-				xge.shape.RectFull(4, 4, 16, 16, (ele->NormalBack.FillColor And &H00FFFFFF) Or &H40000000, ele->Image)
+				xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->NormalBack.BorderColor)
+				xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->NormalBack.BorderColor)
+				xge.shape.RectFull(ele->Image, 4, 4, 16, 16, (ele->NormalBack.FillColor And &H00FFFFFF) Or &H40000000)
 				xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->NormalBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select
@@ -66,26 +66,26 @@ End Sub
 Sub xui_class_RadioBox_OnDraw(ele As xui.Button Ptr)
 	Select Case ele->private_Status
 		Case 1
-			xge.shape.CircFull(10, 10, 8, (ele->HotBack.FillColor And &H00FFFFFF) Or &H40000000, ele->Image)
-			xge.shape.Circ(10, 10, 9, ele->HotBack.BorderColor, ele->Image)
-			xge.shape.Circ(10, 10, 8, ele->HotBack.BorderColor, ele->Image)
+			xge.shape.CircFull(ele->Image, 10, 10, 8, (ele->HotBack.FillColor And &H00FFFFFF) Or &H40000000)
+			xge.shape.Circ(ele->Image, 10, 10, 9, ele->HotBack.BorderColor)
+			xge.shape.Circ(ele->Image, 10, 10, 8, ele->HotBack.BorderColor)
 			xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->HotBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case 2
-			xge.shape.CircFull(10, 10, 8, ele->PressBack.FillColor, ele->Image)
-			xge.shape.Circ(10, 10, 9, ele->PressBack.BorderColor, ele->Image)
-			xge.shape.Circ(10, 10, 8, ele->PressBack.BorderColor, ele->Image)
+			xge.shape.CircFull(ele->Image, 10, 10, 8, ele->PressBack.FillColor)
+			xge.shape.Circ(ele->Image, 10, 10, 9, ele->PressBack.BorderColor)
+			xge.shape.Circ(ele->Image, 10, 10, 8, ele->PressBack.BorderColor)
 			xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->PressBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' 处理选中的状态
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
-				xge.shape.Circ(10, 10, 9, ele->CheckBack.FillColor, ele->Image)
-				xge.shape.Circ(10, 10, 8, ele->CheckBack.FillColor, ele->Image)
-				xge.shape.CircFull(10, 10, 4, ele->CheckBack.BorderColor, ele->Image)
+				xge.shape.Circ(ele->Image, 10, 10, 9, ele->CheckBack.FillColor)
+				xge.shape.Circ(ele->Image, 10, 10, 8, ele->CheckBack.FillColor)
+				xge.shape.CircFull(ele->Image, 10, 10, 4, ele->CheckBack.BorderColor)
 				xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->CheckBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			Else
-				xge.shape.CircFull(10, 10, 8, (ele->NormalBack.FillColor And &H00FFFFFF) Or &H40000000, ele->Image)
-				xge.shape.Circ(10, 10, 9, ele->NormalBack.BorderColor, ele->Image)
-				xge.shape.Circ(10, 10, 8, ele->NormalBack.BorderColor, ele->Image)
+				xge.shape.CircFull(ele->Image, 10, 10, 8, (ele->NormalBack.FillColor And &H00FFFFFF) Or &H40000000)
+				xge.shape.Circ(ele->Image, 10, 10, 9, ele->NormalBack.BorderColor)
+				xge.shape.Circ(ele->Image, 10, 10, 8, ele->NormalBack.BorderColor)
 				xge.Text.DrawRectA(ele->Image, 24 + ele->CaptionOffset.x, ele->CaptionOffset.y, ele->Layout.Rect.w - (24 + ele->CaptionOffset.x), 20, ele->Caption, ele->NormalBack.TextColor, ele->CaptionFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select

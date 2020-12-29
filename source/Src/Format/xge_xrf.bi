@@ -306,9 +306,10 @@ Function xLoad_xrf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As 
 	fd->WidthInt    = info->Data->WordWidth
 	fd->HeightInt   = info->Data->WordHeight
 	fd->FontSizeInt = info->Data->AnsiWidth
-	fd->WordInfo  = Cast(Any Ptr, @xFont_WordInfo_xrf)
-	fd->WordInfoA = Cast(Any Ptr, @xFont_WordInfo_xrf)
-	fd->FreeFont  = Cast(Any Ptr, @xFree_xrf)
+	fd->WordInfo    = Cast(Any Ptr, @xFont_WordInfo_xrf)
+	fd->WordInfoA   = Cast(Any Ptr, @xFont_WordInfo_xrf)
+	fd->FreeFont    = Cast(Any Ptr, @xFree_xrf)
+	fd->SetFontSize = NULL
 	fd->DrawLine_Fast  = NULL	'Cast(Any Ptr, @DrawLine_Fast_xrf)
 	fd->DrawLineA_Fast = NULL
 	fd->DrawRect_Fast  = NULL	'Cast(Any Ptr, @DrawRect_Fast_xrf)

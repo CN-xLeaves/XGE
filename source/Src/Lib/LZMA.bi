@@ -120,7 +120,7 @@ Returns:
 	dictSize			字典大小
 	numThreads		线程数量
 '/
-declare function LzmaCompress(ByVal dest as ubyte ptr,ByRef destLen as size_t,ByVal src as const ubyte ptr,ByVal srcLen as size_t,ByVal outProps as ubyte ptr,_
+Declare Function LzmaCompress StdCall(ByVal dest as ubyte ptr,ByRef destLen as size_t,ByVal src as const ubyte ptr,ByVal srcLen as size_t,ByVal outProps as ubyte ptr,_
 								ByRef outPropsSize as size_t, _           ' outPropsSize must be = 5 
                 byval level as integer = -1,_             ' 0 <= level <= 9, default = 5 
                 byval dictSize as uinteger = 0, _         ' default = (1 << 24) 
@@ -151,9 +151,9 @@ Returns:
   SZ_ERROR_INPUT_EOF   - it needs more bytes in input buffer (src)
 '/
 
-declare function LzmaUncompress(ByVal dest as ubyte Ptr,ByRef destLen as size_t,ByVal src as const ubyte ptr,ByRef srcLen as size_t,ByVal props as const ubyte ptr,ByVal propsSize as size_t) as integer
+Declare Function LzmaUncompress StdCall(ByVal dest as ubyte Ptr,ByRef destLen as size_t,ByVal src as const ubyte ptr,ByRef srcLen as size_t,ByVal props as const ubyte ptr,ByVal propsSize as size_t) as integer
 
-end Extern
+End Extern
 
 
 

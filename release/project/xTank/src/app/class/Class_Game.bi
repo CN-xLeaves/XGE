@@ -82,11 +82,11 @@ Sub GameSystem.TankMove(ByVal TankObj As TankItem Ptr,ByVal dt As Integer)
 					Case 1			' вС
 						If TankObj->x > 1 Then IsMove = -1
 					Case 2			' ср
-						If TankObj->x < (Map.Info.MapWidth-1) Then IsMove = -1
+						If TankObj->x < (Map.HeadInfo.MapWidth-1) Then IsMove = -1
 					Case 3			' ио
 						If TankObj->y > 1 Then IsMove = -1
 					Case Else		' об
-						If TankObj->y < (Map.Info.MapHeight-1) Then IsMove = -1
+						If TankObj->y < (Map.HeadInfo.MapHeight-1) Then IsMove = -1
 				End Select
 			EndIf
 			If IsMove Then
@@ -188,19 +188,19 @@ Sub GameSystem.RunAll()
 	' к╒╧ж
 	If GetTickCount() - TickNewAI > Module.SpawnTime Then
 		TickNewAI = GetTickCount()
-		If Map.Info.NumAI > 0 Then
-			If Tank.GetCountAI < Map.Info.RunAI Then
+		If Map.HeadInfo.NumAI > 0 Then
+			If Tank.GetCountAI < Map.HeadInfo.RunAI Then
 				Dim TankObj As TankItem Ptr = Tank.NewTankEx(GetRand(0,3), Tank.Player.lv)
 				If TankObj Then
-					TankObj->x = Map.Info.PointAI(AddrPointAI).x
-					TankObj->y = Map.Info.PointAI(AddrPointAI).y
-					TankObj->dt = Map.Info.PointAI(AddrPointAI).dt
+					TankObj->x = Map.HeadInfo.PointAI(AddrPointAI).x
+					TankObj->y = Map.HeadInfo.PointAI(AddrPointAI).y
+					TankObj->dt = Map.HeadInfo.PointAI(AddrPointAI).dt
 					
 					AddrPointAI += 1
-					If AddrPointAI = Map.Info.PointNum Then
+					If AddrPointAI = Map.HeadInfo.PointNum Then
 						AddrPointAI = 0
 					EndIf
-					Map.Info.NumAI -= 1
+					Map.HeadInfo.NumAI -= 1
 				EndIf
 			EndIf
 		EndIf
@@ -234,7 +234,7 @@ Sub GameSystem.RunAll()
 						p2.y = AmmoObj->y + 1
 					Case 2			' ср
 						AmmoObj->x += 1
-						If AmmoObj->x >= Map.Info.MapWidth Then AmmoObj->stk = 0
+						If AmmoObj->x >= Map.HeadInfo.MapWidth Then AmmoObj->stk = 0
 						p1.x = AmmoObj->x
 						p1.y = AmmoObj->y
 						p2.x = AmmoObj->x
@@ -248,7 +248,7 @@ Sub GameSystem.RunAll()
 						p2.y = AmmoObj->y
 					Case Else		' об
 						AmmoObj->y += 1
-						If AmmoObj->y >= Map.Info.MapHeight Then AmmoObj->stk = 0
+						If AmmoObj->y >= Map.HeadInfo.MapHeight Then AmmoObj->stk = 0
 						p1.x = AmmoObj->x
 						p1.y = AmmoObj->y
 						p2.x = AmmoObj->x + 1

@@ -77,9 +77,15 @@ Function AppInit() As Integer
 		MessageBox(0, "游戏资源加载失败，请确保游戏客户端完整！", "xTank", MB_ICONERROR)
 		Return 0
 	EndIf
-	' 启动场景
-	xge.Scene.Cut(@LogoScene, 40, FALSE, Cast(Integer, img_Logo))
-	xge.Scene.Cut(@MenuScene, 40, FALSE, Cast(Integer, img_BackImage))
+	If Command(1) = "-e" Then
+		' 地图编辑器模式启动
+		MapPath = Command(2)
+		xge.Scene.Cut(@MapEditScene, 40)
+	Else
+		' 游戏模式启动
+		xge.Scene.Cut(@LogoScene, 40, FALSE, Cast(Integer, img_Logo))
+		xge.Scene.Cut(@MenuScene, 40, FALSE, Cast(Integer, img_BackImage))
+	EndIf
 End Function
 
 

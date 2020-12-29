@@ -22,7 +22,7 @@ bgm->Play()
 ' Wait, press ESC to exit
 Do
 	Sleep(15)
-Loop Until xge.xInput.KeyStatus(SC_ESCAPE)
+Loop Until xInput.KeyStatus(SC_ESCAPE)
 
 ' free memory it's a good habit
 Delete bgm

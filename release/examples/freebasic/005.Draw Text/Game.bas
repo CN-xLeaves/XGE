@@ -22,7 +22,7 @@ img->PrintText(0, 300, 800, 100, "Î¢ÈíÑÅºÚ", 48, XGE_ALIGN_CENTER Or XGE_ALIGN_M
 img->PrintText(0, 400, 800, 100, "Î¢ÈíÑÅºÚ", 52, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE Or XGE_FONT_BOLD, "..\..\..\res\fire.jpg", 0, "xywhsoft@qq.com")
 
 ' free memory it's a good habit
-img->Draw(0,0)
+img->Draw(NULL, 0,0)
 
 ' it should be noted that gdi is ineffcient and is not recommended for large-scale use in games.
 

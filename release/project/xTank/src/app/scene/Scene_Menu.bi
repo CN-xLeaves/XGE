@@ -21,7 +21,7 @@ Function MenuScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 	Select Case msg
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			img->Draw(0, 0)
+			img->Draw(NULL, 0, 0)
 			ui->Draw(NULL)
 		Case XGE_MSG_LOADRES			' load resources
 			img = Cast(Any Ptr, param)

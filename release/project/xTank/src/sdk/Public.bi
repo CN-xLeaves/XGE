@@ -11,3 +11,17 @@ Function RandTest(RndNum As Integer) As Integer
 		Return -1
 	EndIf
 End Function
+
+Function ResToFile(ResID As Integer,sFile As ZString Ptr) As Integer
+	Dim ResHdr As HRSRC = FindResource(NULL, MAKEINTRESOURCE(ResID), RT_RCDATA)
+	If ResHdr Then
+		Dim ResSize As Integer = SizeofResource(NULL, ResHdr)
+		If ResSize Then
+			Dim ResData As HGLOBAL = LoadResource(NULL, ResHdr)
+			If ResData Then
+				xFile.Write(sFile, ResData, 0, ResSize)
+				Return -1
+			EndIf
+		EndIf
+	EndIf
+End Function

@@ -18,7 +18,7 @@ xFile.Read("..\..\..\res\back.bmp", t_mem, 0, t_len)
 Dim img As xge.Surface Ptr = New xge.Surface(t_mem, t_len)
 
 ' draw image
-img->Draw(0,0)
+img->Draw(NULL, 0, 0)
 
 ' free memory it's a good habit
 DeAllocate(t_mem)

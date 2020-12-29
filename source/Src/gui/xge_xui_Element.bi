@@ -157,7 +157,7 @@ Namespace xui
 	End Sub
 	
 	' 画出元素
-	Sub Element.Draw(sf As xge.Surface Ptr, px As Integer = 0, py As Integer = 0) XGE_EXPORT_OBJ
+	Sub Element.Draw(sf As xge.Surface Ptr = NULL, px As Integer = 0, py As Integer = 0) XGE_EXPORT_OBJ
 		Image->Clear()
 		If ClassEvent.OnDraw Then
 			ClassEvent.OnDraw(@This)
@@ -179,13 +179,13 @@ Namespace xui
 			DrawDebug()
 		EndIf
 		' 画到画布上
-		Image->Draw(px + Layout.Rect.x, py + Layout.Rect.y, sf)
+		Image->Draw(sf, px + Layout.Rect.x, py + Layout.Rect.y)
 	End Sub
 	
 	' 画出元素的参考线
 	Sub Element.DrawDebug() XGE_EXPORT_OBJ
 		If Image Then
-			xge.shape.Rect(0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, &HFF00FF00, Image)
+			xge.shape.Rect(Image, 0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, &HFF00FF00)
 			xge.Text.DrawRectA(Image, 0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, Identifier & " [" & Layout.ScreenCoord.x & "," & Layout.ScreenCoord.y & "]", &HFF00FF00)
 		EndIf
 	End Sub
