@@ -75,6 +75,14 @@ Extern XGE_EXTERNMODULE
 			EndIf
 		End Sub
 		
+		' 获取字体大小
+		Function GetFontSize(idx As UInteger) As Integer XGE_EXPORT_ALL
+			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(idx)
+			If fd Then
+				Return fd->HeightInt
+			EndIf
+		End Function
+		
 		
 		
 		' 写字

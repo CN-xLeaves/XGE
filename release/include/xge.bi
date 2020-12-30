@@ -263,6 +263,8 @@
 	/' -------------------------- 元素 ClassID 定义 -------------------------- '/
 	#Define XUI_CLASS_ELEMENT			0				' 基本元素
 	#Define XUI_CLASS_BUTTON			1				' 按钮(包含单选、复选类元素)
+	#Define XUI_CLASS_STATIC			2				' 静态元素(包含标签、图片等)
+	#Define XUI_CLASS_SCROLLBAR			3				' 滚动条(包含横向和纵向)
 	#Define XUI_CLASS_USER				&H10000			' 用户自定义元素的开始ID
 	
 	
@@ -734,11 +736,18 @@
 			
 			
 			' 背景结构
-			Type BackImage
+			Type BackStyle_Struct
+				Image As xge.Surface Ptr = NULL
+				BorderColor As Integer
+				FillColor As Integer
+				Hide As Integer
+			End Type
+			Type BackStyle_Text_Struct
 				Image As xge.Surface Ptr = NULL
 				BorderColor As Integer
 				FillColor As Integer
 				TextColor As Integer
+				Hide As Integer
 			End Type
 			
 			
@@ -810,7 +819,8 @@
 				NeedRedraw As Integer = -1			' 需要重绘标记
 				Identifier As ZString * 32			' 元素ID [相当于引擎附加数据，用户可以将ID映射到脚本语言中处理事件]
 				DrawRange As Integer = 0			' 绘制元素范围
-				Tag As Any Ptr						' 附加数据
+				TagInt As Integer					' 附加数据
+				TagPtr As Any Ptr					' 附加数据
 				
 				' 构造函数
 				Declare Constructor()
@@ -829,19 +839,19 @@
 			
 			
 			' 按钮类
-			Type Button Extends Element
-				Caption As ZString Ptr							' 按钮的标题
-				CaptionOffset As xui.Coord						' 按钮标题坐标偏移
-				CaptionFont As UInteger							' 按钮标题的字体
+			Type Button Extends xui.Element
+				Text As ZString Ptr								' 按钮的标题
+				TextOffset As xui.Coord							' 按钮标题坐标偏移
+				TextFont As UInteger							' 按钮标题的字体
 				
 				Mode As Integer									' 工作模式 [1=复选框、2=单选框、其他=无状态按钮]
 				Checked As Integer								' 按钮是否被选中
 				
-				' 背景图
-				NormalBack As BackImage							' 正常状态的背景
-				HotBack As BackImage							' 按钮被激活 (鼠标进入)
-				PressBack As BackImage							' 按钮被按下
-				CheckBack As BackImage							' 选中时的背景
+				' 背景样式
+				NormalStyle As BackStyle_Text_Struct			' 正常状态的样式
+				HotStyle As BackStyle_Text_Struct				' 按钮被激活的样式 (鼠标进入)
+				PressStyle As BackStyle_Text_Struct				' 按钮被按下的样式
+				CheckStyle As BackStyle_Text_Struct				' 选中时的样式
 				
 				' 声音
 				EnterSound As xge.Sound Ptr						' 鼠标进入的声音
@@ -856,6 +866,28 @@
 				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
 				private_Status As Integer						' 按钮的状态 [0=常规、1=热点、2=按下]
 				private_AllowClick As Integer					' 允许触发点击事件 [当鼠标是在按钮上按下的时候设置为TRUE]
+			End Type
+			
+			
+			' 标签类
+			Type Label Extends xui.Element
+				Text As ZString Ptr								' 标题
+				TextOffset As xui.Coord							' 标题显示偏移
+				TextColor As UInteger							' 标题颜色
+				TextFont As UInteger							' 标题字体
+				TextAlign As Integer							' 标题对齐方式
+				LineSpace As Integer							' 行间距
+				WordSpace As Integer							' 字间距
+				BackStyle As xui.BackStyle_Struct				' 背景样式
+			End Type
+			
+			
+			' 容器类
+			Type Frame Extends xui.Element
+				Text As ZString Ptr								' 标题
+				TextColor As UInteger							' 标题颜色
+				TextFont As UInteger							' 标题字体
+				BackStyle As xui.BackStyle_Struct				' 背景样式
 			End Type
 			
 			
@@ -1085,8 +1117,11 @@
 				' 取得已加载的字体数量
 				Declare Function FontCount() As Integer
 				
-				' 设置字体大小 [针对ttf字体]
+				' 设置字体大小
 				Declare Sub SetFontSize(idx As UInteger, size As UInteger)
+				
+				' 获取字体大小 [字体高度像素]
+				Declare Function GetFontSize(idx As UInteger) As Integer
 				
 				' 写字
 				Declare Sub Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
@@ -1176,6 +1211,8 @@
 		
 		/' -------------------------- 其他易用性函数库 -------------------------- '/
 		Declare Function Split(sText As ZString Ptr, sSep As ZString Ptr) As ZString Ptr Ptr
+		Declare Sub DrawBackStyle(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr)
+		Declare Sub DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr)
 	End Extern
 	
 	

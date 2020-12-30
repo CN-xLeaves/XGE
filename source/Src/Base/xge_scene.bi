@@ -114,35 +114,33 @@ Sub xge_proc_scene()
 			Else
 				xge_global_fps_count += 1
 			EndIf
-			' 消息处理
-			Dim eve As XGE_EVENT
-			Do While ScreenEvent(@eve)
-				xge_global_eveproc(@eve)
-				If xge_global_scene_run = FALSE Then
-					Exit Do
-				EndIf
-			Loop
-			If xge_global_scene_run Then
-				' 框架处理
-				If (xge_global_scene_cur.pause And XGE_PAUSE_FRAME) = 0 Then
-					xge_proc_scmsg(XGE_MSG_FRAME, 0, 0)
-				EndIf
-				' FPS处理
-				If xge_global_scene_cur.Lockfps Then
-					Do While (xge_global_fps_newtick-xge_global_fps_oldtick) < ((1000/xge_global_scene_cur.Lockfps)*xge_global_fps_count)
-						xge_global_dlyproc(1)
-						xge_global_fps_newtick = GetTickCount()
+			' 框架处理
+			If (xge_global_scene_cur.pause And XGE_PAUSE_FRAME) = 0 Then
+				xge_proc_scmsg(XGE_MSG_FRAME, 0, 0)
+			EndIf
+			' FPS处理
+			If xge_global_scene_cur.Lockfps Then
+				Do While (xge_global_fps_newtick-xge_global_fps_oldtick) < ((1000/xge_global_scene_cur.Lockfps)*xge_global_fps_count)
+					' 消息处理
+					Dim eve As XGE_EVENT
+					Do While ScreenEvent(@eve)
+						xge_global_eveproc(@eve)
+						If xge_global_scene_run = FALSE Then
+							Exit Do, Do
+						EndIf
 					Loop
+					xge_global_dlyproc(1)
+					xge_global_fps_newtick = GetTickCount()
+				Loop
+			EndIf
+			' 绘制处理
+			If (xge_global_scene_cur.pause And XGE_PAUSE_DRAW) = 0 Then
+				If xge_global_scene_cur.sync Then
+					ScreenSync()
 				EndIf
-				' 绘制处理
-				If (xge_global_scene_cur.pause And XGE_PAUSE_DRAW) = 0 Then
-					If xge_global_scene_cur.sync Then
-						ScreenSync()
-					EndIf
-					ScreenLock()
-					xge_proc_scmsg(XGE_MSG_DRAW,0 , 0)
-					ScreenUnLock()
-				EndIf
+				ScreenLock()
+				xge_proc_scmsg(XGE_MSG_DRAW,0 , 0)
+				ScreenUnLock()
 			EndIf
 		Loop While xge_global_scene_run
 		' 发送释放资源消息

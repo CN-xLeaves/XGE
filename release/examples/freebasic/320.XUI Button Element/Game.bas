@@ -63,23 +63,23 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			backimg = New xge.Surface("..\..\..\res\back.bmp", 0)
 			
 			' we can provide a new color scheme for the buttons
-			Btn2->NormalBack.BorderColor = &HFFD88E0A
-			Btn2->NormalBack.FillColor = &HFFD88E0A
-			Btn2->NormalBack.TextColor = &HFFFFE8CC
-			Btn2->PressBack.BorderColor = &HFFD88E0A
-			Btn2->PressBack.FillColor = &HFFA86000
-			Btn2->PressBack.TextColor = &HFFFFFFFF
-			Btn2->HotBack.BorderColor = &HFFD88E0A
-			Btn2->HotBack.FillColor = &HFFFAB21C
-			Btn2->HotBack.TextColor = &HFFFFFFFF
-			Btn2->CheckBack.BorderColor = &HFFD88E0A
-			Btn2->CheckBack.FillColor = &HFFD88E0A
-			Btn2->CheckBack.TextColor = &HFF66B8FF
+			Btn2->NormalStyle.BorderColor = &HFFD88E0A
+			Btn2->NormalStyle.FillColor = &HFFD88E0A
+			Btn2->NormalStyle.TextColor = &HFFFFE8CC
+			Btn2->PressStyle.BorderColor = &HFFD88E0A
+			Btn2->PressStyle.FillColor = &HFFA86000
+			Btn2->PressStyle.TextColor = &HFFFFFFFF
+			Btn2->HotStyle.BorderColor = &HFFD88E0A
+			Btn2->HotStyle.FillColor = &HFFFAB21C
+			Btn2->HotStyle.TextColor = &HFFFFFFFF
+			Btn2->CheckStyle.BorderColor = &HFFD88E0A
+			Btn2->CheckStyle.FillColor = &HFFD88E0A
+			Btn2->CheckStyle.TextColor = &HFF66B8FF
 			
 			' modify fonts and dispaly offsets
-			Btn2->CaptionOffset.x = 8
-			Btn2->CaptionOffset.y = 8
-			Btn2->CaptionFont = 2
+			Btn2->TextOffset.x = 8
+			Btn2->TextOffset.y = 8
+			Btn2->TextFont = 2
 			
 			' events in response to buttons
 			Btn3->Event.OnClick = Cast(Any Ptr, @Exit_OnClick)

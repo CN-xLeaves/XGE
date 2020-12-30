@@ -62,10 +62,10 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			xui.LayoutApply()
 			
 			' color matching of HyperLink element only supports TextColor
-			hl2->NormalBack.TextColor = &HFFFFE8CC
-			hl2->PressBack.TextColor = &HFFFFFFFF
-			hl2->HotBack.TextColor = &HFFFFFFFF
-			hl2->CheckBack.TextColor = &HFF800080
+			hl2->NormalStyle.TextColor = &HFFFFE8CC
+			hl2->PressStyle.TextColor = &HFFFFFFFF
+			hl2->HotStyle.TextColor = &HFFFFFFFF
+			hl2->CheckStyle.TextColor = &HFF800080
 			
 			' the HyperLink element till enter the accessed state after begin clicked.
 			' and the working mode is modified to make this state invalid

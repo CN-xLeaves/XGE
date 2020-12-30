@@ -34,7 +34,7 @@ Function PauseScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			' 创建UI按钮
 			ui = xui.GetRootElement()
 			Btn_RetMenu  = xui.CreateButton(XUI_LAYOUT_RULER_PIXEL, 240, 360, 160, 40, !"返回主菜单\n(Return Menu)")
-			Btn_RetMenu->CaptionFont  = 2
+			Btn_RetMenu->TextFont  = 2
 			Btn_RetMenu->Event.OnClick  = Cast(Any Ptr, @RetMenu_OnClick)
 			ui->Childs.AddElement(Btn_RetMenu)
 			xui.LayoutApply()

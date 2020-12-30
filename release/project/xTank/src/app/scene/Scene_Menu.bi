@@ -28,8 +28,8 @@ Function MenuScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			ui = xui.GetRootElement()
 			Btn_NewGame  = xui.CreateButton(XUI_LAYOUT_RULER_PIXEL, 240, 320, 160, 40, !"开始游戏\n(New Game)")
 			Btn_ExitGame = xui.CreateButton(XUI_LAYOUT_RULER_PIXEL, 240, 380, 160, 40, !"退出游戏\n(Exit)")
-			Btn_NewGame->CaptionFont  = 2
-			Btn_ExitGame->CaptionFont = 2
+			Btn_NewGame->TextFont  = 2
+			Btn_ExitGame->TextFont = 2
 			Btn_NewGame->Event.OnClick  = Cast(Any Ptr, @NewGame_OnClick )
 			Btn_ExitGame->Event.OnClick = Cast(Any Ptr, @ExitGame_OnClick)
 			ui->Childs.AddElement(Btn_NewGame )

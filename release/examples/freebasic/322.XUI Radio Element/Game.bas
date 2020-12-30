@@ -74,18 +74,18 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			xui.LayoutApply()
 			
 			' the color scheme of buttons is also applicable to RadioBox
-			Radio22->NormalBack.BorderColor = &HFFD88E0A
-			Radio22->NormalBack.FillColor = &HFFD88E0A
-			Radio22->NormalBack.TextColor = &HFFFFE8CC
-			Radio22->PressBack.BorderColor = &HFFD88E0A
-			Radio22->PressBack.FillColor = &HFFA86000
-			Radio22->PressBack.TextColor = &HFFFFFFFF
-			Radio22->HotBack.BorderColor = &HFFD88E0A
-			Radio22->HotBack.FillColor = &HFFFAB21C
-			Radio22->HotBack.TextColor = &HFFFFFFFF
-			Radio22->CheckBack.BorderColor = &HFFD88E0A
-			Radio22->CheckBack.FillColor = &HFFD88E0A
-			Radio22->CheckBack.TextColor = &HFF66B8FF
+			Radio22->NormalStyle.BorderColor = &HFFD88E0A
+			Radio22->NormalStyle.FillColor = &HFFD88E0A
+			Radio22->NormalStyle.TextColor = &HFFFFE8CC
+			Radio22->PressStyle.BorderColor = &HFFD88E0A
+			Radio22->PressStyle.FillColor = &HFFA86000
+			Radio22->PressStyle.TextColor = &HFFFFFFFF
+			Radio22->HotStyle.BorderColor = &HFFD88E0A
+			Radio22->HotStyle.FillColor = &HFFFAB21C
+			Radio22->HotStyle.TextColor = &HFFFFFFFF
+			Radio22->CheckStyle.BorderColor = &HFFD88E0A
+			Radio22->CheckStyle.FillColor = &HFFD88E0A
+			Radio22->CheckStyle.TextColor = &HFF66B8FF
 			
 			' RadioBox can use OnCheck event, which only trigers when it changes
 			Radio11->Event.OnCheck = Cast(Any Ptr, @OnCheck)

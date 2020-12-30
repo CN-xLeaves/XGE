@@ -67,18 +67,18 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			xui.LayoutApply()
 			
 			' the color scheme of buttons is also applicable to CheckBox
-			chk22->NormalBack.BorderColor = &HFFD88E0A
-			chk22->NormalBack.FillColor = &HFFD88E0A
-			chk22->NormalBack.TextColor = &HFFFFE8CC
-			chk22->PressBack.BorderColor = &HFFD88E0A
-			chk22->PressBack.FillColor = &HFFA86000
-			chk22->PressBack.TextColor = &HFFFFFFFF
-			chk22->HotBack.BorderColor = &HFFD88E0A
-			chk22->HotBack.FillColor = &HFFFAB21C
-			chk22->HotBack.TextColor = &HFFFFFFFF
-			chk22->CheckBack.BorderColor = &HFFD88E0A
-			chk22->CheckBack.FillColor = &HFFD88E0A
-			chk22->CheckBack.TextColor = &HFF66B8FF
+			chk22->NormalStyle.BorderColor = &HFFD88E0A
+			chk22->NormalStyle.FillColor = &HFFD88E0A
+			chk22->NormalStyle.TextColor = &HFFFFE8CC
+			chk22->PressStyle.BorderColor = &HFFD88E0A
+			chk22->PressStyle.FillColor = &HFFA86000
+			chk22->PressStyle.TextColor = &HFFFFFFFF
+			chk22->HotStyle.BorderColor = &HFFD88E0A
+			chk22->HotStyle.FillColor = &HFFFAB21C
+			chk22->HotStyle.TextColor = &HFFFFFFFF
+			chk22->CheckStyle.BorderColor = &HFFD88E0A
+			chk22->CheckStyle.FillColor = &HFFD88E0A
+			chk22->CheckStyle.TextColor = &HFF66B8FF
 			
 			' CheckBox can use OnCheck event, which only trigers when it changes
 			chk11->Event.OnCheck = Cast(Any Ptr, @OnCheck)
