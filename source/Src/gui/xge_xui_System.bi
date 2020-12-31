@@ -47,7 +47,7 @@ Function xui_EventProc(root As xui.Element Ptr, msg As Integer, param As Integer
 			' 优先通知给被激活的元素
 			If xge_xui_element_active Then
 				If xge_xui_element_active->ClassEvent.OnMouseMove Then
-					If xge_xui_element_active->ClassEvent.OnMouseMove(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y, eve->dx, eve->dy) Then
+					If xge_xui_element_active->ClassEvent.OnMouseMove(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y) Then
 						Return -1
 					EndIf
 				EndIf

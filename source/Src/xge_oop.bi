@@ -770,7 +770,7 @@
 			' 元素事件返回 -1 代表中断事件链处理，其他符合条件的控件将无法再收到事件
 			Type ElementEvent
 				' 鼠标移动 [被激活的控件可以优先处理这个事件，如果他放弃处理的话，则这个事件进入正常的消息链]
-				OnMouseMove As Function(ele As Any Ptr, x As Integer, y As Integer, dx As Integer, dy As Integer) As Integer = NULL
+				OnMouseMove As Function(ele As Any Ptr, x As Integer, y As Integer) As Integer = NULL
 				' 鼠标按下
 				OnMouseDown As Function(ele As Any Ptr, x As Integer, y As Integer, btn As Integer) As Integer = NULL
 				' 鼠标弹起 [被激活的控件可以优先处理这个事件，如果他放弃处理的话，则这个事件进入正常的消息链]
@@ -799,6 +799,8 @@
 				OnDraw As Sub(ele As Any Ptr) = NULL
 				' 自绘事件，在 OnDraw 之后调用，可以进行补充绘制 [这个事件系统一般不会占用]
 				OnUserDraw As Sub(ele As Any Ptr) = NULL
+				' 大小改变事件
+				OnSize As Sub(ele As Any Ptr) = NULL
 			End Type
 			
 			
@@ -817,7 +819,7 @@
 			
 			' 滚动视图事件结构
 			Type ScrollViewEvent
-				OnDrawView As Sub(ele As Any Ptr, x As Integer, y As Integer, w As Integer, h As Integer)
+				OnDrawView As Sub(ele As Any Ptr, px As Integer, py As Integer, x As Integer, y As Integer, w As Integer, h As Integer)
 			End Type
 			
 			
@@ -939,6 +941,9 @@
 				
 				Event As ScrollBarEvent							' 滚动条的事件
 				
+				' 设置滚动范围
+				Declare Sub SetRange(iMin As Integer, iMax As Integer, bApplyLayout As Integer = TRUE)
+				
 				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
 				private_Type As Integer							' 类型 [1=横向滚动条、else=纵向滚动条]
 				private_DragX As Integer						' 拖动滑块时记录的横坐标
@@ -958,12 +963,17 @@
 				ScrollBar As Integer							' 滚动条显示状态
 				BorderWidth As UInteger							' 边框宽度
 				BorderColor As UInteger							' 边框颜色
+				BackColor As UInteger							' 背景颜色 [它只会用来填充两个滚动条附近的空白]
 				
 				Event As ScrollViewEvent						' 滚动视图的事件
+				
+				' 设置视图大小
+				Declare Sub SetViewSize(nw As Integer, nh As Integer, bApplyLayout As Integer = TRUE)
 				
 				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
 				private_VScroll As xui.ScrollBar Ptr			' 视图滚动条
 				private_HScroll As xui.ScrollBar Ptr			' 视图滚动条
+				DefaultScrollBar As xui.ScrollBar Ptr			' 默认滚动条 [在视图上拨动滚动条，会将消息发送给这个元素，默认使用垂直滚动条]
 			End Type
 			
 			

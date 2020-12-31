@@ -6,6 +6,17 @@ Sub xui_class_ScrollBar_OnDraw(ele As xui.ScrollBar Ptr)
 	xui_DrawBackStyle(ele, @ele->BackStyle)
 End Sub
 
+' 滚动条类 - 改变大小
+Sub xui_class_ScrollBar_OnSize(ele As xui.ScrollBar Ptr)
+	If ele->private_Type = 1 Then
+		' 横向滚动条
+		ele->private_ButtonCurPos->Layout.w = (ele->Layout.Rect.w - 38) * 0.15
+	Else
+		' 纵向滚动条
+		ele->private_ButtonCurPos->Layout.h = (ele->Layout.Rect.h - 38) * 0.15
+	EndIf
+End Sub
+
 ' 滚动条类 - 调整当前位置
 Sub xui_class_ScrollBar_SetValue(ele As xui.ScrollBar Ptr, iVal As Integer)
 	' 处理当前值
@@ -52,7 +63,7 @@ Function xui_class_ScrollBar_SpaceDown_OnMouseDown(ele As xui.Element Ptr, x As 
 End Function
 
 ' 滚动条类 - 滑块被拖动
-Function xui_class_ScrollBar_ButtonCurPos_OnMouseMove(ele As xui.Button Ptr, x As Integer, y As Integer, dx As Integer, dy As Integer) As Integer
+Function xui_class_ScrollBar_ButtonCurPos_OnMouseMove(ele As xui.Button Ptr, x As Integer, y As Integer) As Integer
 	If xInput.GetMouseBtnL() Then
 		If ele->TagInt Then
 			Dim parent As xui.ScrollBar Ptr = Cast(Any Ptr, ele->Parent)
@@ -210,6 +221,7 @@ Namespace xui
 		ele->private_ButtonCurPos->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_ScrollBar_ButtonCurPos_OnMouseDown)
 		' 设置类参数
 		ele->ClassEvent.OnDraw = Cast(Any Ptr, @xui_class_ScrollBar_OnDraw)
+		ele->ClassEvent.OnSize = Cast(Any Ptr, @xui_class_ScrollBar_OnSize)
 		Return ele
 	End Function
 	
@@ -287,8 +299,33 @@ Namespace xui
 		ele->private_ButtonCurPos->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_ScrollBar_ButtonCurPos_OnMouseDown)
 		' 设置类参数
 		ele->ClassEvent.OnDraw = Cast(Any Ptr, @xui_class_ScrollBar_OnDraw)
+		ele->ClassEvent.OnSize = Cast(Any Ptr, @xui_class_ScrollBar_OnSize)
 		Return ele
 	End Function
+	
+	' 设置滚动范围
+	Sub ScrollBar.SetRange(iMin As Integer, iMax As Integer, bApplyLayout As Integer = TRUE)
+		Max = iMax
+		Min = iMin
+		If Value < Min Then
+			Value = Min
+		EndIf
+		If Value > Max Then
+			Value = Max
+		EndIf
+		If private_Type = 1 Then
+			' 横向滚动条
+			private_SpaceUp->Layout.w = Value - Min
+			private_SpaceDown->Layout.w = Max - Value
+		Else
+			' 纵向滚动条
+			private_SpaceUp->Layout.h = Value - Min
+			private_SpaceDown->Layout.h = Max - Value
+		EndIf
+		If bApplyLayout Then
+			LayoutApply()
+		EndIf
+	End Sub
 	
 	
 	

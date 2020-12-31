@@ -12,6 +12,7 @@ End Sub
 Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	Static pic1 As xge.Surface Ptr
 	Static ui As xui.Element Ptr
+	Static sv As xui.ScrollView Ptr
 	Static As xui.ScrollBar Ptr vs, hs
 	Select Case msg
 		Case XGE_MSG_FRAME				' Âß¼­´¦Àí
@@ -57,11 +58,13 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			
 			pic1 = New xge.Surface("D:\Git\XGE\release\res\back.xgi", 0)
 			
-			vs = xui.CreateVScrollBar(, 100, 50, 18, 500)
-			hs = xui.CreateHScrollBar(, 50, 20, 500, 18)
+			vs = xui.CreateVScrollBar(, 40, 100, 18, 300)
+			hs = xui.CreateHScrollBar(, 100, 40, 400, 18)
+			sv = xui.CreateScrollView(, 100, 100, 400, 300, 401, 301)
 			
 			ui->Childs.AddElement(vs)
 			ui->Childs.AddElement(hs)
+			ui->Childs.AddElement(sv)
 			xui.LayoutApply()
 			
 			'pic1->Create(800, 600)
@@ -92,7 +95,7 @@ End Function
 
 ' OOP °æ²âÊÔº¯Êý
 Sub xge_test_oop()
-	xge.Init(800, 600, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE·¶Àý - ¿Õ°×³¡¾°")
+	xge.Init(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE·¶Àý - ¿Õ°×³¡¾°")
 	xge.Scene.Start(@MainScreen, 40)
 End Sub
 

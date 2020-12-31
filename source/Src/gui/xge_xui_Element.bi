@@ -46,6 +46,12 @@ Namespace xui
 	
 	' 应用布局
 	Sub Element.LayoutApply() XGE_EXPORT_OBJ
+		' 发送 OnSize 事件
+		DrawBuffer->Create(Layout.Rect.w, Layout.Rect.h)
+		If ClassEvent.OnSize Then
+			ClassEvent.OnSize(@This)
+		EndIf
+		' 计算子元素的布局和位置
 		If LayoutMode = XUI_LAYOUT_COORD Then
 			' 坐标布局只计算元素的场景位置
 			Dim c As Integer = Childs.StructCount
@@ -154,7 +160,6 @@ Namespace xui
 				ele->LayoutApply()
 			Next
 		EndIf
-		DrawBuffer->Create(Layout.Rect.w, Layout.Rect.h)
 		NeedRedraw = -1
 	End Sub
 	
@@ -227,7 +232,7 @@ Namespace xui
 				EndIf
 				' 处理移动事件
 				If ClassEvent.OnMouseMove Then
-					Return ClassEvent.OnMouseMove(@This, eve->x, eve->y, eve->dx, eve->dy)
+					Return ClassEvent.OnMouseMove(@This, eve->x, eve->y)
 				EndIf
 			Case XGE_MSG_MOUSE_DOWN			' 鼠标按下
 				If ClassEvent.OnMouseDown Then
