@@ -36,11 +36,6 @@ Sub xui_class_ScrollView_OnSize(ele As xui.ScrollView Ptr)
 	ele->SetViewSize(ele->View.w, ele->View.h, FALSE)
 End Sub
 
-' 滚动视图类 - 鼠标进入 (空事件，用于占领鼠标热点)
-Sub xui_class_ScrollView_OnMouseEnter(ele As xui.ScrollView Ptr)
-	
-End Sub
-
 ' 滚动视图类 - 滚轮拨动
 Function xui_class_ScrollView_OnMouseWhell(ele As xui.ScrollView Ptr, x As Integer, y As Integer, z As Integer, nz As Integer) As Integer
 	If ele->DefaultScrollBar Then
@@ -113,7 +108,6 @@ Namespace xui
 		' 设置类参数
 		ele->ClassEvent.OnDraw = Cast(Any Ptr, @xui_class_ScrollView_OnDraw)
 		ele->ClassEvent.OnSize = Cast(Any Ptr, @xui_class_ScrollView_OnSize)
-		ele->ClassEvent.OnMouseEnter = Cast(Any Ptr, @xui_class_ScrollView_OnMouseEnter)
 		ele->ClassEvent.OnMouseWhell = Cast(Any Ptr, @xui_class_ScrollView_OnMouseWhell)
 		Return ele
 	End Function

@@ -200,6 +200,7 @@ Namespace xui
 	' 消息处理器
 	Function Element.EventLink(msg As Integer, param As Integer, eve As xge_event Ptr) As Integer XGE_EXPORT_OBJ
 		' 处理子控件的消息
+		Dim HotLoss As Integer = FALSE
 		Dim c As Integer = Childs.StructCount
 		For i As Integer = 1 To c
 			Dim ele As xui.Element Ptr
@@ -213,6 +214,7 @@ Namespace xui
 				If (uieve.x >= 0) And (uieve.y >= 0) Then
 					If (uieve.x < ele->Layout.Rect.w) And (uieve.y < ele->Layout.Rect.h) Then
 						' 转发事件到子控件
+						HotLoss = TRUE
 						If ele->EventLink(msg, param, @uieve) Then
 							Return -1
 						EndIf
@@ -224,10 +226,15 @@ Namespace xui
 		Select Case msg
 			Case XGE_MSG_MOUSE_MOVE			' 鼠标移动
 				' 鼠标下的元素将成为热点元素
-				If xge_xui_element_hot <> @This Then
+				If (HotLoss = FALSE) And (xge_xui_element_hot <> @This) Then
+					If xge_xui_element_hot Then
+						If xge_xui_element_hot->ClassEvent.OnMouseLeave Then
+							xge_xui_element_hot->ClassEvent.OnMouseLeave(xge_xui_element_hot)
+						EndIf
+					EndIf
+					xge_xui_element_hot = @This
 					If ClassEvent.OnMouseEnter Then
 						ClassEvent.OnMouseEnter(@This)
-						xge_xui_element_hot = @This
 					EndIf
 				EndIf
 				' 处理移动事件

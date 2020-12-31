@@ -187,8 +187,8 @@ Function xui_class_Button_OnMouseUp(ele As xui.Button Ptr, x As Integer, y As In
 		EndIf
 	Else
 		ele->private_Status = 0
-		xui.ActiveElement(NULL)
 	EndIf
+	xui.ActiveElement(NULL)
 	ele->private_AllowClick = 0
 	Return -1
 End Function
