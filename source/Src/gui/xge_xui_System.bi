@@ -10,26 +10,26 @@
 Extern XGE_EXTERNSTDEXT
 
 ' 根据参数绘制按钮背景
-Sub DrawBackStyle(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr) XGE_EXPORT_ALL
+Sub xui_DrawBackStyle(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr) XGE_EXPORT_ALL
 	If bs->Hide = FALSE Then
 		If bs->Image Then
-			bs->Image->Draw(ele->Image, 0, 0)
+			bs->Image->Draw(ele->DrawBuffer, 0, 0)
 		Else
-			xge.shape.Rect(ele->Image, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, bs->BorderColor)
-			xge.shape.RectFull(ele->Image, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bs->FillColor)
+			xge.shape.Rect(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, bs->BorderColor)
+			xge.shape.RectFull(ele->DrawBuffer, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bs->FillColor)
 		EndIf
 	EndIf
 End Sub
-Sub DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr) XGE_EXPORT_ALL
+Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr) XGE_EXPORT_ALL
 	If bs->Hide = FALSE Then
 		If bs->Image Then
-			bs->Image->Draw(ele->Image, 0, 0)
+			bs->Image->Draw(ele->DrawBuffer, 0, 0)
 		Else
-			xge.shape.Rect(ele->Image, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, bs->BorderColor)
-			xge.shape.RectFull(ele->Image, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bs->FillColor)
+			xge.shape.Rect(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, bs->BorderColor)
+			xge.shape.RectFull(ele->DrawBuffer, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bs->FillColor)
 		EndIf
 	EndIf
-	xge.Text.DrawRectA(ele->Image, CaptionOffset->x, CaptionOffset->y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, sText, bs->TextColor, fontid, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+	xge.Text.DrawRectA(ele->DrawBuffer, CaptionOffset->x, CaptionOffset->y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, sText, bs->TextColor, fontid, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 End Sub
 
 End Extern
@@ -47,7 +47,7 @@ Function xui_EventProc(root As xui.Element Ptr, msg As Integer, param As Integer
 			' 优先通知给被激活的元素
 			If xge_xui_element_active Then
 				If xge_xui_element_active->ClassEvent.OnMouseMove Then
-					If xge_xui_element_active->ClassEvent.OnMouseMove(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y) Then
+					If xge_xui_element_active->ClassEvent.OnMouseMove(xge_xui_element_active, eve->x - xge_xui_element_active->Layout.ScreenCoord.x, eve->y - xge_xui_element_active->Layout.ScreenCoord.y, eve->dx, eve->dy) Then
 						Return -1
 					EndIf
 				EndIf

@@ -163,7 +163,11 @@
 ' xywh Game Engine ½çÃæ¿â
 #Include "Src\gui\xge_xui_System.bi"
 #Include "Src\gui\xge_xui_Element.bi"
+#Include "Src\gui\xge_xui_Static.bi"
 #Include "Src\gui\xge_xui_Button.bi"
+#Include "Src\gui\xge_xui_ScrollBar.bi"
+#Include "Src\gui\xge_xui_ScrollView.bi"
+#Include "Src\gui\xge_xui_ListBox.bi"
 
 
 

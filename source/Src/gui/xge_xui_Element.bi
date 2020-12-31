@@ -11,17 +11,19 @@ Namespace xui
 	
 	' 构造函数 [元素基类]
 	Constructor Element() XGE_EXPORT_OBJ
-		Image = New xge.Surface()
+		DrawBuffer = New xge.Surface()
 		Childs.Parent = @This
 		ClassID = XUI_CLASS_ELEMENT
 	End Constructor
 	Constructor Element(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) XGE_EXPORT_OBJ
-		Image = New xge.Surface()
+		DrawBuffer = New xge.Surface()
 		Childs.Parent = @This
 		ClassID = XUI_CLASS_ELEMENT
 		Layout.Ruler = iLayoutRuler
 		Layout.w = w
 		Layout.h = h
+		Layout.RectBox.x = x
+		Layout.RectBox.y = y
 		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
 			Layout.Rect.x = x
 			Layout.Rect.y = y
@@ -37,8 +39,8 @@ Namespace xui
 	
 	' 析构函数
 	Destructor Element() XGE_EXPORT_OBJ
-		If Image Then
-			Delete Image
+		If DrawBuffer Then
+			Delete DrawBuffer
 		EndIf
 	End Destructor
 	
@@ -152,13 +154,13 @@ Namespace xui
 				ele->LayoutApply()
 			Next
 		EndIf
-		Image->Create(Layout.Rect.w, Layout.Rect.h)
+		DrawBuffer->Create(Layout.Rect.w, Layout.Rect.h)
 		NeedRedraw = -1
 	End Sub
 	
 	' 画出元素
 	Sub Element.Draw(sf As xge.Surface Ptr = NULL, px As Integer = 0, py As Integer = 0) XGE_EXPORT_OBJ
-		Image->Clear()
+		DrawBuffer->Clear()
 		If ClassEvent.OnDraw Then
 			ClassEvent.OnDraw(@This)
 		EndIf
@@ -171,7 +173,7 @@ Namespace xui
 			Dim ele As xui.Element Ptr
 			ele = *Cast(xui.Element Ptr Ptr, Childs.GetPtrStruct(i))
 			If ele->Visible Then
-				ele->Draw(Image, 0, 0)
+				ele->Draw(DrawBuffer, 0, 0)
 			EndIf
 		Next
 		' 调试模式画参考线
@@ -179,14 +181,14 @@ Namespace xui
 			DrawDebug()
 		EndIf
 		' 画到画布上
-		Image->Draw(sf, px + Layout.Rect.x, py + Layout.Rect.y)
+		DrawBuffer->Draw(sf, px + Layout.Rect.x, py + Layout.Rect.y)
 	End Sub
 	
 	' 画出元素的参考线
 	Sub Element.DrawDebug() XGE_EXPORT_OBJ
-		If Image Then
-			xge.shape.Rect(Image, 0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, &HFF00FF00)
-			xge.Text.DrawRectA(Image, 0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, Identifier & " [" & Layout.ScreenCoord.x & "," & Layout.ScreenCoord.y & "]", &HFF00FF00)
+		If DrawBuffer Then
+			xge.shape.Rect(DrawBuffer, 0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, &HFF00FF00)
+			xge.Text.DrawRectA(DrawBuffer, 0, 0, Layout.Rect.w - 1, Layout.Rect.h - 1, Identifier & " [" & Layout.ScreenCoord.x & "," & Layout.ScreenCoord.y & "]", &HFF00FF00)
 		EndIf
 	End Sub
 	
@@ -225,7 +227,7 @@ Namespace xui
 				EndIf
 				' 处理移动事件
 				If ClassEvent.OnMouseMove Then
-					Return ClassEvent.OnMouseMove(@This, eve->x, eve->y)
+					Return ClassEvent.OnMouseMove(@This, eve->x, eve->y, eve->dx, eve->dy)
 				EndIf
 			Case XGE_MSG_MOUSE_DOWN			' 鼠标按下
 				If ClassEvent.OnMouseDown Then

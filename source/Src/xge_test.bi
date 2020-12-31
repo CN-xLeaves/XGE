@@ -11,11 +11,14 @@ End Sub
 ' 一个场景
 Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	Static pic1 As xge.Surface Ptr
+	Static ui As xui.Element Ptr
+	Static As xui.ScrollBar Ptr vs, hs
 	Select Case msg
 		Case XGE_MSG_FRAME				' 逻辑处理
 			
 		Case XGE_MSG_DRAW				' 绘图
-			'xge.Clear()
+			xge.Clear()
+			ui->Draw()
 		Case XGE_MSG_MOUSE_MOVE			' 鼠标移动
 			
 		Case XGE_MSG_MOUSE_DOWN			' 鼠标按下
@@ -43,6 +46,7 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 		Case XGE_MSG_MOUSE_EXIT			' 鼠标移出
 			
 		Case XGE_MSG_LOADRES			' 加载资源
+			ui = xui.GetRootElement()
 			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_12px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("F:\字体\思源屏显臻宋.ttf", 0)
@@ -52,6 +56,14 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			'xge.Text.LoadFont("C:\windows\fonts\simsun.ttc", 0)
 			
 			pic1 = New xge.Surface("D:\Git\XGE\release\res\back.xgi", 0)
+			
+			vs = xui.CreateVScrollBar(, 100, 50, 18, 500)
+			hs = xui.CreateHScrollBar(, 50, 20, 500, 18)
+			
+			ui->Childs.AddElement(vs)
+			ui->Childs.AddElement(hs)
+			xui.LayoutApply()
+			
 			'pic1->Create(800, 600)
 			/'
 			xge.Text.Draw(pic1, 0, 100, A2W("Draw  渲染 ANSI 字符串 [UNICODE->ANSI]"), &HFF00)
@@ -66,9 +78,9 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			xge.Shape.Rect(0, 200, 400, 500, &HFF00FF00, pic1)
 			pic1->Draw_Alpha(200, 0)
 			'/
-			xge.Text.DrawA(pic1, 0, 140, "x x我x", &HFF00, 1)
+			'xge.Text.DrawA(pic1, 0, 140, "x x我x", &HFF00, 1)
 			'xge.Text.DrawRectA(pic1, 0, 200, 400, 300, !"我想回到过去\n沉默着欢喜\n天空之城在哭泣\n越来越远的你", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 0, 0)
-			pic1->Draw_Alpha(NULL, 200, 0)
+			'pic1->Draw_Alpha(NULL, 200, 0)
 		Case XGE_MSG_FREERES			' 卸载资源
 			
 		Case XGE_MSG_CLOSE				' 窗口关闭

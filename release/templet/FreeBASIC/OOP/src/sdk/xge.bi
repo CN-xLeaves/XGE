@@ -265,6 +265,14 @@
 	#Define XUI_CLASS_BUTTON			1				' 按钮(包含单选、复选类元素)
 	#Define XUI_CLASS_STATIC			2				' 静态元素(包含标签、图片等)
 	#Define XUI_CLASS_SCROLLBAR			3				' 滚动条(包含横向和纵向)
+	#Define XUI_CLASS_SCROLLVIEW		4				' 滚动视图
+	#Define XUI_CLASS_LISTBOX			5				' 列表框
+	#Define XUI_CLASS_COMBOBOX			6				' 组合框
+	#Define XUI_CLASS_PROGRESSBAR		7				' 进度条
+	#Define XUI_CLASS_TRACKBAR			8				' 进度条
+	#Define XUI_CLASS_ANIMATBOX			9				' 动画
+	#Define XUI_CLASS_LINEEDIT			10				' 行编辑框
+	#Define XUI_CLASS_TEXTBOX			11				' 全功能文本编辑框
 	#Define XUI_CLASS_USER				&H10000			' 用户自定义元素的开始ID
 	
 	
@@ -755,7 +763,7 @@
 			' 元素事件返回 -1 代表中断事件链处理，其他符合条件的控件将无法再收到事件
 			Type ElementEvent
 				' 鼠标移动 [被激活的控件可以优先处理这个事件，如果他放弃处理的话，则这个事件进入正常的消息链]
-				OnMouseMove As Function(ele As Any Ptr, x As Integer, y As Integer) As Integer = NULL
+				OnMouseMove As Function(ele As Any Ptr, x As Integer, y As Integer, dx As Integer, dy As Integer) As Integer = NULL
 				' 鼠标按下
 				OnMouseDown As Function(ele As Any Ptr, x As Integer, y As Integer, btn As Integer) As Integer = NULL
 				' 鼠标弹起 [被激活的控件可以优先处理这个事件，如果他放弃处理的话，则这个事件进入正常的消息链]
@@ -794,6 +802,12 @@
 			End Type
 			
 			
+			' 滚动条的事件结构
+			Type ScrollEvent
+				OnScroll As Sub(ele As Any Ptr)
+			End Type
+			
+			
 			' 子元素列表类
 			Type ElementList Extends xBsmm
 				Parent As Any Ptr		' 父元素指针 [添加子元素的时候需要]
@@ -815,7 +829,7 @@
 				Childs As ElementList				' 子元素数据
 				Parent As Element Ptr = NULL		' 父元素指针
 				Visible As Integer = -1				' 是否显示 [参与布局和绘制的开关] [使用布局的话修改后必须重新应用布局]
-				Image As xge.Surface Ptr			' 元素画板
+				DrawBuffer As xge.Surface Ptr		' 绘制缓冲区
 				NeedRedraw As Integer = -1			' 需要重绘标记
 				Identifier As ZString * 32			' 元素ID [相当于引擎附加数据，用户可以将ID映射到脚本语言中处理事件]
 				DrawRange As Integer = 0			' 绘制元素范围
@@ -891,6 +905,40 @@
 			End Type
 			
 			
+			' 图像类
+			Type Image Extends xui.Element
+				Image As xge.Surface Ptr						' 图像对象指针
+				ImageOffset As xui.Coord						' 图像绘制偏移
+				BorderWidth As UInteger							' 边框宽度
+				BorderColor As UInteger							' 边框颜色
+			End Type
+			
+			
+			' 滚动条类
+			Type ScrollBar Extends xui.Element
+				Max As Integer									' 最大值
+				Min As Integer									' 最小值
+				Value As Integer								' 当前值
+				SmallChange As Integer							' 当用户单击滚动条上下按钮或箭头键时的滚动幅度
+				LargeChange As Integer							' 当用户单击滚动条空白空间或PageDown、PageUp时的滚动幅度
+				WhellChange As Integer							' 滚轮的滚动幅度
+				BackStyle As xui.BackStyle_Struct				' 背景样式
+				
+				Event As ScrollEvent							' 滚动条的事件
+				
+				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
+				private_Type As Integer							' 类型 [1=横向滚动条、else=纵向滚动条]
+				private_DragX As Integer						' 拖动滑块时记录的横坐标
+				private_DragY As Integer						' 拖动滑块时记录的纵坐标
+				private_SpaceCount As Integer					' 拖动滑块时，总的空白空间像素数
+				private_ButtonUp As xui.Button Ptr				' 上 按钮
+				private_ButtonDown As xui.Button Ptr			' 下 按钮
+				private_ButtonCurPos As xui.Button Ptr			' 当前位置 按钮
+				private_SpaceUp As xui.Element Ptr				' 上方空间 元素
+				private_SpaceDown As xui.Element Ptr			' 下方空间 元素
+			End Type
+			
+			
 			' 获取根元素 (Desktop元素)
 			Declare Function GetRootElement() As xui.Element Ptr
 			
@@ -909,24 +957,39 @@
 			' 应用布局
 			Declare Sub LayoutApply()
 			
-			' 创建一个空白的元素
+			' 创建基础元素
 			Declare Function CreateElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) As xui.Element Ptr
 			
-			' 创建按钮
+			' 创建标签元素
+			Declare Function CreateLabel(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.Label Ptr
+			
+			' 创建容器元素
+			Declare Function CreateFrame(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As ZString Ptr = NULL, sIdentifier As ZString Ptr = NULL) As xui.Frame Ptr
+			
+			' 创建图像元素
+			Declare Function CreateImage(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, pImage As xge.Surface Ptr = NULL, sIdentifier As ZString Ptr = NULL) As xui.Image Ptr
+			
+			' 创建按钮元素
 			Declare Function CreateButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
 			
-			' 创建选择按钮
+			' 创建选择按钮元素
 			Declare Function CreateCheckButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
 			Declare Function CreateRadioButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
 			
-			' 创建复选框
+			' 创建复选框元素
 			Declare Function CreateCheckBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
 			
-			' 创建单选框
+			' 创建单选框元素
 			Declare Function CreateRadioBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
 			
-			' 创建超链接
+			' 创建超链接元素
 			Declare Function CreateHyperLink(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
+			
+			' 创建纵向滚动条
+			Declare Function CreateVScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 18, h As Integer = 200, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr
+			
+			' 创建横向滚动条
+			Declare Function CreateHScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 18, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr
 			
 		End Namespace
 		
