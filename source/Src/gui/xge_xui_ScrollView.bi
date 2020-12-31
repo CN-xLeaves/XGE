@@ -36,6 +36,21 @@ Sub xui_class_ScrollView_OnSize(ele As xui.ScrollView Ptr)
 	ele->SetViewSize(ele->View.w, ele->View.h, FALSE)
 End Sub
 
+' 滚动视图类 - 鼠标进入 (空事件，用于占领鼠标热点)
+Sub xui_class_ScrollView_OnMouseEnter(ele As xui.ScrollView Ptr)
+	
+End Sub
+
+' 滚动视图类 - 滚轮拨动
+Function xui_class_ScrollView_OnMouseWhell(ele As xui.ScrollView Ptr, x As Integer, y As Integer, z As Integer, nz As Integer) As Integer
+	If ele->DefaultScrollBar Then
+		If ele->DefaultScrollBar->ClassEvent.OnMouseWhell Then
+			ele->DefaultScrollBar->ClassEvent.OnMouseWhell(ele->DefaultScrollBar, x, y, z, nz)
+		EndIf
+	EndIf
+	Return -1
+End Function
+
 ' 滚动视图类 - 纵向滚动条改变
 Sub xui_class_ScrollView_OnScrollV(ele As xui.ScrollBar Ptr)
 	Dim parent As xui.ScrollView Ptr = Cast(Any Ptr, ele->Parent)
@@ -94,9 +109,12 @@ Namespace xui
 		ele->Childs.AddElement(ele->private_VScroll)
 		ele->Childs.AddElement(ele->private_HScroll)
 		ele->DefaultScrollBar = ele->private_VScroll
+		' 挂接滚轮事件
 		' 设置类参数
 		ele->ClassEvent.OnDraw = Cast(Any Ptr, @xui_class_ScrollView_OnDraw)
 		ele->ClassEvent.OnSize = Cast(Any Ptr, @xui_class_ScrollView_OnSize)
+		ele->ClassEvent.OnMouseEnter = Cast(Any Ptr, @xui_class_ScrollView_OnMouseEnter)
+		ele->ClassEvent.OnMouseWhell = Cast(Any Ptr, @xui_class_ScrollView_OnMouseWhell)
 		Return ele
 	End Function
 	
