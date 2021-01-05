@@ -13,6 +13,7 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 	Static pic1 As xge.Surface Ptr
 	Static ui As xui.Element Ptr
 	Static sv As xui.ScrollView Ptr
+	Static lb As xui.ListBox Ptr
 	Static As xui.ScrollBar Ptr vs, hs
 	Select Case msg
 		Case XGE_MSG_FRAME				' 逻辑处理
@@ -48,10 +49,10 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			
 		Case XGE_MSG_LOADRES			' 加载资源
 			ui = xui.GetRootElement()
-			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_16px_ucs2.xrf", 0)
-			'xge.Text.LoadFont("..\发布目录\res\font\xrf\simsun_12px_ucs2.xrf", 0)
+			'xge.Text.LoadFont("..\release\res\font\xrf\simsun_16px_ucs2.xrf", 0)
+			xge.Text.LoadFont("..\release\res\font\xrf\simsun_12px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("F:\字体\思源屏显臻宋.ttf", 0)
-			xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\Roboto-Light.ttf", 0)
+			'xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\Roboto-Light.ttf", 0)
 			xge.Text.LoadFont("F:\字体\庞门正道标题体2.0增强版.ttf", 0)
 			xge.Text.SetFontSize(2, 12)
 			'xge.Text.LoadFont("C:\windows\fonts\simsun.ttc", 0)
@@ -60,12 +61,44 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			
 			vs = xui.CreateVScrollBar(, 40, 100, 18, 300)
 			hs = xui.CreateHScrollBar(, 100, 40, 400, 18)
-			sv = xui.CreateScrollView(, 100, 100, 400, 300, 401, 301)
+			sv = xui.CreateScrollView(, 100, 100, 200, 300, 401, 201)
+			lb = xui.CreateListBox(, 320, 100, 200, 300)
 			
 			ui->Childs.AddElement(vs)
 			ui->Childs.AddElement(hs)
 			ui->Childs.AddElement(sv)
+			ui->Childs.AddElement(lb)
+			
 			xui.LayoutApply()
+			
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			lb->List.Append("asdsadsadf")
+			
+			lb->private_ListIndex = 3
+			
+			lb->BorderWidth = 2
 			
 			'pic1->Create(800, 600)
 			/'

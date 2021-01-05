@@ -94,6 +94,7 @@ Function xBsmm.SwapStruct(iPosA As UInteger, iPosB As UInteger) As Integer XGE_E
 				memmove(StuA, StructMemory + (iPosA * StructLenght), StructLenght)
 				memmove(StructMemory + (iPosA * StructLenght), StructMemory + (iPosB * StructLenght), StructLenght)
 				memmove(StructMemory + (iPosB * StructLenght), StuA, StructLenght)
+				free(StuA)
 				Return -1
 			Else
 				' 位置相同，不需要交换

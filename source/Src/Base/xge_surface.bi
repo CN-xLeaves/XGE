@@ -318,7 +318,7 @@ Extern XGE_EXTERNCLASS
 	
 	' »æÖÆÍ¼Ïñ [»Ò¶È]
 	Sub Surface.Draw_Gray(sf As xge.Surface Ptr, x As Integer, y As Integer) XGE_EXPORT_OBJ
-		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, @Blend_Gray, 0)
+		Blend_Custom(@This, x, y, 0, 0, img->Width - 1, img->Height - 1, sf, @Blend_Gray, 0)
 	End Sub
 	Sub Surface.DrawEx_Gray(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, @Blend_Gray, 0)
@@ -326,7 +326,7 @@ Extern XGE_EXTERNCLASS
 	
 	' »æÖÆÍ¼Ïñ [¾µÏñ]
 	Sub Surface.Draw_Mirr(sf As xge.Surface Ptr, x As Integer, y As Integer, flag As Integer) XGE_EXPORT_OBJ
-		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, @Blend_Mirr, flag)
+		Blend_Custom(@This, x, y, 0, 0, img->Width - 1, img->Height - 1, sf, @Blend_Mirr, flag)
 	End Sub
 	Sub Surface.DrawEx_Mirr(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, flag As Integer) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, @Blend_Mirr, flag)
@@ -334,7 +334,7 @@ Extern XGE_EXTERNCLASS
 	
 	' »æÖÆÍ¼Ïñ [¹ý¶É]
 	Sub Surface.Draw_Shade(sf As xge.Surface Ptr, x As Integer, y As Integer, mask As UByte) XGE_EXPORT_OBJ
-		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, @Blend_Shade, mask)
+		Blend_Custom(@This, x, y, 0, 0, img->Width - 1, img->Height - 1, sf, @Blend_Shade, mask)
 	End Sub
 	Sub Surface.DrawEx_Shade(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, mask As UByte) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, @Blend_Shade, mask)
@@ -342,7 +342,7 @@ Extern XGE_EXTERNCLASS
 	
 	' »æÖÆÍ¼Ïñ [×Ô¶¨Òå»ìºÏËã·¨(XGE)]
 	Sub Surface.Draw_Blend(sf As xge.Surface Ptr, x As Integer, y As Integer, bk As Any Ptr, param As Integer = 0) XGE_EXPORT_OBJ
-		Blend_Custom(@This, x, y, 0, 0, img->Width-1, img->Height-1, sf, bk, param)
+		Blend_Custom(@This, x, y, 0, 0, img->Width - 1, img->Height - 1, sf, bk, param)
 	End Sub
 	Sub Surface.DrawEx_Blend(sf As xge.Surface Ptr, x As Integer, y As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, bk As Any Ptr, param As Integer = 0) XGE_EXPORT_OBJ
 		Blend_Custom(@This, x, y, cx, cy, cw, ch, sf, bk, param)

@@ -7,13 +7,17 @@
 
 
 
+' -------------------------- ÆäËûÊý¾Ý
+Dim Shared xge_global_snull As ZString * 4 = !"\0\0\0"					' ¿Õ×Ö·û´®
+
+
+
 #Ifndef xywh_library_inifile
 	#Define xywh_library_inifile
 	
 	
 	Extern XGE_EXTERNMODULE
 		Namespace xIni
-			Dim Shared xywh_library_xrtl_memory_snull As ZString * 4 = !"\0\0\0"					' ¿Õ×Ö·û´®
 			
 			' ¶Á×Ö·û´®¼üÖµ
 			Function GetStr(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr) As ZString Ptr XGE_EXPORT_ALL
@@ -23,7 +27,7 @@
 					pMem[iLen] = 0
 					Return pMem
 				Else
-					Return @xywh_library_xrtl_memory_snull
+					Return @xge_global_snull
 				EndIf
 			End Function
 			

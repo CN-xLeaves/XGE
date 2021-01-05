@@ -1,5 +1,5 @@
 '==================================================================================
-	'★ xywh Game Engine 用户界面系统 [nuklear库]
+	'★ xywh Game Engine 用户界面系统
 	'#-------------------------------------------------------------------------------
 	'# 功能 : 
 	'# 说明 : 
@@ -37,6 +37,45 @@ End Extern
 
 
 Extern XGE_EXTERNCLASS
+
+
+
+' 初始化XUI素材
+Sub InitRes_XUI()
+	' 滚动条上的三角形
+	If xge_xui_VScroll_Triangle = NULL Then
+		xge_xui_VScroll_Triangle = New xge.Surface(9, 5)
+		PSet xge_xui_VScroll_Triangle->img, (4, 0), &HFFFFFFFF
+		Line xge_xui_VScroll_Triangle->img, (3, 1) - (5, 1), &HFFFFFFFF
+		Line xge_xui_VScroll_Triangle->img, (2, 2) - (6, 2), &HFFFFFFFF
+		Line xge_xui_VScroll_Triangle->img, (1, 3) - (7, 3), &HFFFFFFFF
+		Line xge_xui_VScroll_Triangle->img, (0, 4) - (8, 4), &HFFFFFFFF
+	EndIf
+	If xge_xui_HScroll_Triangle = NULL Then
+		xge_xui_HScroll_Triangle = New xge.Surface(5, 9)
+		PSet xge_xui_HScroll_Triangle->img, (0, 4), &HFFFFFFFF
+		Line xge_xui_HScroll_Triangle->img, (1, 3) - (1, 5), &HFFFFFFFF
+		Line xge_xui_HScroll_Triangle->img, (2, 2) - (2, 6), &HFFFFFFFF
+		Line xge_xui_HScroll_Triangle->img, (3, 1) - (3, 7), &HFFFFFFFF
+		Line xge_xui_HScroll_Triangle->img, (4, 0) - (4, 8), &HFFFFFFFF
+	EndIf
+End Sub
+Sub UnitRes_XUI()
+	' 滚动条上的三角形
+	If xge_xui_VScroll_Triangle Then
+		Delete xge_xui_VScroll_Triangle
+	EndIf
+	If xge_xui_HScroll_Triangle Then
+		Delete xge_xui_HScroll_Triangle
+	EndIf
+End Sub
+
+
+
+' 吃掉鼠标移动消息的公共事件回调
+Function xui_class_Empty_OnMouseMove(ele As Any Ptr, x As Integer, y As Integer) As Integer
+	Return -1
+End Function
 
 
 
@@ -244,7 +283,7 @@ Function xui.ElementList.DelElement(iPos As Integer) As Integer XGE_EXPORT_OBJ
 End Function
 
 ' 清空元素
-Sub xui.ElementList.Clear()
+Sub xui.ElementList.Clear() XGE_EXPORT_OBJ
 	ReInitManage()
 End Sub
 

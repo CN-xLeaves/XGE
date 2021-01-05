@@ -7,6 +7,11 @@
 
 
 
+Declare Sub InitRes_XUI()
+Declare Sub UnitRes_XUI()
+
+
+
 Extern XGE_EXTERNMODULE
 	#Ifdef XGE_BUILD_USEOOP
 		Namespace xge
@@ -19,6 +24,8 @@ Extern XGE_EXTERNMODULE
 			If title Then
 				WindowTitle(*title)
 			EndIf
+			' 初始化 XUI 资源
+			InitRes_XUI()
 			' 初始化 BASS 模块
 			If init_mod And XGE_INIT_BASS Then
 				If xge_global_bass_init = FALSE Then
@@ -55,6 +62,8 @@ Extern XGE_EXTERNMODULE
 		xge_global_scrptr = NULL
 		xge_global_scrsize = 0
 		xge_global_scrpitch = 0
+		' 卸载 XUI 资源
+		UnitRes_XUI()
 	End Sub
 	
 	' 调整分辨率

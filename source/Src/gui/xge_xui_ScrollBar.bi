@@ -38,6 +38,10 @@ Sub xui_class_ScrollBar_SetValue(ele As xui.ScrollBar Ptr, iVal As Integer)
 		ele->private_SpaceDown->Layout.h = ele->Max - ele->Value
 	EndIf
 	ele->LayoutApply()
+	' 触发事件
+	If ele->Event.OnScroll Then
+		ele->Event.OnScroll(ele)
+	EndIf
 End Sub
 
 ' 滚动条类 - 上、下按钮被按下
@@ -137,6 +141,28 @@ Sub xui_class_ScrollBar_Space_OnMouseLeave(ele As xui.Element Ptr)
 	parent->private_ButtonCurPos->private_Status = 0
 End Sub
 
+' 滚动条 - 上下按钮重绘 [添加三角形标识]
+Sub xui_class_ScrollBar_ButtonUp_OnUserDraw(ele As xui.Button Ptr)
+	Dim parent As xui.ScrollBar Ptr = Cast(Any Ptr, ele->Parent)
+	If parent->private_Type = 1 Then
+		' 横向滚动条
+		xge_xui_HScroll_Triangle->Draw(ele->DrawBuffer, 6, 5)
+	Else
+		' 纵向滚动条
+		xge_xui_VScroll_Triangle->Draw(ele->DrawBuffer, 5, 6)
+	EndIf
+End Sub
+Sub xui_class_ScrollBar_ButtonDown_OnUserDraw(ele As xui.Button Ptr)
+	Dim parent As xui.ScrollBar Ptr = Cast(Any Ptr, ele->Parent)
+	If parent->private_Type = 1 Then
+		' 横向滚动条
+		xge_xui_HScroll_Triangle->Draw_Mirr(ele->DrawBuffer, 7, 5, XGE_BLEND_MIRR_H)
+	Else
+		' 纵向滚动条
+		xge_xui_VScroll_Triangle->Draw_Mirr(ele->DrawBuffer, 5, 7, XGE_BLEND_MIRR_V)
+	EndIf
+End Sub
+
 
 
 Extern XGE_EXTERNCLASS
@@ -152,20 +178,7 @@ Namespace xui
 		Dim ele As xui.ScrollBar Ptr = New xui.ScrollBar()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_SCROLLBAR
-		ele->Layout.Ruler = iLayoutRuler
-		ele->Layout.w = w
-		ele->Layout.h = h
-		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
-			ele->Layout.Rect.x = x
-			ele->Layout.Rect.y = y
-			ele->Layout.Rect.w = w
-			ele->Layout.Rect.h = h
-		EndIf
-		ele->LayoutMode = XUI_LAYOUT_T2B
-		If sIdentifier Then
-			strncpy(@ele->Identifier, sIdentifier, 31)
-			ele->Identifier[31] = 0
-		EndIf
+		ele->InitElement(iLayoutRuler, x, y, w, h, XUI_LAYOUT_T2B, sIdentifier)
 		' 自定义属性赋值
 		ele->Max = 100
 		ele->Min = 0
@@ -199,6 +212,8 @@ Namespace xui
 		' 挂接子控件事件
 		ele->private_ButtonUp->Event.OnClick = Cast(Any Ptr, @xui_class_ScrollBar_ButtonUp_OnClick)
 		ele->private_ButtonDown->Event.OnClick = Cast(Any Ptr, @xui_class_ScrollBar_ButtonDown_OnClick)
+		ele->private_ButtonUp->ClassEvent.OnUserDraw = Cast(Any Ptr, @xui_class_ScrollBar_ButtonUp_OnUserDraw)
+		ele->private_ButtonDown->ClassEvent.OnUserDraw = Cast(Any Ptr, @xui_class_ScrollBar_ButtonDown_OnUserDraw)
 		ele->private_SpaceUp->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_ScrollBar_SpaceUp_OnMouseDown)
 		ele->private_SpaceDown->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_ScrollBar_SpaceDown_OnMouseDown)
 		ele->private_ButtonCurPos->ClassEvent.OnMouseMove = Cast(Any Ptr, @xui_class_ScrollBar_ButtonCurPos_OnMouseMove)
@@ -222,6 +237,7 @@ Namespace xui
 		' 设置类参数
 		ele->ClassEvent.OnDraw = Cast(Any Ptr, @xui_class_ScrollBar_OnDraw)
 		ele->ClassEvent.OnSize = Cast(Any Ptr, @xui_class_ScrollBar_OnSize)
+		ele->ClassEvent.OnMouseMove = Cast(Any Ptr, @xui_class_Empty_OnMouseMove)
 		Return ele
 	End Function
 	
@@ -230,20 +246,7 @@ Namespace xui
 		Dim ele As xui.ScrollBar Ptr = New xui.ScrollBar()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_SCROLLBAR
-		ele->Layout.Ruler = iLayoutRuler
-		ele->Layout.w = w
-		ele->Layout.h = h
-		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
-			ele->Layout.Rect.x = x
-			ele->Layout.Rect.y = y
-			ele->Layout.Rect.w = w
-			ele->Layout.Rect.h = h
-		EndIf
-		ele->LayoutMode = XUI_LAYOUT_L2R
-		If sIdentifier Then
-			strncpy(@ele->Identifier, sIdentifier, 31)
-			ele->Identifier[31] = 0
-		EndIf
+		ele->InitElement(iLayoutRuler, x, y, w, h, XUI_LAYOUT_L2R, sIdentifier)
 		' 自定义属性赋值
 		ele->Max = 100
 		ele->Min = 0
@@ -277,6 +280,8 @@ Namespace xui
 		' 挂接子控件事件
 		ele->private_ButtonUp->Event.OnClick = Cast(Any Ptr, @xui_class_ScrollBar_ButtonUp_OnClick)
 		ele->private_ButtonDown->Event.OnClick = Cast(Any Ptr, @xui_class_ScrollBar_ButtonDown_OnClick)
+		ele->private_ButtonUp->ClassEvent.OnUserDraw = Cast(Any Ptr, @xui_class_ScrollBar_ButtonUp_OnUserDraw)
+		ele->private_ButtonDown->ClassEvent.OnUserDraw = Cast(Any Ptr, @xui_class_ScrollBar_ButtonDown_OnUserDraw)
 		ele->private_SpaceUp->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_ScrollBar_SpaceUp_OnMouseDown)
 		ele->private_SpaceDown->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_ScrollBar_SpaceDown_OnMouseDown)
 		ele->private_ButtonCurPos->ClassEvent.OnMouseMove = Cast(Any Ptr, @xui_class_ScrollBar_ButtonCurPos_OnMouseMove)
@@ -304,7 +309,7 @@ Namespace xui
 	End Function
 	
 	' 设置滚动范围
-	Sub ScrollBar.SetRange(iMin As Integer, iMax As Integer, bApplyLayout As Integer = TRUE)
+	Sub ScrollBar.SetRange(iMin As Integer, iMax As Integer, bApplyLayout As Integer = TRUE) XGE_EXPORT_OBJ
 		Max = iMax
 		Min = iMin
 		If Value < Min Then

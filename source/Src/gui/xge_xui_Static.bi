@@ -3,14 +3,7 @@
 
 ' 标签类 - 绘图
 Sub xui_class_Label_OnDraw(ele As xui.Label Ptr)
-	If ele->BackStyle.Hide = FALSE Then
-		If ele->BackStyle.Image Then
-			ele->BackStyle.Image->Draw(ele->DrawBuffer, 0, 0)
-		Else
-			xge.shape.Rect(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->BackStyle.BorderColor)
-			xge.shape.RectFull(ele->DrawBuffer, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, ele->BackStyle.FillColor)
-		EndIf
-	EndIf
+	xui_DrawBackStyle(ele, @ele->BackStyle)
 	xge.Text.DrawRectA(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, ele->TextColor, ele->TextFont, 0, ele->TextAlign, ele->LineSpace, ele->WordSpace)
 End Sub
 
@@ -61,22 +54,7 @@ Namespace xui
 		Dim ele As xui.Label Ptr = New xui.Label()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_STATIC
-		ele->Layout.Ruler = iLayoutRuler
-		ele->Layout.w = w
-		ele->Layout.h = h
-		ele->Layout.RectBox.x = x
-		ele->Layout.RectBox.y = y
-		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
-			ele->Layout.Rect.x = x
-			ele->Layout.Rect.y = y
-			ele->Layout.Rect.w = w
-			ele->Layout.Rect.h = h
-		EndIf
-		ele->LayoutMode = XUI_LAYOUT_COORD
-		If sIdentifier Then
-			strncpy(@ele->Identifier, sIdentifier, 31)
-			ele->Identifier[31] = 0
-		EndIf
+		ele->InitElement(iLayoutRuler, x, y, w, h, XUI_LAYOUT_COORD, sIdentifier)
 		' 自定义属性赋值
 		ele->Text = sCaption
 		ele->TextOffset.x = 0
@@ -98,22 +76,7 @@ Namespace xui
 		Dim ele As xui.Frame Ptr = New xui.Frame()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_STATIC
-		ele->Layout.Ruler = iLayoutRuler
-		ele->Layout.w = w
-		ele->Layout.h = h
-		ele->Layout.RectBox.x = x
-		ele->Layout.RectBox.y = y
-		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
-			ele->Layout.Rect.x = x
-			ele->Layout.Rect.y = y
-			ele->Layout.Rect.w = w
-			ele->Layout.Rect.h = h
-		EndIf
-		ele->LayoutMode = iLayoutMode
-		If sIdentifier Then
-			strncpy(@ele->Identifier, sIdentifier, 31)
-			ele->Identifier[31] = 0
-		EndIf
+		ele->InitElement(iLayoutRuler, x, y, w, h, iLayoutMode, sIdentifier)
 		' 自定义属性赋值
 		ele->Text = sCaption
 		ele->TextColor = &HFFFFFFFF
@@ -132,22 +95,7 @@ Namespace xui
 		Dim ele As xui.Image Ptr = New xui.Image()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_STATIC
-		ele->Layout.Ruler = iLayoutRuler
-		ele->Layout.w = w
-		ele->Layout.h = h
-		ele->Layout.RectBox.x = x
-		ele->Layout.RectBox.y = y
-		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
-			ele->Layout.Rect.x = x
-			ele->Layout.Rect.y = y
-			ele->Layout.Rect.w = w
-			ele->Layout.Rect.h = h
-		EndIf
-		ele->LayoutMode = XUI_LAYOUT_COORD
-		If sIdentifier Then
-			strncpy(@ele->Identifier, sIdentifier, 31)
-			ele->Identifier[31] = 0
-		EndIf
+		ele->InitElement(iLayoutRuler, x, y, w, h, XUI_LAYOUT_COORD, sIdentifier)
 		' 自定义属性赋值
 		ele->Image = pImage
 		ele->ImageOffset.x = 0

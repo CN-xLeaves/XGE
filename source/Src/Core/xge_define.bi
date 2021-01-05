@@ -139,4 +139,9 @@ Dim Shared xge_xui_element_active As xui.Element Ptr = NULL
 Dim Shared xge_xui_element_hot As xui.Element Ptr = NULL
 
 
+' -------------------------- XUIÄÚÖÃËØ²Ä
+Dim Shared xge_xui_VScroll_Triangle As xge.Surface Ptr
+Dim Shared xge_xui_HScroll_Triangle As xge.Surface Ptr
+
+
 

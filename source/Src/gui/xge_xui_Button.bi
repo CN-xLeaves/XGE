@@ -263,22 +263,7 @@ Namespace xui
 		Dim ele As xui.Button Ptr = New xui.Button()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_BUTTON
-		ele->Layout.Ruler = iLayoutRuler
-		ele->Layout.w = w
-		ele->Layout.h = h
-		ele->Layout.RectBox.x = x
-		ele->Layout.RectBox.y = y
-		If iLayoutRuler = XUI_LAYOUT_RULER_PIXEL Then
-			ele->Layout.Rect.x = x
-			ele->Layout.Rect.y = y
-			ele->Layout.Rect.w = w
-			ele->Layout.Rect.h = h
-		EndIf
-		ele->LayoutMode = XUI_LAYOUT_COORD
-		If sIdentifier Then
-			strncpy(@ele->Identifier, sIdentifier, 31)
-			ele->Identifier[31] = 0
-		EndIf
+		ele->InitElement(iLayoutRuler, x, y, w, h, XUI_LAYOUT_COORD, sIdentifier)
 		' 自定义属性赋值
 		ele->Text = sCaption
 		ele->TextFont = 1
@@ -305,6 +290,7 @@ Namespace xui
 		ele->CheckStyle.TextColor = &HFFFFB866
 		' 设置类参数
 		ele->ClassEvent.OnDraw = Cast(Any Ptr, @xui_class_Button_OnDraw)
+		ele->ClassEvent.OnMouseMove = Cast(Any Ptr, @xui_class_Empty_OnMouseMove)
 		ele->ClassEvent.OnMouseEnter = Cast(Any Ptr, @xui_class_Button_OnMouseEnter)
 		ele->ClassEvent.OnMouseLeave = Cast(Any Ptr, @xui_class_Button_OnMouseLeave)
 		ele->ClassEvent.OnMouseDown = Cast(Any Ptr, @xui_class_Button_OnMouseDown)

@@ -81,13 +81,13 @@
 		Sub Blend_Gray(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer) XGE_EXPORT_ALL
 			Dim As UInteger Ptr DstLine, SrcLine
 			Dim TmpColor As UInteger
-			For y As Integer = 0 To h-1
+			For y As Integer = 0 To h
 				SrcLine = SrcAddr + (SrcPitch * y) + SrcLineS
 				DstLine = DstAddr + (DstPitch * y) + DstLineS
-				For x As Integer = 0 To w-1
+				For x As Integer = 0 To w
 					TmpColor = SrcLine[x]
 					If (TmpColor And MASK32) <> MASK_COLOR_32 Then
-						TmpColor = (((TmpColor And Mask32_R) Shr 16)*1224 + ((TmpColor And Mask32_G) Shr 8)*2405 + (TmpColor And Mask32_B)*467) Shr 12
+						TmpColor = (((TmpColor And Mask32_R) Shr 16) * 1224 + ((TmpColor And Mask32_G) Shr 8) * 2405 + (TmpColor And Mask32_B) * 467) Shr 12
 						TmpColor = (TmpColor Shl 16) Or (TmpColor Shl 8) Or TmpColor
 						DstLine[x] = TmpColor
 					EndIf
@@ -99,20 +99,20 @@
 		Sub Blend_Mirr(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer) XGE_EXPORT_ALL
 			Dim As UInteger Ptr DstLine, SrcLine
 			Dim TmpColor As UInteger
-			For y As Integer = 0 To h-1
+			For y As Integer = 0 To h
 				SrcLine = SrcAddr + (SrcPitch * y) + SrcLineS
 				' 垂直镜像则反算指针
 				If param And XGE_BLEND_MIRR_V Then
-					DstLine = DstAddr + (DstPitch * ((h-1)-y)) + DstLineS
+					DstLine = DstAddr + (DstPitch * (h-y)) + DstLineS
 				Else
 					DstLine = DstAddr + (DstPitch * y) + DstLineS
 				EndIf
-				For x As Integer = 0 To w-1
+				For x As Integer = 0 To w
 					'/' 垂直十万次耗时 6.7 秒		水平十万次耗时 7.1 秒		垂直+水平十万次耗时 7.1 秒
-					If (SrcLine[x] And MASK32) <> MASK_COLOR_32 Then
+					If ((SrcLine[x] And MASK32_A) <> 0) And ((SrcLine[x] And MASK32) <> MASK_COLOR_32) Then
 						' 水平镜像则反算指针
 						If param And XGE_BLEND_MIRR_H Then
-							DstLine[(w-1)-x] = SrcLine[x]
+							DstLine[w-x] = SrcLine[x]
 						Else
 							DstLine[x] = SrcLine[x]
 						EndIf
@@ -147,10 +147,10 @@
 		' 场景过渡效果
 		Sub Blend_Shade(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer) XGE_EXPORT_ALL
 			Dim As UInteger Ptr DstLine, SrcLine
-			For y As Integer = 0 To h-1
+			For y As Integer = 0 To h
 				SrcLine = SrcAddr + (SrcPitch * y) + SrcLineS
 				DstLine = DstAddr + (DstPitch * y) + DstLineS
-				For x As Integer = 0 To w-1
+				For x As Integer = 0 To w
 					If XGE_Blend_ShadeData[(y*XGE_Blend_ShadeWidth)+x] <= param Then
 						DstLine[x] = SrcLine[x]
 					EndIf

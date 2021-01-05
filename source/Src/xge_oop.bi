@@ -118,10 +118,11 @@
 	/' -------------------------- 颜色定义 -------------------------- '/
 	#Define MASK_COLOR_24				&HFF00FF
 	#Define MASK_COLOR_32				&HFFFF00FF
-	#Define MASK32_R					&HFF0000
-	#Define MASK32_G					&H00FF00
-	#Define MASK32_B					&H0000FF
-	#Define MASK32						&HFFFFFF
+	#Define MASK32_A					&HFF000000
+	#Define MASK32_R					&H00FF0000
+	#Define MASK32_G					&H0000FF00
+	#Define MASK32_B					&H000000FF
+	#Define MASK32						&HFFFFFFFF
 	
 	
 	/' -------------------------- 镜像定义 -------------------------- '/
@@ -753,16 +754,75 @@
 			' 背景结构
 			Type BackStyle_Struct
 				Image As xge.Surface Ptr = NULL
-				BorderColor As Integer
-				FillColor As Integer
+				BorderColor As UInteger
+				FillColor As UInteger
 				Hide As Integer
 			End Type
 			Type BackStyle_Text_Struct
 				Image As xge.Surface Ptr = NULL
-				BorderColor As Integer
-				FillColor As Integer
-				TextColor As Integer
+				BorderColor As UInteger
+				FillColor As UInteger
+				TextColor As UInteger
 				Hide As Integer
+			End Type
+			
+			
+			' 列表项结构体
+			Type List_Item_BasicStruct							' 列表项结构体 [基础结构]
+				Checked As Integer								' 选中状态
+				Tag As Integer									' 附加数据
+				Text As ZString Ptr								' 显示文本
+				TextColor As UInteger							' 文本颜色
+				UserData As Any Ptr								' 用户自定义数据开始的位置 [这个数据是不存在的，用于提取指针]
+			End Type
+			
+			' 列表项集合管理器
+			Type List_ItemSet Extends xBsmm						' 列表项集合管理器
+				Parent As Any Ptr								' 父元素指针
+				
+				' 构造函数
+				Declare Constructor()
+				
+				' 列表项数量
+				Declare Function Count() As UInteger
+				
+				' 添加列表项
+				Declare Function Append(sVal As ZString Ptr, Tag As Integer = 0) As UInteger
+				Declare Function Insert(iPos As UInteger, sVal As ZString Ptr, Tag As Integer = 0) As UInteger
+				
+				' 删除列表项
+				Declare Function Remove(iPos As UInteger) As Integer
+				Declare Sub Clear()
+				
+				' 获取/设置 列表项的标题
+				Declare Property Text(iPos As UInteger) As ZString Ptr
+				Declare Property Text(iPos As UInteger, sVal As ZString Ptr)
+				
+				' 获取/设置 列表项的附加数据
+				Declare Property Tag(iPos As UInteger) As Integer
+				Declare Property Tag(iPos As UInteger, iVal As Integer)
+				
+				' 选中列表项
+				Declare Property Selected(iPos As UInteger) As Integer
+				Declare Property Selected(iPos As UInteger, iStk As Integer)
+				
+				' 统计选中列表项的数量
+				Declare Function SelectCount() As UInteger
+				
+				' 选择所有列表项
+				Declare Sub SelectAll()
+				
+				' 取消所有选中的列表项
+				Declare Sub SelectClear()
+				
+				' 反选所有列表项
+				Declare Sub SelectInverse()
+				
+				' 设置用户自定义数据结构大小 [默认为0，只能在还没有列表项时调用]
+				Declare Sub SetUserDataSize(bc As UInteger)
+				
+				' 获取用户自定义数据指针
+				Declare Function UserData(iPos As UInteger) As Any Ptr
 			End Type
 			
 			
@@ -823,6 +883,15 @@
 			End Type
 			
 			
+			' 列表框事件结构
+			Type ListBoxEvent
+				OnDrawItem As Sub(ele As Any Ptr, iPos As UInteger, Item As List_Item_BasicStruct Ptr, stk As Integer, x As Integer, y As Integer, w As Integer, h As Integer)
+				OnClickItem As Sub(ele As Any Ptr, iPos As UInteger, btn As Integer)
+				OnDoubleClickItem As Sub(ele As Any Ptr, iPos As UInteger, btn As Integer)
+				OnSelectChange As Sub(ele As Any Ptr, iOld As UInteger)
+			End Type
+			
+			
 			' 子元素列表类
 			Type ElementList Extends xBsmm
 				Parent As Any Ptr		' 父元素指针 [添加子元素的时候需要]
@@ -858,8 +927,16 @@
 				' 析构函数
 				Declare Destructor()
 				
+				' 填写基础数据
+				Declare Sub InitElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL)
+				
+				' 应用布局
 				Declare Sub LayoutApply()
+				
+				' 绘制
 				Declare Sub Draw(sf As xge.Surface Ptr = NULL, px As Integer = 0, py As Integer = 0)
+				
+				' 事件链
 				Declare Function EventLink(msg As Integer,param As Integer,eve As xge_event Ptr) As Integer
 				
 				' 画参考线
@@ -892,7 +969,7 @@
 				
 				Event As ButtonEvent							' 按钮的事件
 				
-				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
 				private_Status As Integer						' 按钮的状态 [0=常规、1=热点、2=按下]
 				private_AllowClick As Integer					' 允许触发点击事件 [当鼠标是在按钮上按下的时候设置为TRUE]
 			End Type
@@ -944,7 +1021,7 @@
 				' 设置滚动范围
 				Declare Sub SetRange(iMin As Integer, iMax As Integer, bApplyLayout As Integer = TRUE)
 				
-				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
 				private_Type As Integer							' 类型 [1=横向滚动条、else=纵向滚动条]
 				private_DragX As Integer						' 拖动滑块时记录的横坐标
 				private_DragY As Integer						' 拖动滑块时记录的纵坐标
@@ -965,15 +1042,44 @@
 				BorderColor As UInteger							' 边框颜色
 				BackColor As UInteger							' 背景颜色 [它只会用来填充两个滚动条附近的空白]
 				
-				Event As ScrollViewEvent						' 滚动视图的事件
+				ViewEvent As ScrollViewEvent						' 滚动视图的事件
+				
+				' 构造函数
+				Declare Constructor()
 				
 				' 设置视图大小
 				Declare Sub SetViewSize(nw As Integer, nh As Integer, bApplyLayout As Integer = TRUE)
 				
-				' 不公开的属性 [但我没有隐藏这些细节，方便你二次开发]
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
 				private_VScroll As xui.ScrollBar Ptr			' 视图滚动条
 				private_HScroll As xui.ScrollBar Ptr			' 视图滚动条
 				DefaultScrollBar As xui.ScrollBar Ptr			' 默认滚动条 [在视图上拨动滚动条，会将消息发送给这个元素，默认使用垂直滚动条]
+			End Type
+			
+			
+			' 列表框类 (列表项范围从1开始, 0代表非法范围, 选择是0表示没有任何列表项被选中)
+			Type ListBox Extends xui.Element
+				List As List_ItemSet							' 列表项集合
+				TextColor As UInteger							' 文字颜色
+				TextFont As UInteger							' 文字字体
+				BackStyle As xui.BackStyle_Struct				' 背景样式
+				ItemHotStyle As xui.BackStyle_Struct			' 热点项样式
+				ItemSelStyle As xui.BackStyle_Struct			' 选中项样式
+				BorderWidth As UInteger							' 边框宽度
+				ItemHeight As UInteger							' 列表项高度
+				
+				Event As ListBoxEvent							' 列表框事件
+				
+				Declare Property ListIndex As Integer
+				Declare Property ListIndex(iPos As Integer)
+				
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
+				private_HotItem As UInteger						' 鼠标指向的元素
+				private_ListIndex As UInteger					' 当前选择项
+				private_WordHeight As UInteger					' 文字高度
+				private_ShowCount As UInteger					' 列表能够显示的项目数量 [用于计算滚动条]
+				private_Scroll As xui.ScrollBar Ptr				' 滚动条
+				private_ShowScroll As Integer					' 是否显示滚动条
 			End Type
 			
 			
@@ -1028,6 +1134,12 @@
 			
 			' 创建横向滚动条
 			Declare Function CreateHScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 18, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr
+			
+			' 创建滚动视图
+			Declare Function CreateScrollView(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 200, vw As Integer = 200, vh As Integer = 200, sIdentifier As ZString Ptr = NULL) As xui.ScrollView Ptr
+			
+			' 创建列表框
+			Declare Function CreateListBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 120, h As Integer = 200, TextColor As UInteger = &HFF000000, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.ListBox Ptr
 			
 		End Namespace
 		

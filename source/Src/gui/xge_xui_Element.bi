@@ -19,6 +19,18 @@ Namespace xui
 		DrawBuffer = New xge.Surface()
 		Childs.Parent = @This
 		ClassID = XUI_CLASS_ELEMENT
+		InitElement(iLayoutRuler, x, y, w, h, iLayoutMode, sIdentifier)
+	End Constructor
+	
+	' 析构函数
+	Destructor Element() XGE_EXPORT_OBJ
+		If DrawBuffer Then
+			Delete DrawBuffer
+		EndIf
+	End Destructor
+	
+	' 填写基础信息
+	Sub Element.InitElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) XGE_EXPORT_OBJ
 		Layout.Ruler = iLayoutRuler
 		Layout.w = w
 		Layout.h = h
@@ -35,14 +47,7 @@ Namespace xui
 			strncpy(@Identifier, sIdentifier, 31)
 			Identifier[31] = 0
 		EndIf
-	End Constructor
-	
-	' 析构函数
-	Destructor Element() XGE_EXPORT_OBJ
-		If DrawBuffer Then
-			Delete DrawBuffer
-		EndIf
-	End Destructor
+	End Sub
 	
 	' 应用布局
 	Sub Element.LayoutApply() XGE_EXPORT_OBJ
