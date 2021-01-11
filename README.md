@@ -1,4 +1,4 @@
-## xywh Game Engine
+﻿## xywh Game Engine
 
 This is a game development framework that supports FreeBasic and C++.
 
@@ -39,8 +39,11 @@ Very often, smaller means less coupling, fewer errors, and more speed.
 
 ## Released Versions
 
-Ver 1.1 ： https://github.com/CN-xLeaves/XGE/releases/tag/1.1
-Ver 1.0 ： https://github.com/CN-xLeaves/XGE/releases/tag/1.0
+### Ver 1.1 ：
+https://github.com/CN-xLeaves/XGE/releases/tag/1.1
+
+### Ver 1.0 ：
+https://github.com/CN-xLeaves/XGE/releases/tag/1.0
 
 ## Files Structure
 
