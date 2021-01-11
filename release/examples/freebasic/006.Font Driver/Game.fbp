@@ -19,12 +19,12 @@ Output=..\bin\006.Font Driver.exe
 Run=
 Delete=
 [TabOrder]
-TabOrder=1
+TabOrder=1,0
 [File]
 1=Game.bas
 2=Game.rc
 [BreakPoint]
 1=
 [FileInfo]
-1=0,72,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+1=0,76,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

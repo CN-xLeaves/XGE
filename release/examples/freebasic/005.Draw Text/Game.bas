@@ -17,7 +17,7 @@ Dim img As xge.GdiSurface Ptr = New xge.GdiSurface(800, 600)
 ' -> is member function of the class is called, through the pointer
 ' developing a game needs to manage a lot of resources, and it is convenient to use pointers and classes.
 img->PrintText(0, 100, 800, 100, "宋体", 48, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE Or XGE_FONT_UNDERLINE, &HFFFF00, "xywh Game Engine")
-img->PrintText(0, 200, 800, 100, "微软雅黑", 60, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE Or XGE_FONT_BOLD, &HFFFF, 2, "星月无痕软件工作组出品")
+img->PrintText(0, 200, 800, 100, "微软雅黑", 60, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE Or XGE_FONT_BOLD, &HFFFF, 2, "xywhsoft working group")
 img->PrintText(0, 300, 800, 100, "微软雅黑", 48, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE Or XGE_FONT_BOLD, &HFF00, &HFF, 2, "作者 : xLeaves (叶子的离开)")
 img->PrintText(0, 400, 800, 100, "微软雅黑", 52, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE Or XGE_FONT_BOLD, "..\..\..\res\fire.jpg", 0, "xywhsoft@qq.com")
 

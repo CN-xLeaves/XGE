@@ -63,9 +63,9 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			' XUI_LAYOUT_RULER_PIXEL layout mode : occupy a fixed size
 			' because the layout is from left to right, the height parameter of XUI_LAYOUT_RULER_RATIO layout mode is meaningless
 			' the total width of LeftLayout and RightLayout is 3, so they occupy 1/3 and 2/3 of the remaining space respectively after automatic layout
-			LeftLayout = xui.CreateElement(XUI_LAYOUT_RULER_RATIO, 0, 0, 1, 1, XUI_LAYOUT_COORD, "SpaceL")
-			CenterLayout = xui.CreateElement(XUI_LAYOUT_RULER_PIXEL, 0, 0, 240, 600, XUI_LAYOUT_COORD, "SpaceL")
-			RightLayout = xui.CreateElement(XUI_LAYOUT_RULER_RATIO, 0, 0, 2, 1, XUI_LAYOUT_COORD, "SpaceL")
+			LeftLayout = xui.CreateElement(XUI_LAYOUT_RULER_RATIO, 0, 0, 1, 1, XUI_LAYOUT_COORD, "LeftLayout")
+			CenterLayout = xui.CreateElement(XUI_LAYOUT_RULER_PIXEL, 0, 0, 240, 600, XUI_LAYOUT_COORD, "CenterLayout")
+			RightLayout = xui.CreateElement(XUI_LAYOUT_RULER_RATIO, 0, 0, 2, 1, XUI_LAYOUT_COORD, "RightLayout")
 			
 			' draw the reference lines of the three elements so as to observe their positions
 			LeftLayout->DrawRange = TRUE

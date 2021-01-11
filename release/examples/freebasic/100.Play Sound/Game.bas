@@ -11,7 +11,7 @@ xge.Init(640, 480, XGE_INIT_WINDOW, XGE_INIT_ALL, "XGE - Play Sound")
 xge.Text.LoadFont("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 
 ' draw text
-xge.Text.DrawRectA(NULL, 0, 0, 640, 480, "Press ESC to exit", &HFF00)
+xge.Text.DrawRectA(NULL, 0, 0, 640, 480, "Press ESC to exit", 0, &HFF00)
 
 ' load music
 Dim bgm As xge.Sound Ptr = New xge.Sound(XGE_SOUND_STREAM, 0, "..\..\..\res\bgm.mp3")

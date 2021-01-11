@@ -14,7 +14,7 @@
 	
 	
 	Extern XGE_EXTERNSTDEXT
-		Function AsciToUnicode(ZStrPtr As ZString Ptr,ZStrLen As UInteger) As Any Ptr XGE_EXPORT_LIB
+		Function AsciToUnicode(ZStrPtr As ZString Ptr, ZStrLen As UInteger = 0) As WString Ptr XGE_EXPORT_LIB
 			If ZStrLen = 0 Then
 				ZStrLen = strlen(ZStrPtr)
 			EndIf
@@ -25,7 +25,7 @@
 			Return WStrMem
 		End Function
 		
-		Function UnicodeToAsci(WStrPtr As WString Ptr,WStrLen As UInteger) As Any Ptr XGE_EXPORT_LIB
+		Function UnicodeToAsci(WStrPtr As WString Ptr, WStrLen As UInteger = 0) As ZString Ptr XGE_EXPORT_LIB
 			If WStrLen = 0 Then
 				WStrLen = wcslen(WStrPtr)
 			EndIf
@@ -36,7 +36,7 @@
 			Return ZStrMem
 		End Function
 		
-		Function UnicodeToUTF8(WStrPtr As WString Ptr,WStrLen As UInteger) As Any Ptr XGE_EXPORT_LIB
+		Function UnicodeToUTF8(WStrPtr As WString Ptr, WStrLen As UInteger = 0) As ZString Ptr XGE_EXPORT_LIB
 			If WStrLen = 0 Then
 				WStrLen = wcslen(WStrPtr)
 			EndIf
@@ -47,7 +47,7 @@
 			Return UTF8Mem
 		End Function
 		
-		Function UTF8ToUnicode(UTF8Ptr As ZString Ptr,UTF8Len As UInteger) As Any Ptr XGE_EXPORT_LIB
+		Function UTF8ToUnicode(UTF8Ptr As ZString Ptr, UTF8Len As UInteger = 0) As WString Ptr XGE_EXPORT_LIB
 			If UTF8Len = 0 Then
 				UTF8Len = strlen(UTF8Ptr)
 			EndIf
@@ -78,7 +78,7 @@
 			Return xywh_library_auto_memory
 		End Function
 		
-		Function U2W(UStr As ZString Ptr,ULen As UInteger=0) As ZString Ptr XGE_EXPORT_LIB
+		Function U2W(UStr As ZString Ptr,ULen As UInteger=0) As WString Ptr XGE_EXPORT_LIB
 			DeAllocate(xywh_library_auto_memory)
 			xywh_library_auto_memory = UTF8ToUnicode(UStr,ULen)
 			Return xywh_library_auto_memory

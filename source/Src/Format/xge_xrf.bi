@@ -211,12 +211,20 @@ End Sub
 Sub xFont_WordInfo_xrf(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
 	If iCode < &H80 Then	' 暂时没有控制字符的处理功能，例如 制表符 之类的
 		' ASCII字符
-		*w = fd->FontSizeInt
-		*h = fd->HeightInt
+		If w Then
+			*w = fd->FontSizeInt
+		EndIf
+		If h Then
+			*h = fd->HeightInt
+		EndIf
 	Else
 		' 宽字符
-		*w = fd->WidthInt
-		*h = fd->HeightInt
+		If w Then
+			*w = fd->WidthInt
+		EndIf
+		If h Then
+			*h = fd->HeightInt
+		EndIf
 	EndIf
 End Sub
 

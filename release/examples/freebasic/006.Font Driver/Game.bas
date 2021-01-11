@@ -76,7 +76,7 @@ xge.Hook.SetFontLoadProc(Cast(Any Ptr, @MyFontLoad))
 xge.Text.LoadFont("it's just something that doesn't exist anyway", 0)
 
 ' because we didn't pass rhe correct text size, the drawing effect was a bit strange, but it worked well.
-xge.Text.DrawA(NULL, 100, 50, "you are very clever!", &HFF00, 1)
+xge.Text.DrawA(NULL, 100, 50, "you are very clever!", 0, &HFF00FF00, 1)
 
 ' wait 5s
 Sleep 5000

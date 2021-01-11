@@ -139,6 +139,7 @@ Function xBsmm.CallocMemory(iCount As UInteger) As Integer XGE_EXPORT_OBJ
 	ElseIf iCount = 0 Then
 		' Çå¿Õ
 		ReInitManage()
+		Return -1
 	Else
 		' ²»±ä
 		Return -1

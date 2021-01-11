@@ -270,10 +270,11 @@
 	#Define XUI_CLASS_LISTBOX			5				' 列表框
 	#Define XUI_CLASS_COMBOBOX			6				' 组合框
 	#Define XUI_CLASS_PROGRESSBAR		7				' 进度条
-	#Define XUI_CLASS_TRACKBAR			8				' 进度条
+	#Define XUI_CLASS_SLIDER			8				' 滑块
 	#Define XUI_CLASS_ANIMATBOX			9				' 动画
 	#Define XUI_CLASS_LINEEDIT			10				' 行编辑框
 	#Define XUI_CLASS_TEXTBOX			11				' 全功能文本编辑框
+	#Define XUI_CLASS_WINDOW			12				' 动画
 	#Define XUI_CLASS_USER				&H10000			' 用户自定义元素的开始ID
 	
 	
@@ -282,6 +283,20 @@
 	#Define XUI_SCROLL_H				2				' 显示横向滚动条
 	#Define XUI_SCROLL_VH				3				' 横向和纵向滚动条都显示
 	#Define XUI_SCROLL_HV				3				' 横向和纵向滚动条都显示
+	
+	
+	/' -------------------------- 元素进度条显示状态定义 -------------------------- '/
+	#Define XUI_PROGRESSBAR_HIDE		0				' 不显示
+	#Define XUI_PROGRESSBAR_PERCENT		1				' 显示百分比
+	#Define XUI_PROGRESSBAR_VALUE		2				' 显示数值
+	
+	
+	/' -------------------------- XUI IME 相关事件ID定义 -------------------------- '/
+	#Define XUI_IME_INPUT				0				' IME传递输入数据
+	#Define XUI_IME_STARTCOMPOSITION	1				' IME开始输入
+	#Define XUI_IME_COMPTEXT			2				' IME输入变动
+	#Define XUI_IME_ENDCOMPOSITION		3				' IME输入结束
+	#Define XUI_IME_CHAR				4				' WM_CHAR
 	
 	
 	/' -------------------------- 文件查找规则 -------------------------- '/
@@ -456,6 +471,51 @@
 			
 			' 重置（释放资源）
 			Declare Sub ReInitManage()
+		End Type
+		
+		
+		/' -------------------------- 字符串缓冲区管理器 [UCS2] -------------------------- '/
+		Type xStringBuffer
+			
+			' 内存指针
+			BufferMemory As WString Ptr
+			
+			' 数据长度
+			BufferLenght As UInteger
+			
+			' 已经申请的内存长度
+			AllocLenght As UInteger
+			
+			' 预分配内存步长
+			AllocStep As UInteger
+			
+			' 附加数据
+			Tag As Integer
+			
+			' 构造函数
+			Declare Constructor()
+			
+			' 析构函数
+			Declare Destructor()
+			
+			' 设置数据
+			Declare Function SetText(sText As WString Ptr, iTextSize As UInteger = 0) As Integer
+			
+			' 追加写数据
+			Declare Function AppendText(sText As WString Ptr, iTextSize As UInteger = 0) As Integer
+			
+			' 插入写数据
+			Declare Function InsertText(iPos As UInteger, iSize As UInteger, sText As WString Ptr, iTextSize As UInteger = 0) As Integer
+			
+			' 删除数据
+			Declare Function DeleteText(iPos As UInteger, iSize As UInteger) As Integer
+			
+			' 分配内存
+			Declare Function MallocMemory(iLenght As UInteger) As Integer
+			
+			' 释放内存
+			Declare Sub FreeMemory()
+			
 		End Type
 	End Extern
 	
@@ -892,6 +952,25 @@
 			End Type
 			
 			
+			' 输入框事件结构
+			Type LineEditEvent
+				OnChange As Sub(ele As Any Ptr)
+				OnGotfocus As Sub(ele As Any Ptr)
+				OnLostFocus As Sub(ele As Any Ptr)
+				OnSubmit As Sub(ele As Any Ptr)
+				OnTab As Sub(ele As Any Ptr)
+			End Type
+			
+			
+			' 窗口事件结构
+			Type WindowEvent
+				OnGotfocus As Sub(ele As Any Ptr)
+				OnLostFocus As Sub(ele As Any Ptr)
+				OnMove As Sub(ele As Any Ptr)
+				OnSize As Sub(ele As Any Ptr)		' 暂未实现
+			End Type
+			
+			
 			' 子元素列表类
 			Type ElementList Extends xBsmm
 				Parent As Any Ptr		' 父元素指针 [添加子元素的时候需要]
@@ -1006,6 +1085,21 @@
 			End Type
 			
 			
+			' 进度条类
+			Type ProgressBar Extends xui.Element
+				Max As Integer									' 最大值
+				Min As Integer									' 最小值
+				Value As Integer								' 当前值
+				TextFont As UInteger							' 字体
+				TextColor As UInteger							' 文字颜色
+				BackStyle As xui.BackStyle_Struct				' 背景样式
+				ForeStyle As xui.BackStyle_Struct				' 前景样式
+				ShowMode As Integer								' 显示模式 [ 1=显示百分比、2=显示数值、else=不显示 ]
+				RercentDigit As UInteger						' 百分比位数
+				BorderWidth As UInteger							' 边框宽度
+			End Type
+			
+			
 			' 滚动条类
 			Type ScrollBar Extends xui.Element
 				Max As Integer									' 最大值
@@ -1042,7 +1136,7 @@
 				BorderColor As UInteger							' 边框颜色
 				BackColor As UInteger							' 背景颜色 [它只会用来填充两个滚动条附近的空白]
 				
-				ViewEvent As ScrollViewEvent						' 滚动视图的事件
+				ViewEvent As ScrollViewEvent					' 滚动视图的事件
 				
 				' 构造函数
 				Declare Constructor()
@@ -1083,6 +1177,93 @@
 			End Type
 			
 			
+			' 行编辑类 [单行编辑器]
+			Type LineEdit Extends xui.Element
+				TextFont As UInteger							' 文字字体
+				TextColor As UInteger							' 文字颜色
+				CompColor As UInteger							' 正在输入的文字颜色
+				SelTextColor As UInteger						' 选中文字的颜色
+				SelBackColor As UInteger						' 选中文字的背景颜色
+				BorderWidth As UInteger							' 边框宽度
+				BackStyle As xui.BackStyle_Struct				' 背景样式
+				SelStart As UInteger							' 选择文本开始的位置
+				SelSize As UInteger								' 选择文本的长度
+				TextAlign As Integer							' 文字对齐方式 [暂未实现]
+				EnableIME As Integer							' 是否启用IME输入法
+				PassWordChar As Integer							' 密码模式字符 [为0时不使用密码模式；密码模式下无法复制和剪切]
+				MaxLenght As UInteger							' 最大长度，为 0 时不限制
+				
+				Event As LineEditEvent
+				
+				' 构造函数
+				Declare Constructor()
+				
+				' 文本属性
+				Declare Property Text As WString Ptr
+				Declare Property Text(sText As WString Ptr)
+				
+				' 文本长度
+				Declare Function TextLenght() As UInteger
+				
+				' 全选
+				Declare Sub SelectAll()
+				
+				' 剪切
+				Declare Sub Cut()
+				
+				' 复制
+				Declare Sub Copy()
+				
+				' 粘贴
+				Declare Sub Paste()
+				
+				' 删除选择内容
+				Declare Sub Del()
+				
+				' 设置当前选择的文字
+				Declare Sub SetSelText(sText As WString Ptr, iSize As UInteger = 0)
+				
+				' 设置文字选择范围
+				Declare Sub SetSel(s As UInteger, l As Integer)
+				
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
+				private_ViewX As UInteger						' 视图横坐标 [用于处理输入文字超出范围的情况] [暂未实现]
+				private_Buffer As xStringBuffer					' 文字缓冲区
+				private_Offset As xui.Coord						' 文字绘制偏移 [用于排版、计算坐标]
+				private_Caret As xui.Rect						' 插入符的像素位置和大小
+				private_CaretTick As UInteger					' 插入符上次闪烁的时间
+				private_CaretShow As Integer					' 插入符显示状态
+				private_CaretPos As UInteger					' 插入符位置
+				private_CaretBlink As UInteger					' 插入符闪烁间隔 [毫秒]
+				private_CaretColor As UInteger					' 插入符的颜色
+				private_compstr As WString Ptr					' IME输入字符串
+				private_comppos As UInteger						' IME输入字符串指针所在的位置
+				private_DragPos As UInteger						' 鼠标在拖动选择时记忆的字符位置
+			End Type
+			
+			
+			' 窗口类
+			Type Window Extends xui.Element
+				
+				Text As ZString Ptr								' 标题
+				TextColor As UInteger							' 标题颜色
+				TextFont As UInteger							' 标题字体
+				BackStyle As xui.BackStyle_Struct				' 背景样式
+				AllowMove As Integer							' 允许拖拽移动
+				AllowSize As Integer							' 允许调整大小 [暂未实现]
+				
+				Event As WindowEvent
+				
+				' 构造函数
+				Declare Constructor()
+				
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
+				private_DragMode As Integer						' 是否开始拖动
+				private_Drag As xui.Coord						' 拖动窗口时点击的坐标
+				private_DragWinPos As xui.Coord					' 拖动窗口时窗口的坐标
+			End Type
+			
+			
 			' 获取根元素 (Desktop元素)
 			Declare Function GetRootElement() As xui.Element Ptr
 			
@@ -1091,6 +1272,16 @@
 			
 			' 激活元素 [传递NULL则取消当前激活的元素]
 			Declare Sub ActiveElement(ele As xui.Element Ptr)
+			
+			' 设置鼠标捕获 [传递NULL则释放鼠标捕获]
+			' 鼠标捕获一般在 OnMouseDown 时设置，OnMouseUp 时释放
+			' 捕获期间，鼠标消息会优先通知给捕获的元素处理，当捕获元素不处理时才会分发给其他元素和XGE引擎
+			Declare Sub MouseCapture(ele As xui.Element Ptr)
+			
+			' 关闭和激活输入法
+			Declare Sub DisableIME()
+			Declare Sub EnableIME(proc As Any Ptr, param As Integer)
+			Declare Sub EnableCharInput(proc As Any Ptr, param As Integer)
 			
 			' 获取鼠标指针下的热点元素
 			Declare Function GetHotElement() As xui.Element Ptr
@@ -1140,6 +1331,18 @@
 			
 			' 创建列表框
 			Declare Function CreateListBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 120, h As Integer = 200, TextColor As UInteger = &HFF000000, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.ListBox Ptr
+			
+			' 创建行编辑框
+			Declare Function CreateLineEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.LineEdit Ptr
+			
+			' 创建密码编辑框
+			Declare Function CreatePassWordEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.LineEdit Ptr
+			
+			' 创建进度条
+			Declare Function CreateProgressBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sIdentifier As ZString Ptr = NULL) As xui.ProgressBar Ptr
+			
+			' 创建窗口
+			Declare Function CreateBaseWindow(x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As ZString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.Window Ptr
 			
 		End Namespace
 		
@@ -1285,6 +1488,7 @@
 				
 				Tag As Integer
 				TagFloat As Single
+				TagPtr As Any Ptr
 				
 				' 必要的接口
 				DrawWord As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
@@ -1298,13 +1502,23 @@
 				' 设置字体大小
 				SetFontSize As Sub(fd As FontDriver Ptr, size As UInteger)
 				
+				' 测量文字的宽度和高度
+				GetTextWidth_Fast As Function(fd As FontDriver Ptr, txt As WString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As Integer
+				GetTextWidthA_Fast As Function(fd As FontDriver Ptr, txt As ZString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As Integer
+				GetTextRect_Fast As Function(fd As FontDriver Ptr, txt As WString Ptr, txtLen As UInteger, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
+				GetTextRectA_Fast As Function(fd As FontDriver Ptr, txt As ZString Ptr, txtLen As UInteger, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
+				
+				' 根据坐标或宽度反推文字的位置
+				WidthToPos_Fast As Function(fd As FontDriver Ptr, cw As Integer, txt As WString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As UInteger
+				WidthToPosA_Fast As Function(fd As FontDriver Ptr, cw As Integer, txt As ZString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As UInteger
+				
 				' 输出一行文字
-				DrawLine_Fast As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As WString Ptr, iColor As Integer, Style As Integer, wd As Integer)
-				DrawLineA_Fast As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, wd As Integer)
+				DrawLine_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As WString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, wd As Integer) As xui.Rect
+				DrawLineA_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, wd As Integer) As xui.Rect
 				
 				' 输出一些文字到一个矩形范围内 [ align:对其方式、wd:字间距、ld:行间距 ] [暂未实现自动换行功能]
-				DrawRect_Fast As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As WString Ptr, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer)
-				DrawRectA_Fast As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer)
+				DrawRect_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As WString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
+				DrawRectA_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
 				
 			End Type
 			
@@ -1336,13 +1550,23 @@
 				' 获取字体大小 [字体高度像素]
 				Declare Function GetFontSize(idx As UInteger) As Integer
 				
+				' 测量文字的宽度和高度
+				Declare Function GetTextWidth(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
+				Declare Function GetTextWidthA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
+				Declare Function GetTextRect(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
+				Declare Function GetTextRectA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
+				
+				' 根据坐标或宽度反推文字的位置
+				Declare Function WidthToPos(cw As Integer, txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
+				Declare Function WidthToPosA(cw As Integer, txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
+				
 				' 写字
-				Declare Sub Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
-				Declare Sub DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0)
+				Declare Function Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xui.Rect
+				Declare Function DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xui.Rect
 				
 				' 矩形格式化写字 [ align:对其方式、wd:字间距、ld:行间距 ]
-				Declare Sub DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0)
-				Declare Sub DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0)
+				Declare Function DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
+				Declare Function DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
 				
 			End Namespace
 			
@@ -1410,21 +1634,26 @@
 		
 		
 		/' -------------------------- 字符集转换库 -------------------------- '/
-		Declare Function AsciToUnicode(ZStrPtr As ZString Ptr, ZStrLen As UInteger) As Any Ptr
-		Declare Function UnicodeToAsci(WStrPtr As WString Ptr, WStrLen As UInteger) As Any Ptr
-		Declare Function UnicodeToUTF8(WStrPtr As WString Ptr, WStrLen As UInteger) As Any Ptr
-		Declare Function UTF8ToUnicode(UTF8Ptr As ZString Ptr, UTF8Len As UInteger) As Any Ptr
+		Declare Function AsciToUnicode(ZStrPtr As ZString Ptr, ZStrLen As UInteger = 0) As WString Ptr
+		Declare Function UnicodeToAsci(WStrPtr As WString Ptr, WStrLen As UInteger = 0) As ZString Ptr
+		Declare Function UnicodeToUTF8(WStrPtr As WString Ptr, WStrLen As UInteger = 0) As ZString Ptr
+		Declare Function UTF8ToUnicode(UTF8Ptr As ZString Ptr, UTF8Len As UInteger = 0) As WString Ptr
 		Declare Function A2W(AStr As ZString Ptr, ALen As UInteger = 0) As WString Ptr
 		Declare Function W2A(UStr As WString Ptr, ULen As UInteger = 0) As ZString Ptr
 		Declare Function W2U(UStr As WString Ptr, ULen As UInteger = 0) As ZString Ptr
-		Declare Function U2W(UStr As ZString Ptr, ULen As UInteger = 0) As ZString Ptr
+		Declare Function U2W(UStr As ZString Ptr, ULen As UInteger = 0) As WString Ptr
 		Declare Function A2U(ZStr As ZString Ptr, ZLen As UInteger = 0) As ZString Ptr
 		Declare Function U2A(UStr As ZString Ptr, ULen As UInteger = 0) As ZString Ptr
 		
 		
 		/' -------------------------- 其他易用性函数库 -------------------------- '/
+		Declare Function Clip_GetText() As WString Ptr
+		Declare Function Clip_SetText(Text As WString Ptr, Size As UInteger = 0) As Integer
+		Declare Function Clip_GetTextA() As ZString Ptr
+		Declare Function Clip_SetTextA(Text As ZString Ptr, Size As UInteger = 0) As Integer
 		Declare Function Split(sText As ZString Ptr, sSep As ZString Ptr) As ZString Ptr Ptr
 		Declare Sub xui_DrawBackStyle(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr)
+		Declare Sub xui_DrawBackStyle_Rect(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr, rc As xui.Rect Ptr)
 		Declare Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr)
 	End Extern
 	

@@ -1,0 +1,50 @@
+[Project]
+Version=3
+Description=图片格式批量转换工具
+Api=fb (FreeBASIC),win (Windows)
+Grouping=1
+AddMainFiles=1
+AddModuleFiles=1
+ResExport=
+CompileIfNewer=0
+IncVersion=0
+RunCmd=0
+[Make]
+Module=Module Build,fbc -c
+Recompile=2
+Current=1
+1=Windows GUI,fbc -s gui
+2=Windows Console,fbc -s console
+3=Windows dll,fbc -s gui -dll -export
+4=Library,fbc -lib
+Output=..\..\release\tools\image conv\conv.exe
+Run=
+Delete=
+[File]
+1=tool.bas
+2=tool.rc
+3=Inc\Diadlg.bi
+4=Inc\xGui.bi
+5=Inc\xGui_base.bi
+6=Inc\xGui_CommCtrl.bi
+7=Inc\xGui_SciEdit.bi
+8=Inc\xGui_SpreadSheet.bi
+[BreakPoint]
+1=
+5=
+4=
+3=
+8=
+7=
+6=
+[FileInfo]
+1=0,148,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2=0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+5=0,583,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+4=0,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+3=0,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+8=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+7=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+6=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+[TabOrder]
+TabOrder=1,2

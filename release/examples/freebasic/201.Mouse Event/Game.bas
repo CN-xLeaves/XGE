@@ -15,7 +15,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			' xge.Clear Used to clear the previous content on the canvas
 			xge.Clear()
 			' Draw the coordinate information to the screen
-			xge.Text.DrawRectA(NULL, 0, 0, 800, 600, @buf, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectA(NULL, 0, 0, 800, 600, @buf, 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			' Record the coordinates of the mouse on the screen
 			buf = "x : " & eve->x & !"\ny : " & eve->y & !"\ndx : " & eve->dx & !"\ndy : " & eve->dy

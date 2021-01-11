@@ -23,7 +23,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			buf  = IIf(down, !"Mouse Down\n\n", !"Mouse Normal\n\n")
 			buf &= IIf(click, !"You click the mouse\n\n", !"No mouse click for one second\n\n")
 			buf &= IIf(dclick, !"You double click the mouse", !"No mouse double click for one second")
-			xge.Text.DrawRectA(NULL, 0, 0, 800, 600, @buf, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectA(NULL, 0, 0, 800, 600, @buf, 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			
 		Case XGE_MSG_MOUSE_DOWN			' mouse down

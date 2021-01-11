@@ -15,8 +15,8 @@ xge.Text.LoadFont("..\..\..\res\font\ttf\cn_zk_happy_2016.ttf", 0)
 xge.Text.SetFontSize(2, 32)
 
 ' draw text
-xge.Text.DrawRectA(NULL, 0, 100, 800, 200, !"Hello World\n你好，世界\n\nxywh Game Engine\nUse freebasic to develop", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 1, 6)
-xge.Text.DrawRectA(NULL, 0, 300, 800, 200, !"Hello World\n你好，世界\n\nxywh Game Engine\nUse freebasic to develop", &HFF00, 2, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 1, 6)
+xge.Text.DrawRectA(NULL, 0, 100, 800, 200, !"Hello World\n你好，世界\n\nxywh Game Engine\nUse freebasic to develop", 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 1, 6)
+xge.Text.DrawRectA(NULL, 0, 300, 800, 200, !"Hello World\n你好，世界\n\nxywh Game Engine\nUse freebasic to develop", 0, &HFF00, 2, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 1, 6)
 
 ' wait 5s
 Sleep 5000

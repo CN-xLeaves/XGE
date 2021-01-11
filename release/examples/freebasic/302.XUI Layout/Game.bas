@@ -65,12 +65,8 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			
 			' fill other elements into these layouts, and we can form our user interface
 			Btn1   = xui.CreateButton(XUI_LAYOUT_RULER_RATIO, 0, 0, 1, 1, !"开始游戏\n(New Game)")
-			Btn2   = xui.CreateButton(XUI_LAYOUT_RULER_RATIO, 0, 0, 1, 1, !"载入存档\n(Load)")
-			Btn3   = xui.CreateButton(XUI_LAYOUT_RULER_RATIO, 0, 0, 1, 1, !"退出游戏\n(Exit)")
-			
-			' add some spaceing to the buttons
-			Btn2->Layout.RectBox.TopOffset = 20
-			Btn3->Layout.RectBox.TopOffset = 20
+			Btn2   = xui.CreateButton(XUI_LAYOUT_RULER_RATIO, 0, 20, 1, 1, !"载入存档\n(Load)")
+			Btn3   = xui.CreateButton(XUI_LAYOUT_RULER_RATIO, 0, 20, 1, 1, !"退出游戏\n(Exit)")
 			
 			' add three buttons to the middle layout
 			MiddleLayout->Childs.AddElement(Btn1)

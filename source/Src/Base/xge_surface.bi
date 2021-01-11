@@ -57,10 +57,10 @@ Extern XGE_EXTERNCLASS
 	' ‘ÿ»ÎÕºœÒ
 	Function Surface.Load(addr As ZString Ptr, size As UInteger = 0) As Integer XGE_EXPORT_OBJ
 		Free()
-		If xLoad_xgi(@This, addr, size) Then
+		If xLoad_stb(@This, addr, size) Then
 			Return TRUE
 		Else
-			If xLoad_stb(@This, addr, size) Then
+			If xLoad_xgi(@This, addr, size) Then
 				Return TRUE
 			Else
 				If xge_global_bldproc Then

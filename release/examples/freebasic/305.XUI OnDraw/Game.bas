@@ -6,34 +6,34 @@
 
 ' draw a red dot in the upper right corner of the button
 Sub OnUserDraw(ele As xui.Button Ptr)
-	xge.Shape.CircFull(ele->image, ele->Layout.Rect.w - 12, 12, 5, &HFFFF0000)
+	xge.Shape.CircFull(ele->DrawBuffer, ele->Layout.Rect.w - 12, 12, 5, &HFFFF0000)
 End Sub
 
 ' Completely redraw the button, the drawing code of xui.CheckBox is used here
 Sub OnDraw(ele As xui.Button Ptr)
 	Select Case ele->private_Status
 		Case 1
-			xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->HotStyle.BorderColor)
-			xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->HotStyle.BorderColor)
-			xge.shape.RectFull(ele->Image, 4, 4, 16, 16, (ele->HotStyle.FillColor And &H00FFFFFF) Or &H40000000)
-			xge.Text.DrawRectA(ele->Image, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, ele->HotStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+			xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->HotStyle.BorderColor)
+			xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->HotStyle.BorderColor)
+			xge.shape.RectFull(ele->DrawBuffer, 4, 4, 16, 16, (ele->HotStyle.FillColor And &H00FFFFFF) Or &H40000000)
+			xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case 2
-			xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->PressStyle.BorderColor)
-			xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->PressStyle.BorderColor)
-			xge.shape.RectFull(ele->Image, 4, 4, 16, 16, ele->PressStyle.FillColor)
-			xge.Text.DrawRectA(ele->Image, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, ele->PressStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+			xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->PressStyle.BorderColor)
+			xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->PressStyle.BorderColor)
+			xge.shape.RectFull(ele->DrawBuffer, 4, 4, 16, 16, ele->PressStyle.FillColor)
+			xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' judging the selected state
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
-				xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->CheckStyle.FillColor)
-				xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->CheckStyle.FillColor)
-				xge.shape.RectFull(ele->Image, 7, 7, 13, 13, ele->CheckStyle.BorderColor)
-				xge.Text.DrawRectA(ele->Image, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, ele->CheckStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+				xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->CheckStyle.FillColor)
+				xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->CheckStyle.FillColor)
+				xge.shape.RectFull(ele->DrawBuffer, 7, 7, 13, 13, ele->CheckStyle.BorderColor)
+				xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			Else
-				xge.shape.Rect(ele->Image, 2, 2, 18, 18, ele->NormalStyle.BorderColor)
-				xge.shape.Rect(ele->Image, 3, 3, 17, 17, ele->NormalStyle.BorderColor)
-				xge.shape.RectFull(ele->Image, 4, 4, 16, 16, (ele->NormalStyle.FillColor And &H00FFFFFF) Or &H40000000)
-				xge.Text.DrawRectA(ele->Image, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, ele->NormalStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+				xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->NormalStyle.BorderColor)
+				xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->NormalStyle.BorderColor)
+				xge.shape.RectFull(ele->DrawBuffer, 4, 4, 16, 16, (ele->NormalStyle.FillColor And &H00FFFFFF) Or &H40000000)
+				xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select
 End Sub

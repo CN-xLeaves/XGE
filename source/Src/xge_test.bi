@@ -12,9 +12,7 @@ End Sub
 Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	Static pic1 As xge.Surface Ptr
 	Static ui As xui.Element Ptr
-	Static sv As xui.ScrollView Ptr
-	Static lb As xui.ListBox Ptr
-	Static As xui.ScrollBar Ptr vs, hs
+	Static win As xui.Window Ptr
 	Select Case msg
 		Case XGE_MSG_FRAME				' 逻辑处理
 			
@@ -53,70 +51,17 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			xge.Text.LoadFont("..\release\res\font\xrf\simsun_12px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("F:\字体\思源屏显臻宋.ttf", 0)
 			'xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\Roboto-Light.ttf", 0)
-			xge.Text.LoadFont("F:\字体\庞门正道标题体2.0增强版.ttf", 0)
+			'xge.Text.LoadFont("F:\字体\庞门正道标题体2.0增强版.ttf", 0)
 			xge.Text.SetFontSize(2, 12)
 			'xge.Text.LoadFont("C:\windows\fonts\simsun.ttc", 0)
 			
 			pic1 = New xge.Surface("D:\Git\XGE\release\res\back.xgi", 0)
 			
-			vs = xui.CreateVScrollBar(, 40, 100, 18, 300)
-			hs = xui.CreateHScrollBar(, 100, 40, 400, 18)
-			sv = xui.CreateScrollView(, 100, 100, 200, 300, 401, 201)
-			lb = xui.CreateListBox(, 320, 100, 200, 300)
+			win = xui.CreateWindowUI(10, 10, 320, 240, , "About xywh Game Engine")
 			
-			ui->Childs.AddElement(vs)
-			ui->Childs.AddElement(hs)
-			ui->Childs.AddElement(sv)
-			ui->Childs.AddElement(lb)
-			
+			ui->Childs.AddElement(win)
 			xui.LayoutApply()
 			
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			lb->List.Append("asdsadsadf")
-			
-			lb->private_ListIndex = 3
-			
-			lb->BorderWidth = 2
-			
-			'pic1->Create(800, 600)
-			/'
-			xge.Text.Draw(pic1, 0, 100, A2W("Draw  渲染 ANSI 字符串 [UNICODE->ANSI]"), &HFF00)
-			xge.Text.DrawA(pic1, 0, 140, "DrawA 渲染 ANSI 字符串 [ANSI->ANSI]", &HFF00)
-			xge.Text.Draw(pic1, 0, 180, A2W("Draw  渲染 GB2312 字符串 [UNICODE->GB2312]"), &HFF00, 2)
-			xge.Text.DrawA(pic1, 0, 220, "DrawA 渲染 GB2312 字符串 [GB2312->GB2312]", &HFF00, 2)
-			xge.Text.Draw(pic1, 0, 260, A2W("Draw  渲染 UCS2 字符串 [UNICODE->UNICODE]"), &HFF00, 3)
-			xge.Text.DrawA(pic1, 0, 300, "DrawA 渲染 UCS2 字符串 [ANSI->UNICODE]", &HFF00, 3)
-			xge.Text.Draw(pic1, 0, 0, A2W("stb_ttf 字体的渲染效果"), &HFF00, 1)
-			xge.Text.DrawA(pic1, 0, 100, "stb_ttf 字体的渲染效果", &HFF00, 1, 5)
-			xge.Text.DrawRect(pic1, 0, 200, 400, 300, A2W(!"我想回到过去\n沉默着欢喜\n天空之城在哭泣\n越来越远的你"), &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 0, 0)
-			xge.Shape.Rect(0, 200, 400, 500, &HFF00FF00, pic1)
-			pic1->Draw_Alpha(200, 0)
-			'/
-			'xge.Text.DrawA(pic1, 0, 140, "x x我x", &HFF00, 1)
-			'xge.Text.DrawRectA(pic1, 0, 200, 400, 300, !"我想回到过去\n沉默着欢喜\n天空之城在哭泣\n越来越远的你", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, 0, 0)
-			'pic1->Draw_Alpha(NULL, 200, 0)
 		Case XGE_MSG_FREERES			' 卸载资源
 			
 		Case XGE_MSG_CLOSE				' 窗口关闭

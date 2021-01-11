@@ -313,7 +313,7 @@ Sub TankManage.DrawTank(ByVal TankObj As TankItem Ptr)
 			tr.right = tr.left + 32
 			tr.bottom = tr.top + 12
 			If ViewLevel Then
-				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 12, "Lv." & TankObj->lv, &HFFFFFFFF)
+				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 12, "Lv." & TankObj->lv, 0, &HFFFFFFFF)
 			EndIf
 			' »­ÑªÌõ
 			If ViewHP Then
@@ -324,7 +324,7 @@ Sub TankManage.DrawTank(ByVal TankObj As TankItem Ptr)
 			tr.top = tr.bottom+5
 			tr.bottom = tr.top + 12
 			If ViewHP_Value Then
-				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 12, TankObj->hp & "/" & TankObj->hpmax, &HFFFFFFFF)
+				xge.Text.DrawRectA(NULL, tr.left, tr.top, 32, 12, TankObj->hp & "/" & TankObj->hpmax, 0, &HFFFFFFFF)
 			EndIf
 		EndIf
 	EndIf

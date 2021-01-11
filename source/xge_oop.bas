@@ -126,13 +126,15 @@
 #Include "Src\LIB\File.bi"
 #Include "Src\Lib\ini.bi"
 #Include "Src\LIB\Charset.bi"
+#Include "Src\Lib\ClipBoard.bi"
 #Include "Src\LIB\xStack.bi"
+#Include "Src\Lib\xBsmm.bi"
+#Include "Src\Lib\xStringBuffer.bi"
 #Include "Src\LIB\Bass.bi"
 #Include "Src\LIB\Iocp.bi"
-#Include "Src\Lib\xBsmm.bi"
 #Include "Src\Lib\Split.bi"
 #Include "Src\Lib\Lz4.bi"
-#Include "Src\Lib\LZMA.bi"
+'#Include "Src\Lib\LZMA.bi"
 
 
 ' xywh Game Engine 引擎核心配置
@@ -161,13 +163,15 @@
 
 
 ' xywh Game Engine 界面库
-#Include "Src\gui\xge_xui_System.bi"
-#Include "Src\gui\xge_xui_Element.bi"
-#Include "Src\gui\xge_xui_Static.bi"
-#Include "Src\gui\xge_xui_Button.bi"
-#Include "Src\gui\xge_xui_ScrollBar.bi"
-#Include "Src\gui\xge_xui_ScrollView.bi"
-#Include "Src\gui\xge_xui_ListBox.bi"
+#Include "Src\xui\xui_System.bi"
+#Include "Src\xui\xui_Element.bi"
+#Include "Src\xui\xui_Static.bi"
+#Include "Src\xui\xui_Button.bi"
+#Include "Src\xui\xui_ScrollBar.bi"
+#Include "Src\xui\xui_ScrollView.bi"
+#Include "Src\xui\xui_ListBox.bi"
+#Include "Src\xui\xui_LineEdit.bi"
+#Include "Src\xui\xui_Window.bi"
 
 
 

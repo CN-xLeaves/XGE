@@ -90,8 +90,12 @@ Sub xFont_WordInfo_ttf(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As
 	Dim font As stbtt_fontinfo Ptr = fd->Font
 	Dim As Integer advanceWidth
 	stbtt_GetCodepointHMetrics(font, iCode, @advanceWidth, NULL)
-	*w = advanceWidth * fd->FontSizeFloat
-	*h = fd->FontSizeInt
+	If w Then
+		*w = advanceWidth * fd->FontSizeFloat
+	EndIf
+	If h Then
+		*h = fd->FontSizeInt
+	EndIf
 End Sub
 Sub xFont_WordInfo_ttf_ansi(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
 	Dim s As WString Ptr

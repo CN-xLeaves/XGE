@@ -137,6 +137,15 @@ Dim Shared xge_fontlist As xBsmm = xBsmm(SizeOf(xge.Text.FontDriver), 8)
 ' -------------------------- XUI系统数据
 Dim Shared xge_xui_element_active As xui.Element Ptr = NULL
 Dim Shared xge_xui_element_hot As xui.Element Ptr = NULL
+Dim Shared xge_xui_element_capture As xui.Element Ptr = NULL
+Dim Shared xui_global_ime_wordlist As xui.ListBox Ptr = NULL
+Dim Shared xge_xui_Window_Proc As Function(hWin As HWND, uMsg As UINT, wParam As WPARAM, lParam As LPARAM) As Integer
+Dim Shared xge_xui_ime_prop_unicode As Integer
+Dim Shared xge_xui_ime_state As Integer
+Dim Shared xge_xui_ime_proc As Sub(iMsg As Integer, himc As HIMC, sText As WString Ptr, iSize As UInteger, CurPos As Integer, iParam As Integer)
+Dim Shared xge_xui_ime_proc_param As Integer
+Dim Shared ime_global_compstrptr As WString Ptr = NULL
+Dim Shared ime_global_compchar As WString * 2
 
 
 ' -------------------------- XUI内置素材

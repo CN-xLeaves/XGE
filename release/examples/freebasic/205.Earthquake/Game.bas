@@ -19,7 +19,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
 			img->Draw(NULL, 0, 0)
-			xge.Text.DrawRectA(NULL, 0, 0, 640, 480, !"Double click the left button to start shaking\n\nDouble right click to stop shaking", &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectA(NULL, 0, 0, 640, 480, !"Double click the left button to start shaking\n\nDouble right click to stop shaking", 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			
 		Case XGE_MSG_MOUSE_DOWN			' mouse down
