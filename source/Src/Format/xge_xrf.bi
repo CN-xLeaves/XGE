@@ -41,7 +41,7 @@ End Type
 
 
 ' 渲染单个文字 [ANSI]
-Sub xFont_DrawWord_xrf_ansi(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
+Sub xFont_DrawWord_xrf_ansi(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
 	Dim info As FontDriverInfo_xrf Ptr = fd->Font
 	Dim BW As Integer = info->LineMemSize
 	If iCode < &H80 Then
@@ -88,7 +88,7 @@ End Sub
 
 
 ' 渲染单个文字 [GB2312]
-Sub xFont_DrawWord_xrf_gb2312(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
+Sub xFont_DrawWord_xrf_gb2312(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
 	Dim info As FontDriverInfo_xrf Ptr = fd->Font
 	Dim BW As Integer = info->LineMemSize
 	If iCode < &H80 Then
@@ -148,7 +148,7 @@ Sub xFont_DrawWord_xrf_gb2312(fd As xge.Text.FontDriver Ptr, sf As xge.Surface P
 	EndIf
 End Sub
 ' 输入 UNICODE 编码字符，转码为 GB2312 后渲染
-Sub xFont_DrawWord_xrf_gb2312_fromUcs2(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
+Sub xFont_DrawWord_xrf_gb2312_fromUcs2(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
 	Dim s As UByte Ptr = UnicodeToAsci(Cast(WString Ptr, @iCode), 1)
 	If s[1] = 0 Then
 		xFont_DrawWord_xrf_gb2312(fd, sf, px, py, w, h, s[0], iColor, Style)
@@ -162,7 +162,7 @@ End Sub
 
 
 ' 渲染单个文字 [UNICODE]
-Sub xFont_DrawWord_xrf_ucs2(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
+Sub xFont_DrawWord_xrf_ucs2(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
 	Dim info As FontDriverInfo_xrf Ptr = fd->Font
 	Dim BW As Integer = info->LineMemSize
 	Dim bm As Any Ptr = info->AscPtr + (iCode * info->ChrMemSize)
@@ -193,7 +193,7 @@ Sub xFont_DrawWord_xrf_ucs2(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr
 	EndIf
 End Sub
 ' 输入 GB2312 编码字符，转码为 UNICODE 后渲染
-Sub xFont_DrawWord_xrf_ucs2_fromAnsi(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
+Sub xFont_DrawWord_xrf_ucs2_fromAnsi(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As UInteger, Style As Integer)
 	Dim s As WString Ptr
 	If iCode < &H100 Then
 		s = AsciToUnicode(Cast(ZString Ptr, @iCode), 1)
@@ -208,7 +208,7 @@ End Sub
 
 
 ' 获取单个文字的字符信息
-Sub xFont_WordInfo_xrf(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
+Sub xFont_WordInfo_xrf(fd As xge.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
 	If iCode < &H80 Then	' 暂时没有控制字符的处理功能，例如 制表符 之类的
 		' ASCII字符
 		If w Then
@@ -231,25 +231,25 @@ End Sub
 
 
 ' 渲染一行文字
-Sub DrawLine_Fast_xrf(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, wd As Integer)
+Sub DrawLine_Fast_xrf(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, wd As Integer)
 	
 End Sub
-Sub DrawLineA_Fast_xrf(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, wd As Integer)
+Sub DrawLineA_Fast_xrf(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, wd As Integer)
 	
 End Sub
 
 ' 将文字渲染到一个矩形内
-Sub DrawRect_Fast_xrf(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer)
+Sub DrawRect_Fast_xrf(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer)
 	
 End Sub
-Sub DrawRectA_Fast_xrf(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer)
+Sub DrawRectA_Fast_xrf(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer)
 	
 End Sub
 
 
 
 ' xrf 字库清理
-Sub xFree_xrf(fd As xge.Text.FontDriver Ptr)
+Sub xFree_xrf(fd As xge.FontDriver Ptr)
 	Dim info As FontDriverInfo_xrf Ptr = fd->Font
 	If info->IsMemoryFree Then
 		DeAllocate(info->Data)
@@ -258,21 +258,21 @@ Sub xFree_xrf(fd As xge.Text.FontDriver Ptr)
 End Sub
 
 ' xrf 字库加载器
-Function xLoad_xrf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As UInteger, param As Any Ptr) As Integer
+Function xLoad_xrf(fd As xge.FontDriver Ptr, Addr As WString Ptr, iSize As UInteger, param As Any Ptr) As Integer
 	Dim info As FontDriverInfo_xrf Ptr = Allocate(SizeOf(FontDriverInfo_xrf))
 	If iSize Then
 		' 从内存载入字库
 		info->Data = Cast(Any Ptr, Addr)
 	Else
 		' 从文件载入字库
-		iSize = xFile.Size(Addr)
+		iSize = xFile_SizeW(Addr)
 		If iSize = 0 Then
 			DeAllocate(info)
 			Return 0
 		EndIf
 		info->IsMemoryFree = -1
 		info->Data = Allocate(iSize)
-		xFile.Read(Addr, info->Data, 0, SizeOf(xywhRasterFont_Handle))
+		xFile_ReadW(Addr, info->Data, 0, SizeOf(xywhRasterFont_Handle))
 	EndIf
 	' 计算一个字符占用多少字节的内存
 	info->LineMemSize = (info->Data->WordWidth + 7) \ 8
@@ -283,19 +283,19 @@ Function xLoad_xrf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As 
 			' ANSI 字库
 			info->AscPtr = Cast(Any Ptr, info->Data) + SizeOf(xywhRasterFont_Handle)
 			info->UniPtr = NULL
-			fd->DrawWord = Cast(Any Ptr, @xFont_DrawWord_xrf_ansi)
+			fd->DrawWordW = Cast(Any Ptr, @xFont_DrawWord_xrf_ansi)
 			fd->DrawWordA = Cast(Any Ptr, @xFont_DrawWord_xrf_ansi)
 		Case XRF_VER1_UCS2
 			' UNICODE 字库
 			info->AscPtr = Cast(Any Ptr, info->Data) + SizeOf(xywhRasterFont_Handle)
 			info->UniPtr = Cast(Any Ptr, info->Data) + SizeOf(xywhRasterFont_Handle)
-			fd->DrawWord = Cast(Any Ptr, @xFont_DrawWord_xrf_ucs2)
+			fd->DrawWordW = Cast(Any Ptr, @xFont_DrawWord_xrf_ucs2)
 			fd->DrawWordA = Cast(Any Ptr, @xFont_DrawWord_xrf_ucs2_fromAnsi)
 		Case XRF_VER1_GB2312
 			' GB2312 字库
 			info->AscPtr = Cast(Any Ptr, info->Data) + SizeOf(xywhRasterFont_Handle)
 			info->UniPtr = info->AscPtr + (info->ChrMemSize * 96)
-			fd->DrawWord = Cast(Any Ptr, @xFont_DrawWord_xrf_gb2312_fromUcs2)
+			fd->DrawWordW = Cast(Any Ptr, @xFont_DrawWord_xrf_gb2312_fromUcs2)
 			fd->DrawWordA = Cast(Any Ptr, @xFont_DrawWord_xrf_gb2312)
 		Case Else
 			' 无法识别的文件头
@@ -307,20 +307,20 @@ Function xLoad_xrf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As 
 	End Select
 	' 如果是从文件加载的，则读入全部内容 [一开始只读文件头]
 	If info->IsMemoryFree Then
-		xFile.Read(Addr, info->Data, 0, iSize)
+		xFile_ReadW(Addr, info->Data, 0, iSize)
 	EndIf
 	' 填充字体驱动
 	fd->Font = info
 	fd->WidthInt    = info->Data->WordWidth
 	fd->HeightInt   = info->Data->WordHeight
 	fd->FontSizeInt = info->Data->AnsiWidth
-	fd->WordInfo    = Cast(Any Ptr, @xFont_WordInfo_xrf)
+	fd->WordInfoW   = Cast(Any Ptr, @xFont_WordInfo_xrf)
 	fd->WordInfoA   = Cast(Any Ptr, @xFont_WordInfo_xrf)
 	fd->FreeFont    = Cast(Any Ptr, @xFree_xrf)
 	fd->SetFontSize = NULL
-	fd->DrawLine_Fast  = NULL	'Cast(Any Ptr, @DrawLine_Fast_xrf)
+	fd->DrawLineW_Fast = NULL	'Cast(Any Ptr, @DrawLine_Fast_xrf)
 	fd->DrawLineA_Fast = NULL
-	fd->DrawRect_Fast  = NULL	'Cast(Any Ptr, @DrawRect_Fast_xrf)
+	fd->DrawRectW_Fast = NULL	'Cast(Any Ptr, @DrawRect_Fast_xrf)
 	fd->DrawRectA_Fast = NULL
 	Return -1
 End Function

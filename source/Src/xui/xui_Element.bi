@@ -15,7 +15,7 @@ Namespace xui
 		Childs.Parent = @This
 		ClassID = XUI_CLASS_ELEMENT
 	End Constructor
-	Constructor Element(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) XGE_EXPORT_OBJ
+	Constructor Element(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As WString Ptr = NULL) XGE_EXPORT_OBJ
 		DrawBuffer = New xge.Surface()
 		Childs.Parent = @This
 		ClassID = XUI_CLASS_ELEMENT
@@ -30,7 +30,7 @@ Namespace xui
 	End Destructor
 	
 	' ÌîÐ´»ù´¡ÐÅÏ¢
-	Sub Element.InitElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) XGE_EXPORT_OBJ
+	Sub Element.InitElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As WString Ptr = NULL) XGE_EXPORT_OBJ
 		Layout.Ruler = iLayoutRuler
 		Layout.w = w
 		Layout.h = h
@@ -44,8 +44,8 @@ Namespace xui
 		EndIf
 		LayoutMode = iLayoutMode
 		If sIdentifier Then
-			strncpy(@Identifier, sIdentifier, 31)
-			Identifier[31] = 0
+			wcsncpy(@Identifier, sIdentifier, XGE_XUI_IDSIZE)
+			Identifier[XGE_XUI_IDSIZE-1] = 0
 		EndIf
 	End Sub
 	

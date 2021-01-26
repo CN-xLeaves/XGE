@@ -36,7 +36,7 @@ Sub xui_class_ListBox_OnDraw(ele As xui.ListBox Ptr)
 				xge.shape.RectFull(ele->DrawBuffer, ele->BorderWidth + 1, y + 1, (ele->BorderWidth + w) - 2, (y + ele->ItemHeight) - 2, ele->ItemHotStyle.FillColor)
 				xge.shape.Rect(ele->DrawBuffer, ele->BorderWidth, y, (ele->BorderWidth + w) - 1, (y + ele->ItemHeight) - 1, ele->ItemHotStyle.BorderColor)
 			EndIf
-			xge.Text.DrawA(ele->DrawBuffer, ele->BorderWidth + wy, y + wy, Item->Text, 0, Item->TextColor, ele->TextFont)
+			xge.Text.DrawW(ele->DrawBuffer, ele->BorderWidth + wy, y + wy, Item->Text, 0, Item->TextColor, ele->TextFont)
 		EndIf
 		y += ele->ItemHeight
 	Next
@@ -157,7 +157,7 @@ Namespace xui
 	End Function
 	
 	' 添加列表项
-	Function List_ItemSet.Append(sVal As ZString Ptr, iTag As Integer = 0) As UInteger XGE_EXPORT_OBJ
+	Function List_ItemSet.Append(sVal As WString Ptr, iTag As Integer = 0) As UInteger XGE_EXPORT_OBJ
 		Dim iPos As UInteger = AppendStruct()
 		Dim Item As List_Item_BasicStruct Ptr = GetPtrStruct(iPos)
 		If Item Then
@@ -175,7 +175,7 @@ Namespace xui
 		EndIf
 		Return iPos
 	End Function
-	Function List_ItemSet.Insert(iInsPos As UInteger, sVal As ZString Ptr, iTag As Integer = 0) As UInteger XGE_EXPORT_OBJ
+	Function List_ItemSet.Insert(iInsPos As UInteger, sVal As WString Ptr, iTag As Integer = 0) As UInteger XGE_EXPORT_OBJ
 		Dim iPos As UInteger = InsertStruct(iInsPos)
 		Dim Item As List_Item_BasicStruct Ptr = GetPtrStruct(iPos)
 		If Item Then
@@ -212,15 +212,15 @@ Namespace xui
 	End Sub
 	
 	' 获取/设置 列表项的标题
-	Property List_ItemSet.Text(iPos As UInteger) As ZString Ptr XGE_EXPORT_OBJ
+	Property List_ItemSet.Text(iPos As UInteger) As WString Ptr XGE_EXPORT_OBJ
 		Dim Item As List_Item_BasicStruct Ptr = GetPtrStruct(iPos)
 		If Item Then
 			Return Item->Text
 		Else
-			Return @xge_global_snull
+			Return Cast(WString Ptr, @xge_global_snull)
 		EndIf
 	End Property
-	Property List_ItemSet.Text(iPos As UInteger, sVal As ZString Ptr) XGE_EXPORT_OBJ
+	Property List_ItemSet.Text(iPos As UInteger, sVal As WString Ptr) XGE_EXPORT_OBJ
 		Dim Item As List_Item_BasicStruct Ptr = GetPtrStruct(iPos)
 		If Item Then
 			Item->Text = sVal
@@ -317,7 +317,7 @@ Namespace xui
 	
 	
 	' 创建列表框
-	Function CreateListBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 120, h As Integer = 200, TextColor As UInteger = &HFF000000, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.ListBox Ptr XGE_EXPORT_ALL
+	Function CreateListBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 120, h As Integer = 200, TextColor As UInteger = &HFF000000, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.ListBox Ptr XGE_EXPORT_ALL
 		Dim ele As xui.ListBox Ptr = New xui.ListBox()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_LISTBOX

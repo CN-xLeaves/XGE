@@ -131,7 +131,7 @@ Dim Shared xge_global_bass_init As Integer
 
 
 ' -------------------------- 字体列表
-Dim Shared xge_fontlist As xBsmm = xBsmm(SizeOf(xge.Text.FontDriver), 8)
+Dim Shared xge_fontlist As xBsmm = xBsmm(SizeOf(xge.FontDriver), 8)
 
 
 ' -------------------------- XUI系统数据

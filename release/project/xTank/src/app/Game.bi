@@ -24,14 +24,14 @@ Function LoadRes() As Integer
 	se_Boom = New xge.Sound(XGE_SOUND_SAMPLE, 0, ResPath & "boom.ogg", 0)
 	se_Fire = New xge.Sound(XGE_SOUND_SAMPLE, 0, ResPath & "fire.ogg", 0)
 	
-	xge.Text.LoadFont(ResPath & "simsun_12px_gb2312.xrf", 0)
-	xge.Text.LoadFont(ResPath & "simsun_16px_gb2312.xrf", 0)
+	xge.Text.LoadFontA(ResPath & "simsun_12px_gb2312.xrf", 0)
+	xge.Text.LoadFontA(ResPath & "simsun_16px_gb2312.xrf", 0)
 	
 	' 载入设置
-	ViewHP = xIni.GetInt(ExePath & "\setup.ini", "option", "ViewHP")
-	ViewLevel = xIni.GetInt(ExePath & "\setup.ini", "option", "ViewLevel")
-	ViewHP_Value = xIni.GetInt(ExePath & "\setup.ini", "option", "ViewHP_Value")
-	CheatMode = xIni.GetInt(ExePath & "\setup.ini", "option", "CheatMode")
+	ViewHP = xIni_GetInt(ExePath & "\setup.ini", "option", "ViewHP")
+	ViewLevel = xIni_GetInt(ExePath & "\setup.ini", "option", "ViewLevel")
+	ViewHP_Value = xIni_GetInt(ExePath & "\setup.ini", "option", "ViewHP_Value")
+	CheatMode = xIni_GetInt(ExePath & "\setup.ini", "option", "CheatMode")
 	
 	Return -1
 End Function
@@ -68,7 +68,7 @@ Function AppInit() As Integer
 		Return 0
 	EndIf
 	' 初始化XGE游戏引擎
-	If xge.Init(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, @Module.Title) = FALSE Then
+	If xge.InitA(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, @Module.Title) = FALSE Then
 		MessageBox(0, "xywh Game Engine 初始化失败！", "xTank", MB_ICONERROR)
 		Return 0
 	EndIf

@@ -16,6 +16,26 @@
 
 
 
+' -------------------------- 游戏使用音频 [需要bass.dll,不使用注视掉即可]
+#Define XGE_USE_SOUND
+
+
+
+' -------------------------- 声音采样频率
+#Define XGE_SOUND_BPS		44100
+
+
+
+' -------------------------- 音频初始化标记
+#Define XGE_SOUND_FLAG		0
+
+
+
+' -------------------------- 场景栈最大层数
+#Define XGE_MAX_SCENE		256
+
+
+
 ' -------------------------- 函数导出开关
 #Define XGE_EXPORT_OBJ Export
 #Define XGE_EXPORT_SDK
@@ -25,7 +45,8 @@
 
 
 ' -------------------------- 函数命名表
-#Define XGE_EXPORT_Init					Init
+#Define XGE_EXPORT_InitA				InitA
+#Define XGE_EXPORT_InitW				InitW
 #Define XGE_EXPORT_Unit					Unit
 #Define XGE_EXPORT_SetScreen			SetScreen
 #Define XGE_EXPORT_hWnd					hWnd
@@ -38,10 +59,8 @@
 #Define XGE_EXPORT_PixAddr				PixAddr
 #Define XGE_EXPORT_PixSize				PixSize
 #Define XGE_EXPORT_Pitch				Pitch
-#Define XGE_EXPORT_Driver				Driver
 #Define XGE_EXPORT_SetSoundVol			SetSoundVol
 #Define XGE_EXPORT_GetSoundVol			GetSoundVol
-#Define XGE_EXPORT_Ver					Ver
 
 #Define XGE_EXPORT_Scene_Start			Start
 #Define XGE_EXPORT_Scene_Cut			Cut
@@ -63,7 +82,8 @@
 #Define XGE_EXPORT_Aux_ScreenShot		ScreenShot
 #Define XGE_EXPORT_Aux_GetPixel			GetPixel
 #Define XGE_EXPORT_Aux_RGB2BGR			RGB2BGR
-#Define XGE_EXPORT_Aux_SetTitle			SetTitle
+#Define XGE_EXPORT_Aux_SetTitleA		SetTitleA
+#Define XGE_EXPORT_Aux_SetTitleW		SetTitleW
 #Define XGE_EXPORT_Aux_SetView			SetView
 #Define XGE_EXPORT_Aux_ReSetView		ReSetView
 #Define XGE_EXPORT_Aux_SetCoodr			SetCoodr
@@ -132,13 +152,12 @@
 #Include "Src\Lib\xStringBuffer.bi"
 #Include "Src\LIB\Bass.bi"
 #Include "Src\LIB\Iocp.bi"
-#Include "Src\Lib\Split.bi"
+'#Include "Src\Lib\Split.bi"
 #Include "Src\Lib\Lz4.bi"
 '#Include "Src\Lib\LZMA.bi"
 
 
-' xywh Game Engine 引擎核心配置
-#Include "Src\Core\xge_config.bi"
+' xywh Game Engine 引擎全局定义
 #Include "Src\Core\xge_define.bi"
 
 

@@ -43,34 +43,34 @@ Sub xui_class_LineEdit_OnDraw(ele As xui.LineEdit Ptr)
 		If ele->SelSize Then
 			' 有选择内容 [分段画出]
 			Dim px As Integer = 0
-			Dim RetRect As xui.Rect
+			Dim RetRect As xge_Rect
 			If ele->SelStart > 0 Then
-				RetRect = xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, ele->private_Buffer.BufferMemory, ele->SelStart, ele->TextColor, ele->TextFont, 0, 0)
+				RetRect = xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, ele->private_Buffer.BufferMemory, ele->SelStart, ele->TextColor, ele->TextFont, 0, 0)
 				px += RetRect.w
 			EndIf
-			Dim SelBackWidth As Integer = xge.Text.GetTextWidth(@ele->private_Buffer.BufferMemory[ele->SelStart], ele->SelSize, ele->TextFont, 0, 0)
+			Dim SelBackWidth As Integer = xge.Text.GetTextWidthW(@ele->private_Buffer.BufferMemory[ele->SelStart], ele->SelSize, ele->TextFont, 0, 0)
 			xge.Shape.RectFull(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, (ele->private_Offset.x + px + SelBackWidth) - 1, (ele->private_Offset.y + xge.Text.GetFontSize(ele->TextFont)) - 1, ele->SelBackColor)
-			RetRect = xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @ele->private_Buffer.BufferMemory[ele->SelStart], ele->SelSize, ele->SelTextColor, ele->TextFont, 0, 0)
+			RetRect = xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @ele->private_Buffer.BufferMemory[ele->SelStart], ele->SelSize, ele->SelTextColor, ele->TextFont, 0, 0)
 			px += RetRect.w
 			Dim eLen As Integer = ele->private_Buffer.BufferLenght - (ele->SelStart + ele->SelSize)
 			If eLen > 0 Then
-				xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @ele->private_Buffer.BufferMemory[ele->SelStart + ele->SelSize], eLen, ele->TextColor, ele->TextFont, 0, 0)
+				xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @ele->private_Buffer.BufferMemory[ele->SelStart + ele->SelSize], eLen, ele->TextColor, ele->TextFont, 0, 0)
 			EndIf
 		Else
 			' 无选择内容 [全部画出]
-			xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, ele->private_Buffer.BufferMemory, 0, ele->TextColor, ele->TextFont, 0, 0)
+			xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, ele->private_Buffer.BufferMemory, 0, ele->TextColor, ele->TextFont, 0, 0)
 		EndIf
 	EndIf
 	' 画IME输入变动
 	If ele->private_compstr Then
-		Dim BackWidth As Integer = xge.Text.GetTextWidth(ele->private_compstr, 0, ele->TextFont, 0, 0)
+		Dim BackWidth As Integer = xge.Text.GetTextWidthW(ele->private_compstr, 0, ele->TextFont, 0, 0)
 		xge.Shape.RectFull(ele->DrawBuffer, ele->private_Caret.x, ele->private_Offset.y, (ele->private_Caret.x + BackWidth) - 1, (ele->private_Offset.y + xge.Text.GetFontSize(ele->TextFont)) - 1, ele->BackStyle.FillColor)
-		Dim RetRect As xui.Rect = xge.Text.Draw(ele->DrawBuffer, ele->private_Caret.x, ele->private_Caret.y, ele->private_compstr, 0, ele->CompColor, ele->TextFont, 0, 0)
+		Dim RetRect As xge_Rect = xge.Text.DrawW(ele->DrawBuffer, ele->private_Caret.x, ele->private_Caret.y, ele->private_compstr, 0, ele->CompColor, ele->TextFont, 0, 0)
 		xge.shape.LinesEx(ele->DrawBuffer, ele->private_Caret.x, (ele->private_Caret.y + RetRect.h) - 1, ele->private_Caret.x + RetRect.w, (ele->private_Caret.y + RetRect.h) - 1, ele->CompColor, &B11110000111100001111000011110000)
 		' 画IME游标
 		If xge_xui_element_active = ele Then
 			If ele->private_CaretShow Then
-				Dim px As UInteger = xge.Text.GetTextWidth(ele->private_compstr, ele->private_comppos, ele->TextFont, 0, 0)
+				Dim px As UInteger = xge.Text.GetTextWidthW(ele->private_compstr, ele->private_comppos, ele->TextFont, 0, 0)
 				xge.Shape.RectFull(ele->DrawBuffer, ele->private_Caret.x + px, ele->private_Caret.y, (ele->private_Caret.x + px + ele->private_Caret.w) - 1, (ele->private_Caret.y + ele->private_Caret.h) - 1, ele->private_CaretColor)
 			EndIf
 			If GetTickCount() > (ele->private_CaretTick + ele->private_CaretBlink) Then
@@ -106,22 +106,22 @@ Sub xui_class_PassWordEditEdit_OnDraw(ele As xui.LineEdit Ptr)
 		If ele->SelSize Then
 			' 有选择内容 [分段画出]
 			Dim px As Integer = 0
-			Dim RetRect As xui.Rect
+			Dim RetRect As xge_Rect
 			If ele->SelStart > 0 Then
-				RetRect = xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, PassWordBuffer, ele->SelStart, ele->TextColor, ele->TextFont, 0, 0)
+				RetRect = xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, PassWordBuffer, ele->SelStart, ele->TextColor, ele->TextFont, 0, 0)
 				px += RetRect.w
 			EndIf
-			Dim SelBackWidth As Integer = xge.Text.GetTextWidth(@ele->private_Buffer.BufferMemory[ele->SelStart], ele->SelSize, ele->TextFont, 0, 0)
+			Dim SelBackWidth As Integer = xge.Text.GetTextWidthW(@ele->private_Buffer.BufferMemory[ele->SelStart], ele->SelSize, ele->TextFont, 0, 0)
 			xge.Shape.RectFull(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, (ele->private_Offset.x + px + SelBackWidth) - 1, (ele->private_Offset.y + xge.Text.GetFontSize(ele->TextFont)) - 1, ele->SelBackColor)
-			RetRect = xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @PassWordBuffer[ele->SelStart], ele->SelSize, ele->SelTextColor, ele->TextFont, 0, 0)
+			RetRect = xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @PassWordBuffer[ele->SelStart], ele->SelSize, ele->SelTextColor, ele->TextFont, 0, 0)
 			px += RetRect.w
 			Dim eLen As Integer = ele->private_Buffer.BufferLenght - (ele->SelStart + ele->SelSize)
 			If eLen > 0 Then
-				xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @PassWordBuffer[ele->SelStart + ele->SelSize], eLen, ele->TextColor, ele->TextFont, 0, 0)
+				xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x + px, ele->private_Offset.y, @PassWordBuffer[ele->SelStart + ele->SelSize], eLen, ele->TextColor, ele->TextFont, 0, 0)
 			EndIf
 		Else
 			' 无选择内容 [全部画出]
-			xge.Text.Draw(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, PassWordBuffer, 0, ele->TextColor, ele->TextFont, 0, 0)
+			xge.Text.DrawW(ele->DrawBuffer, ele->private_Offset.x, ele->private_Offset.y, PassWordBuffer, 0, ele->TextColor, ele->TextFont, 0, 0)
 		EndIf
 		DeAllocate(PassWordBuffer)
 	EndIf
@@ -144,7 +144,7 @@ Function xui_class_LineEdit_OnMouseDown(ele As xui.LineEdit Ptr, x As Integer, y
 	xui.MouseCapture(ele)
 	' 处理光标位置
 	If ele->private_Buffer.BufferLenght > 0 Then
-		ele->private_CaretPos = xge.Text.WidthToPos(x - ele->private_Offset.x, ele->private_Buffer.BufferMemory, ele->private_Buffer.BufferLenght, ele->TextFont, 0, 0)
+		ele->private_CaretPos = xge.Text.WidthToPosW(x - ele->private_Offset.x, ele->private_Buffer.BufferMemory, ele->private_Buffer.BufferLenght, ele->TextFont, 0, 0)
 		ele->SetSel(ele->private_CaretPos, 0)
 	Else
 		ele->SetSel(0, 0)
@@ -164,7 +164,7 @@ End Function
 Function xui_class_LineEdit_OnMouseMove(ele As xui.LineEdit Ptr, x As Integer, y As Integer) As Integer
 	If xInput.GetMouseBtnL() Then
 		If ele->private_Buffer.BufferLenght > 0 Then
-			Dim iPos As UInteger = xge.Text.WidthToPos(x - ele->private_Offset.x, ele->private_Buffer.BufferMemory, ele->private_Buffer.BufferLenght, ele->TextFont, 0, 0)
+			Dim iPos As UInteger = xge.Text.WidthToPosW(x - ele->private_Offset.x, ele->private_Buffer.BufferMemory, ele->private_Buffer.BufferLenght, ele->TextFont, 0, 0)
 			ele->SetSel(ele->private_DragPos, iPos - ele->private_DragPos)
 		EndIf
 	EndIf
@@ -286,7 +286,7 @@ Namespace xui
 	
 	
 	' 创建普通的行编辑元素
-	Function CreateLineEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.LineEdit Ptr XGE_EXPORT_ALL
+	Function CreateLineEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.LineEdit Ptr XGE_EXPORT_ALL
 		Dim ele As xui.LineEdit Ptr = New xui.LineEdit()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_LINEEDIT
@@ -299,7 +299,7 @@ Namespace xui
 	End Function
 	
 	' 创建密码行编辑元素
-	Function CreatePassWordEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.LineEdit Ptr XGE_EXPORT_ALL
+	Function CreatePassWordEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.LineEdit Ptr XGE_EXPORT_ALL
 		Dim ele As xui.LineEdit Ptr = New xui.LineEdit()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_LINEEDIT
@@ -409,14 +409,14 @@ Namespace xui
 	Sub LineEdit.Copy() XGE_EXPORT_OBJ
 		If PassWordChar = 0 Then
 			If SelSize Then
-				Clip_SetText(@private_Buffer.BufferMemory[SelStart], SelSize)
+				xClip_SetTextW(@private_Buffer.BufferMemory[SelStart], SelSize)
 			EndIf
 		EndIf
 	End Sub
 	
 	' 粘贴
 	Sub LineEdit.Paste() XGE_EXPORT_OBJ
-		Dim ClipText As WString Ptr = Clip_GetText()
+		Dim ClipText As WString Ptr = xClip_GetTextW()
 		SetSelText(ClipText, 0)
 		DeAllocate(ClipText)
 	End Sub
@@ -462,7 +462,7 @@ Namespace xui
 		EndIf
 		' 重新计算游标的位置
 		If private_CaretPos Then
-			private_Caret.x = (private_Offset.x + xge.Text.GetTextWidth(private_Buffer.BufferMemory, private_CaretPos, TextFont, 0, 0)) - 1
+			private_Caret.x = (private_Offset.x + xge.Text.GetTextWidthW(private_Buffer.BufferMemory, private_CaretPos, TextFont, 0, 0)) - 1
 		Else
 			private_Caret.x = private_Offset.x
 		EndIf

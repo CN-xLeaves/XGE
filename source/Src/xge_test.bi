@@ -48,7 +48,7 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 		Case XGE_MSG_LOADRES			' 加载资源
 			ui = xui.GetRootElement()
 			'xge.Text.LoadFont("..\release\res\font\xrf\simsun_16px_ucs2.xrf", 0)
-			xge.Text.LoadFont("..\release\res\font\xrf\simsun_12px_ucs2.xrf", 0)
+			xge.Text.LoadFontA("..\release\res\font\xrf\simsun_12px_ucs2.xrf", 0)
 			'xge.Text.LoadFont("F:\字体\思源屏显臻宋.ttf", 0)
 			'xge.Text.LoadFont("D:\Git\XGE\release\res\font\ttf\Roboto-Light.ttf", 0)
 			'xge.Text.LoadFont("F:\字体\庞门正道标题体2.0增强版.ttf", 0)
@@ -57,7 +57,7 @@ Function MainScreen(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As I
 			
 			pic1 = New xge.Surface("D:\Git\XGE\release\res\back.xgi", 0)
 			
-			win = xui.CreateWindowUI(10, 10, 320, 240, , "About xywh Game Engine")
+			win = xui.CreateBaseWindow(10, 10, 320, 240, , "About xywh Game Engine")
 			
 			ui->Childs.AddElement(win)
 			xui.LayoutApply()
@@ -73,7 +73,7 @@ End Function
 
 ' OOP 版测试函数
 Sub xge_test_oop()
-	xge.Init(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE范例 - 空白场景")
+	xge.InitA(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, "XGE范例 - 空白场景")
 	xge.Scene.Start(@MainScreen, 40)
 End Sub
 

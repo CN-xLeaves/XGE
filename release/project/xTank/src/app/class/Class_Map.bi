@@ -69,13 +69,13 @@ End Type
 
 
 Function Tank_Map.Load(MapFile As ZString Ptr) As Integer
-	xFile.Read(MapFile, @HeadInfo, 0, SizeOf(MapFileHdr_Old))
+	xFile_Read(MapFile, @HeadInfo, 0, SizeOf(MapFileHdr_Old))
 	If HeadInfo.FileHead = "xtm" Then
 		If tk Then
 			DeAllocate(tk)
 		EndIf
 		tk = Allocate(HeadInfo.MapWidth * HeadInfo.MapHeight)
-		xFile.Read(MapFile, tk, SizeOf(MapFileHdr_Old), HeadInfo.MapWidth * HeadInfo.MapHeight)
+		xFile_Read(MapFile, tk, SizeOf(MapFileHdr_Old), HeadInfo.MapWidth * HeadInfo.MapHeight)
 		Return -1
 	Else
 		MessageBox(xge.hWnd,"地图载入失败 [格式不正确] ！","Error :",MB_ICONERROR)
@@ -91,8 +91,8 @@ Sub Tank_Map.Save(ByVal MapFile As ZString Ptr)
 	HeadInfo.RunAI = 3
 	HeadInfo.Player.dt = 3
 	' 保存地图
-	xFile.Write(MapFile, @HeadInfo, 0, SizeOf(MapFileHdr_Old))
-	xFile.Write(MapFile, tk, SizeOf(MapFileHdr_Old), 900)
+	xFile_Write(MapFile, @HeadInfo, 0, SizeOf(MapFileHdr_Old))
+	xFile_Write(MapFile, tk, SizeOf(MapFileHdr_Old), 900)
 End Sub
 
 Sub Tank_Map.Draw(ByVal px As Integer,ByVal py As Integer)

@@ -39,6 +39,9 @@ Extern XGE_EXTERNCLASS
 	Constructor Surface(addr As ZString Ptr, size As UInteger = 0) XGE_EXPORT_OBJ
 		Load(addr, size)
 	End Constructor
+	Constructor Surface(addr As WString Ptr, size As UInteger = 0) XGE_EXPORT_OBJ
+		Load(addr, size)
+	End Constructor
 	
 	' 析构
 	Destructor Surface() XGE_EXPORT_OBJ
@@ -55,7 +58,7 @@ Extern XGE_EXTERNCLASS
 	End Function
 	
 	' 载入图像
-	Function Surface.Load(addr As ZString Ptr, size As UInteger = 0) As Integer XGE_EXPORT_OBJ
+	Function Surface.Load(addr As WString Ptr, size As UInteger = 0) As Integer XGE_EXPORT_OBJ
 		Free()
 		If xLoad_stb(@This, addr, size) Then
 			Return TRUE
@@ -75,6 +78,15 @@ Extern XGE_EXTERNCLASS
 			EndIf
 		EndIf
 	End Function
+	Function Surface.Load(addr As ZString Ptr, size As UInteger = 0) As Integer XGE_EXPORT_OBJ
+		If size Then
+			Return Load(Cast(WString Ptr, addr), size)
+		Else
+			Dim sf As WString Ptr = AsciToUnicode(addr, 0)
+			Function = Load(sf, size)
+			DeAllocate(sf)
+		EndIf
+	End Function
 	
 	' 保存图像
 	Function Surface.Save(addr As ZString Ptr, tpe As UInteger = 0, flag As Integer = 0) As Integer XGE_EXPORT_OBJ
@@ -86,6 +98,11 @@ Extern XGE_EXTERNCLASS
 				' 保存为 bmp 格式
 				Return BSave(*addr, img)
 		End Select
+	End Function
+	Function Surface.Save(addr As WString Ptr, tpe As UInteger = 0, flag As Integer = 0) As Integer XGE_EXPORT_OBJ
+		Dim sf As ZString Ptr = UnicodeToAsci(addr, 0)
+		Function = Save(sf, tpe, flag)
+		DeAllocate(sf)
 	End Function
 	
 	' 释放图像

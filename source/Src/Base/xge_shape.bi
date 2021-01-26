@@ -123,11 +123,11 @@ Extern XGE_EXTERNMODULE
 	End Sub
 	
 	' 填充图像 [使用图形文本]
-	Sub XGE_EXPORT_Shape_FullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, p As ZString Ptr, f As Integer) XGE_EXPORT_ALL
+	Sub XGE_EXPORT_Shape_FullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, p As Any Ptr, f As Integer) XGE_EXPORT_ALL
 		If sf Then
-			Paint sf->img, (x,y), *p, f
+			Paint sf->img, (x,y), *Cast(ZString Ptr, p), f
 		Else
-			Paint (x,y), *p, f
+			Paint (x,y), *Cast(ZString Ptr, p), f
 		EndIf
 	End Sub
 	

@@ -20,7 +20,7 @@ Sub xui_DrawBackStyle(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr) XG
 		EndIf
 	EndIf
 End Sub
-Sub xui_DrawBackStyle_Rect(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr, rc As xui.Rect Ptr) XGE_EXPORT_ALL
+Sub xui_DrawBackStyle_Rect(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr, rc As xge_Rect Ptr) XGE_EXPORT_ALL
 	If bs->Hide = FALSE Then
 		If bs->Image Then
 			bs->Image->Draw(ele->DrawBuffer, rc->x, rc->y)
@@ -30,7 +30,7 @@ Sub xui_DrawBackStyle_Rect(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Pt
 		EndIf
 	EndIf
 End Sub
-Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr) XGE_EXPORT_ALL
+Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As WString Ptr, fontid As UInteger, CaptionOffset As xge_Coord Ptr) XGE_EXPORT_ALL
 	If bs->Hide = FALSE Then
 		If bs->Image Then
 			bs->Image->Draw(ele->DrawBuffer, 0, 0)
@@ -39,7 +39,7 @@ Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Stru
 			xge.shape.RectFull(ele->DrawBuffer, 1, 1, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, bs->FillColor)
 		EndIf
 	EndIf
-	xge.Text.DrawRectA(ele->DrawBuffer, CaptionOffset->x, CaptionOffset->y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, sText, 0, bs->TextColor, fontid, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+	xge.Text.DrawRectW(ele->DrawBuffer, CaptionOffset->x, CaptionOffset->y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, sText, 0, bs->TextColor, fontid, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 End Sub
 
 End Extern
@@ -349,7 +349,7 @@ Namespace xui
 	
 	
 	' 创建一个空白的元素
-	Function CreateElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) As xui.Element Ptr XGE_EXPORT_ALL
+	Function CreateElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As WString Ptr = NULL) As xui.Element Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Element Ptr
 		ele = New xui.Element(iLayoutRuler, x, y, w, h, iLayoutMode, sIdentifier)
 		Return ele

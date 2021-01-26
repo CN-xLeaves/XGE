@@ -10,7 +10,7 @@
 </Folder>
 <Folder name="Other Files">
 </Folder>
-<Attribute topline="954" x="16" y="342">stb_image.c</Attribute>
+<Attribute topline="170" x="21" y="180">stb_image.c</Attribute>
 <FolderState>111</FolderState>
 <DefConfig>mingw5</DefConfig>
 <Builder name="mingw5" type="MinGW" version="1.0">

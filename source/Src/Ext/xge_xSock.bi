@@ -22,17 +22,17 @@ Extern XGE_EXTERNCLASS
 				RecvPack = TCP_Read(lpOverlapped)
 				If RecvPack Then
 					'RecvPack[Size] = 0
-					If Custom->Event.Recv Then
-						Custom->Event.Recv(lpOverlapped, RecvPack, Size)
+					If Custom->Event.OnRecv Then
+						Custom->Event.OnRecv(lpOverlapped, RecvPack, Size)
 					EndIf
 				EndIf
 			Case IOCP_TCP_SEND			' 消息发送成功
-				If Custom->Event.Send Then
-					Custom->Event.Send(lpOverlapped, 0)
+				If Custom->Event.OnSend Then
+					Custom->Event.OnSend(lpOverlapped, 0)
 				EndIf
 			Case IOCP_TCP_ESEND			' 消息发送失败
-				If Custom->Event.Send Then
-					Custom->Event.Send(lpOverlapped, 1)
+				If Custom->Event.OnSend Then
+					Custom->Event.OnSend(lpOverlapped, 1)
 				EndIf
 			Case IOCP_TCP_ACCEPT		' 新连接
 				Custom->AcceptProc(lpOverlapped)
@@ -72,6 +72,11 @@ Extern XGE_EXTERNCLASS
 			' 返回成功
 			Return TRUE
 		EndIf
+	End Function
+	Function xServer.Create(ip As WString Ptr, port As UShort, max As UInteger = 1000, ThreadCount As UInteger = 1) As Integer XGE_EXPORT_LIB
+		Dim sip As ZString Ptr = UnicodeToAsci(ip)
+		Function = Create(sip, port, max, ThreadCount)
+		DeAllocate(sip)
 	End Function
 	
 	' 销毁
@@ -147,6 +152,16 @@ Extern XGE_EXTERNCLASS
 			Return TRUE
 		EndIf
 	End Function
+	Function xServer.GetClientInfo(client As HANDLE, ip As WString Ptr Ptr, port As UInteger Ptr) As Integer XGE_EXPORT_LIB
+		If h_Socket Then
+			Dim sip As ZString Ptr
+			GetClientInfo(client, @sip, port)
+			If ip Then
+				*ip = A2W(sip)
+			EndIf
+			Return TRUE
+		EndIf
+	End Function
 	
 	' 内部事件函数 [连接]
 	Sub xServer.AcceptProc(client As HANDLE)
@@ -161,8 +176,8 @@ Extern XGE_EXTERNCLASS
 	Sub xServer.DisconnProc(client As HANDLE)
 		EnterCriticalSection(@Section)
 		DelClientList(client)
-		If Event.Disconn Then
-			Event.Disconn(client)
+		If Event.OnDisconn Then
+			Event.OnDisconn(client)
 		EndIf
 		LeaveCriticalSection(@Section)
 	End Sub
@@ -175,8 +190,8 @@ Extern XGE_EXTERNCLASS
 		If c_AddIndex < c_Max Then
 			c_List[c_AddIndex] = client
 			c_AddIndex += 1
-			If Event.Accept Then
-				Event.Accept(client)
+			If Event.OnAccept Then
+				Event.OnAccept(client)
 			EndIf
 			Return TRUE
 		Else
@@ -184,8 +199,8 @@ Extern XGE_EXTERNCLASS
 			For i As Integer = 0 To c_Max - 1
 				If c_List[i] = NULL Then
 					c_List[i] = client
-					If Event.Accept Then
-						Event.Accept(client)
+					If Event.OnAccept Then
+						Event.OnAccept(client)
 					EndIf
 					Return TRUE
 				EndIf
@@ -218,21 +233,21 @@ Extern XGE_EXTERNCLASS
 				RecvPack = TCP_Read(lpOverlapped)
 				If RecvPack Then
 					'RecvPack[Size] = 0
-					If pClient->Event.Recv Then
-						pClient->Event.Recv(RecvPack, Size)
+					If pClient->Event.OnRecv Then
+						pClient->Event.OnRecv(RecvPack, Size)
 					EndIf
 				EndIf
 			Case IOCP_TCP_SEND
-				If pClient->Event.Send Then
-					pClient->Event.Send(0)
+				If pClient->Event.OnSend Then
+					pClient->Event.OnSend(0)
 				EndIf
 			Case IOCP_TCP_ESEND
-				If pClient->Event.Send Then
-					pClient->Event.Send(1)
+				If pClient->Event.OnSend Then
+					pClient->Event.OnSend(1)
 				EndIf
 			Case IOCP_TCP_DISCONNECT
-				If pClient->Event.Disconn Then
-					pClient->Event.Disconn()
+				If pClient->Event.OnDisconn Then
+					pClient->Event.OnDisconn()
 				EndIf
 		End Select
 	End Sub
@@ -313,6 +328,11 @@ Extern XGE_EXTERNCLASS
 			TCP_Client_ConnectEnd(hSocket, h_Client)
 			Return TRUE
 		EndIf
+	End Function
+	Function xClient.Connect(ip As WString Ptr, port As UShort) As Integer XGE_EXPORT_LIB
+		Dim sip As ZString Ptr = UnicodeToAsci(ip)
+		Function = Connect(sip, port)
+		DeAllocate(sip)
 	End Function
 	
 	' 断开

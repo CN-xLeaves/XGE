@@ -51,7 +51,7 @@ End Extern
 
 
 ' 渲染单个文字
-Sub xFont_DrawWord_ttf(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
+Sub xFont_DrawWord_ttf(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
 	Dim font As stbtt_fontinfo Ptr = fd->Font
 	Dim As Integer ww, wh, wx, wy
 	Dim word As UByte Ptr = stbtt_GetCodepointBitmap(font, 0, fd->FontSizeFloat, iCode, @ww, @wh, @wx, @wy)
@@ -73,7 +73,7 @@ Sub xFont_DrawWord_ttf(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px 
 	Next
 	stbtt_FreeBitmap(word, NULL)
 End Sub
-Sub xFont_DrawWord_ttf_ansi(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
+Sub xFont_DrawWord_ttf_ansi(fd As xge.FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
 	Dim s As WString Ptr
 	If iCode < &H100 Then
 		s = AsciToUnicode(Cast(ZString Ptr, @iCode), 1)
@@ -86,7 +86,7 @@ Sub xFont_DrawWord_ttf_ansi(fd As xge.Text.FontDriver Ptr, sf As xge.Surface Ptr
 End Sub
 
 ' 获取单个文字的字符信息
-Sub xFont_WordInfo_ttf(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
+Sub xFont_WordInfo_ttf(fd As xge.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
 	Dim font As stbtt_fontinfo Ptr = fd->Font
 	Dim As Integer advanceWidth
 	stbtt_GetCodepointHMetrics(font, iCode, @advanceWidth, NULL)
@@ -97,7 +97,7 @@ Sub xFont_WordInfo_ttf(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As
 		*h = fd->FontSizeInt
 	EndIf
 End Sub
-Sub xFont_WordInfo_ttf_ansi(fd As xge.Text.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
+Sub xFont_WordInfo_ttf_ansi(fd As xge.FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
 	Dim s As WString Ptr
 	If iCode < &H100 Then
 		s = AsciToUnicode(Cast(ZString Ptr, @iCode), 1)
@@ -112,7 +112,7 @@ End Sub
 
 
 ' ttf 字库清理
-Sub xFree_ttf(fd As xge.Text.FontDriver Ptr)
+Sub xFree_ttf(fd As xge.FontDriver Ptr)
 	Dim info As stbtt_fontinfo Ptr = fd->Font
 	If info->IsMemoryFree Then
 		DeAllocate(info->Data)
@@ -123,7 +123,7 @@ End Sub
 
 
 ' ttf 设置字体大小
-Sub SetFontSize_ttf(fd As xge.Text.FontDriver Ptr, size As UInteger)
+Sub SetFontSize_ttf(fd As xge.FontDriver Ptr, size As UInteger)
 	Dim ascent As Integer
 	stbtt_GetFontVMetrics(fd->Font, @ascent, 0, 0)
 	fd->FontSizeInt   = size
@@ -135,21 +135,21 @@ End Sub
 
 
 ' ttf 字库加载器
-Function xLoad_ttf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As UInteger, param As Integer) As Integer
+Function xLoad_ttf(fd As xge.FontDriver Ptr, Addr As WString Ptr, iSize As UInteger, param As Integer) As Integer
 	Dim IsMemoryFree As Integer
-	Dim Buff As ZString Ptr
+	Dim Buff As WString Ptr
 	If iSize Then
 		' 从内存载入字库
 		Buff = Addr
 	Else
 		' 从文件载入字库
-		Dim iSize As UInteger = xFile.Size(Addr)
+		Dim iSize As UInteger = xFile_SizeW(Addr)
 		If iSize = 0 Then
 			Return 0
 		EndIf
 		IsMemoryFree = -1
 		Buff = Allocate(iSize)
-		xFile.Read(Addr, Buff, 0, iSize)
+		xFile_ReadW(Addr, Buff, 0, iSize)
 	EndIf
 	' 开始加载字体
 	Dim font As stbtt_fontinfo Ptr = Allocate(SizeOf(stbtt_fontinfo))
@@ -170,15 +170,15 @@ Function xLoad_ttf(fd As xge.Text.FontDriver Ptr, Addr As ZString Ptr, iSize As 
 	fd->HeightInt     = 36
 	fd->FontSizeFloat = stbtt_ScaleForPixelHeight(font, 36)
 	fd->TagFloat      = ascent * fd->FontSizeFloat		' 这里保存字体的基线
-	fd->DrawWord    = Cast(Any Ptr, @xFont_DrawWord_ttf)
+	fd->DrawWordW   = Cast(Any Ptr, @xFont_DrawWord_ttf)
 	fd->DrawWordA   = Cast(Any Ptr, @xFont_DrawWord_ttf_ansi)
-	fd->WordInfo    = Cast(Any Ptr, @xFont_WordInfo_ttf)
+	fd->WordInfoW   = Cast(Any Ptr, @xFont_WordInfo_ttf)
 	fd->WordInfoA   = Cast(Any Ptr, @xFont_WordInfo_ttf_ansi)
 	fd->FreeFont    = Cast(Any Ptr, @xFree_ttf)
 	fd->SetFontSize = Cast(Any Ptr, @SetFontSize_ttf)
-	fd->DrawLine_Fast  = NULL	'Cast(Any Ptr, @DrawLine_Fast_ttf)
+	fd->DrawLineW_Fast = NULL	'Cast(Any Ptr, @DrawLine_Fast_ttf)
 	fd->DrawLineA_Fast = NULL
-	fd->DrawRect_Fast  = NULL	'Cast(Any Ptr, @DrawRect_Fast_ttf)
+	fd->DrawRectW_Fast = NULL	'Cast(Any Ptr, @DrawRect_Fast_ttf)
 	fd->DrawRectA_Fast = NULL
 	Return -1
 End Function

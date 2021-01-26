@@ -19,7 +19,7 @@ Function ResToFile(ResID As Integer,sFile As ZString Ptr) As Integer
 		If ResSize Then
 			Dim ResData As HGLOBAL = LoadResource(NULL, ResHdr)
 			If ResData Then
-				xFile.Write(sFile, ResData, 0, ResSize)
+				xFile_Write(sFile, ResData, 0, ResSize)
 				Return -1
 			EndIf
 		EndIf

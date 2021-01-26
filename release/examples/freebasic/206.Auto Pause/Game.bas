@@ -42,7 +42,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			' Other events require manually locking the screen to avoid tearing the image
 			xge.Lock()
 				img->Draw_Gray(NULL, 0, 0)
-				xge.Text.DrawRectA(NULL, 0, 0, 640, 480, "The game has been suspended", 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(NULL, 0, 0, 640, 480, "The game has been suspended", 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 			xge.UnLock()
 			xge.Scene.Pause()
 		Case XGE_MSG_MOUSE_ENTER		' mouse enter
@@ -50,7 +50,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 		Case XGE_MSG_MOUSE_EXIT			' mouse leave
 			
 		Case XGE_MSG_LOADRES			' load resources
-			xge.Text.LoadFont("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
+			xge.Text.LoadFontW("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 			img = New xge.Surface("..\..\..\res\back.bmp")
 		Case XGE_MSG_FREERES			' unload resources
 			xge.Text.RemoveFont(1)
@@ -62,6 +62,6 @@ End Function
 
 
 
-xge.Init(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE - Auto Pause")
+xge.InitW(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, "XGE - Auto Pause")
 xge.Scene.Start(@MainScene, 40)
 xge.Unit()

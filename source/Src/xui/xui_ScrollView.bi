@@ -95,7 +95,7 @@ Namespace xui
 	
 	
 	' 创建滚动视图
-	Function CreateScrollView(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 200, vw As Integer = 200, vh As Integer = 200, sIdentifier As ZString Ptr = NULL) As xui.ScrollView Ptr XGE_EXPORT_ALL
+	Function CreateScrollView(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 200, vw As Integer = 200, vh As Integer = 200, sIdentifier As WString Ptr = NULL) As xui.ScrollView Ptr XGE_EXPORT_ALL
 		Dim ele As xui.ScrollView Ptr = New xui.ScrollView()
 		' 基础属性赋值
 		ele->InitElement(iLayoutRuler, x, y, w, h, XUI_LAYOUT_COORD, sIdentifier)

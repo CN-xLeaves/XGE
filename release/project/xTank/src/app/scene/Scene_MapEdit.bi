@@ -136,7 +136,7 @@ Function MapEditScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As
 			xge.Shape.RectFull(AI, 0, 0, 32, 32, &HFF0000FF)
 			xge.Text.DrawRectA(P1, 0, 0, 32, 32, "P1", 0, &HFFFFFFFF)
 			xge.Text.DrawRectA(AI, 0, 0, 32, 32, "AI", 0, &HFFFFFFFF)
-			If xFile.Exists(@MapPath) = FALSE Then
+			If xFile_Exists(@MapPath) = FALSE Then
 				ResToFile(200, @MapPath)
 			EndIf
 			Map.Load(@MapPath)

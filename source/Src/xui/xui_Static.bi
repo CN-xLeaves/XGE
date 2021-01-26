@@ -4,7 +4,7 @@
 ' 标签类 - 绘图
 Sub xui_class_Label_OnDraw(ele As xui.Label Ptr)
 	xui_DrawBackStyle(ele, @ele->BackStyle)
-	xge.Text.DrawRectA(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->TextColor, ele->TextFont, 0, ele->TextAlign, ele->LineSpace, ele->WordSpace)
+	xge.Text.DrawRectW(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->TextColor, ele->TextFont, 0, ele->TextAlign, ele->LineSpace, ele->WordSpace)
 End Sub
 
 ' 容器类 - 绘图
@@ -21,7 +21,7 @@ Sub xui_class_Frame_OnDraw(ele As xui.Frame Ptr)
 				xge.shape.Rect(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->BackStyle.BorderColor)
 				xge.shape.RectFull(ele->DrawBuffer, 1, 1, ele->Layout.Rect.w - 2, WordHeight + 5, ele->BackStyle.BorderColor)
 				xge.shape.RectFull(ele->DrawBuffer, 1, WordHeight + 6, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, ele->BackStyle.FillColor)
-				xge.Text.DrawRectA(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, WordHeight + 6, ele->Text, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, WordHeight + 6, ele->Text, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 			EndIf
 		EndIf
 	EndIf
@@ -46,7 +46,7 @@ Sub xui_class_ProgressBar_OnDraw(ele As xui.ProgressBar Ptr)
 	xui_DrawBackStyle(ele, @ele->BackStyle)
 	Dim percent As Double = (ele->Value - ele->Min) / (ele->Max - ele->Min)
 	If ele->Value > ele->Min Then
-		Dim ForeRect As xui.Rect = (ele->BorderWidth, ele->BorderWidth, ele->BorderWidth + ((ele->Layout.Rect.w - ele->BorderWidth) * percent), ele->Layout.Rect.h - ele->BorderWidth)
+		Dim ForeRect As xge_Rect = (ele->BorderWidth, ele->BorderWidth, ele->BorderWidth + ((ele->Layout.Rect.w - ele->BorderWidth) * percent), ele->Layout.Rect.h - ele->BorderWidth)
 		xui_DrawBackStyle_Rect(ele, @ele->ForeStyle, @ForeRect)
 	EndIf
 	Select Case ele->ShowMode
@@ -57,7 +57,7 @@ Sub xui_class_ProgressBar_OnDraw(ele As xui.ProgressBar Ptr)
 			xge.Text.DrawRectA(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, @c, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XUI_PROGRESSBAR_VALUE
 			' 显示数值
-			xge.Text.DrawRectA(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Value & "/" & ele->Max, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Value & "/" & ele->Max, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' 不显示文字
 	End Select
@@ -74,7 +74,7 @@ Namespace xui
 	
 	
 	' 创建标签
-	Function CreateLabel(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.Label Ptr XGE_EXPORT_ALL
+	Function CreateLabel(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.Label Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Label Ptr = New xui.Label()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_STATIC
@@ -96,7 +96,7 @@ Namespace xui
 	End Function
 	
 	' 创建容器
-	Function CreateFrame(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As ZString Ptr = NULL, sIdentifier As ZString Ptr = NULL) As xui.Frame Ptr XGE_EXPORT_ALL
+	Function CreateFrame(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As WString Ptr = NULL, sIdentifier As WString Ptr = NULL) As xui.Frame Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Frame Ptr = New xui.Frame()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_STATIC
@@ -115,7 +115,7 @@ Namespace xui
 	End Function
 	
 	' 创建图像类
-	Function CreateImage(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, pImage As xge.Surface Ptr = NULL, sIdentifier As ZString Ptr = NULL) As xui.Image Ptr XGE_EXPORT_ALL
+	Function CreateImage(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, pImage As xge.Surface Ptr = NULL, sIdentifier As WString Ptr = NULL) As xui.Image Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Image Ptr = New xui.Image()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_STATIC
@@ -132,7 +132,7 @@ Namespace xui
 	End Function
 	
 	' 创建进度条类
-	Function CreateProgressBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sIdentifier As ZString Ptr = NULL) As xui.ProgressBar Ptr XGE_EXPORT_ALL
+	Function CreateProgressBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sIdentifier As WString Ptr = NULL) As xui.ProgressBar Ptr XGE_EXPORT_ALL
 		Dim ele As xui.ProgressBar Ptr = New xui.ProgressBar()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_PROGRESSBAR

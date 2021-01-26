@@ -19,7 +19,7 @@ Extern XGE_EXTERNMODULE
 	
 	
 	' 初始化 XGE 游戏引擎
-	Function XGE_EXPORT_Init(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW, init_mod As Integer = XGE_INIT_ALL, title As ZString Ptr = NULL) As Integer XGE_EXPORT_ALL
+	Function XGE_EXPORT_InitA(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW, title As ZString Ptr = NULL) As Integer XGE_EXPORT_ALL
 		If XGE_EXPORT_SetScreen(w, h, init_gfx) Then
 			If title Then
 				WindowTitle(*title)
@@ -27,30 +27,31 @@ Extern XGE_EXTERNMODULE
 			' 初始化 XUI 资源
 			InitRes_XUI()
 			' 初始化 BASS 模块
-			If init_mod And XGE_INIT_BASS Then
-				If xge_global_bass_init = FALSE Then
-					xge_global_bass_init = TRUE
-					If HiWord(BASS_GetVersion()) = BASSVERSION Then
-						If BASS_Init(-1, XGE_SOUND_BPS, XGE_SOUND_FLAG, XGE_PROC_hWnd, NULL) = 0 Then
-							Return FALSE
-						EndIf
-					Else
+			If xge_global_bass_init = FALSE Then
+				xge_global_bass_init = TRUE
+				If HiWord(BASS_GetVersion()) = BASSVERSION Then
+					If BASS_Init(-1, XGE_SOUND_BPS, XGE_SOUND_FLAG, XGE_PROC_hWnd, NULL) = 0 Then
 						Return FALSE
 					EndIf
+				Else
+					Return FALSE
 				EndIf
 			EndIf
 			' 初始化 GDI/GDI+
-			If init_mod And XGE_INIT_GDI Then
-				If xge_global_gdi_init = FALSE Then
-					xge_global_gdi_init = TRUE
-					xge_global_gdi_gsi.GdiplusVersion = 1
-					If GdiPlus.GdiplusStartup(@xge_global_gdi_token, @xge_global_gdi_gsi, NULL) <> GdiPlus.OK Then
-						Return FALSE
-					EndIf
+			If xge_global_gdi_init = FALSE Then
+				xge_global_gdi_init = TRUE
+				xge_global_gdi_gsi.GdiplusVersion = 1
+				If GdiPlus.GdiplusStartup(@xge_global_gdi_token, @xge_global_gdi_gsi, NULL) <> GdiPlus.OK Then
+					Return FALSE
 				EndIf
 			EndIf
 			Return TRUE
 		EndIf
+	End Function
+	Function XGE_EXPORT_InitW(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW, title As WString Ptr = NULL) As Integer XGE_EXPORT_ALL
+		Dim st As ZString Ptr = UnicodeToAsci(title)
+		Function = XGE_EXPORT_InitA(w, h, init_gfx, st)
+		DeAllocate(st)
 	End Function
 	
 	' 终止 XGE 游戏引擎
@@ -84,6 +85,11 @@ Extern XGE_EXTERNMODULE
 				xge_global_scene_cur.RootElement->Layout.Rect.h = h
 				xge_global_scene_cur.RootElement->LayoutApply()
 			EndIf
+			' 设置窗口图标
+			Dim hIcon As HICON = LoadIcon(hInst, Cast(Any Ptr, 100))
+			Dim hWin As HANDLE = XGE_EXPORT_hWnd()
+			SendMessage(hWin, WM_SETICON, ICON_BIG, Cast(Integer, hIcon))
+			SendMessage(hWin, WM_SETICON, ICON_SMALL, Cast(Integer, hIcon))
 			Return TRUE
 		EndIf
 	End Function
@@ -91,7 +97,7 @@ Extern XGE_EXTERNMODULE
 	' 获取窗口句柄
 	Function XGE_EXPORT_hWnd() As HANDLE XGE_EXPORT_ALL
 		Dim hWin As HANDLE
-		ScreenControl(GET_WINDOW_HANDLE,Cast(Integer,hWin))
+		ScreenControl(GET_WINDOW_HANDLE, Cast(Integer, hWin))
 		Return hWin
 	End Function
 	
@@ -140,16 +146,6 @@ Extern XGE_EXTERNMODULE
 	' 获取扫描行数据大小
 	Function XGE_EXPORT_Pitch() As UInteger XGE_EXPORT_ALL
 		Return xge_global_scrpitch
-	End Function
-	
-	' 获取图像驱动
-	Function XGE_EXPORT_Driver() As ZString Ptr XGE_EXPORT_ALL
-		DeAllocate(xywh_library_auto_memory)
-		xywh_library_auto_memory = Allocate(32)
-		Dim d As String
-		ScreenInfo( , , , , , , d)
-		*Cast(ZString Ptr, xywh_library_auto_memory) = d
-		Return xywh_library_auto_memory
 	End Function
 	
 	' 设置音量

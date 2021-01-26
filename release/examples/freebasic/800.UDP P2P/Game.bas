@@ -43,8 +43,8 @@ Function DlgProc(ByVal hWin As HWND, ByVal uMsg As UINT, ByVal wParam As WPARAM,
 			TextRecv.Bind(hWin, 1005)
 			BtnCreate.Bind(hWin, 1008)
 			LabelState.Bind(hWin, 1009)
-			udp.RecvEvent = Cast(Any Ptr, @my_udp_RecvEvent)
-			udp.SendEvent = Cast(Any Ptr, @my_udp_SendEvent)
+			udp.Event.OnRecv = Cast(Any Ptr, @my_udp_RecvEvent)
+			udp.Event.OnSend = Cast(Any Ptr, @my_udp_SendEvent)
 		Case WM_COMMAND
 			id=LoWord(wParam)
 			Event=HiWord(wParam)

@@ -174,7 +174,7 @@ Namespace xui
 	
 	
 	' 创建纵向滚动条
-	Function CreateVScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 18, h As Integer = 200, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr XGE_EXPORT_ALL
+	Function CreateVScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 18, h As Integer = 200, sIdentifier As WString Ptr = NULL) As xui.ScrollBar Ptr XGE_EXPORT_ALL
 		Dim ele As xui.ScrollBar Ptr = New xui.ScrollBar()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_SCROLLBAR
@@ -242,7 +242,7 @@ Namespace xui
 	End Function
 	
 	' 创建横向滚动条
-	Function CreateHScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 18, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr XGE_EXPORT_ALL
+	Function CreateHScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 18, sIdentifier As WString Ptr = NULL) As xui.ScrollBar Ptr XGE_EXPORT_ALL
 		Dim ele As xui.ScrollBar Ptr = New xui.ScrollBar()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_SCROLLBAR

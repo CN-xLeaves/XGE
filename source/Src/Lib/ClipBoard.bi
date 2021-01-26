@@ -6,7 +6,7 @@ Extern XGE_EXTERNSTDEXT
 	
 	
 	' 获取文本
-	Function Clip_GetText() As WString Ptr XGE_EXPORT_LIB
+	Function xClip_GetTextW() As WString Ptr XGE_EXPORT_LIB
 		If OpenClipboard(NULL) Then
 			If IsClipboardFormatAvailable(CF_UNICODETEXT) Then
 				Dim hMem As HGLOBAL = GetClipboardData(CF_UNICODETEXT)
@@ -37,7 +37,7 @@ Extern XGE_EXTERNSTDEXT
 	End Function
 	
 	' 设置文本
-	Function Clip_SetText(Text As WString Ptr, Size As UInteger = 0) As Integer XGE_EXPORT_LIB
+	Function xClip_SetTextW(Text As WString Ptr, Size As UInteger = 0) As Integer XGE_EXPORT_LIB
 		If OpenClipboard(NULL) Then
 			EmptyClipboard()
 			If Size = 0 Then
@@ -61,7 +61,7 @@ Extern XGE_EXTERNSTDEXT
 	
 	
 	' 获取文本
-	Function Clip_GetTextA() As ZString Ptr XGE_EXPORT_LIB
+	Function xClip_GetTextA() As ZString Ptr XGE_EXPORT_LIB
 		If OpenClipboard(NULL) Then
 			If IsClipboardFormatAvailable(CF_TEXT) Then
 				Dim hMem As HGLOBAL = GetClipboardData(CF_TEXT)
@@ -92,7 +92,7 @@ Extern XGE_EXTERNSTDEXT
 	End Function
 	
 	' 设置文本
-	Function Clip_SetTextA(Text As ZString Ptr, Size As UInteger = 0) As Integer XGE_EXPORT_LIB
+	Function xClip_SetTextA(Text As ZString Ptr, Size As UInteger = 0) As Integer XGE_EXPORT_LIB
 		If OpenClipboard(NULL) Then
 			EmptyClipboard()
 			If Size = 0 Then

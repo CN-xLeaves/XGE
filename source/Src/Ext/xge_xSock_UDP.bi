@@ -23,18 +23,23 @@ Extern XGE_EXTERNCLASS
 				Dim RecvPort As UShort
 				RecvPack = UDP_Read(lpOverlapped, RecvIP, RecvPort)
 				If RecvPack Then
-					'RecvPack[Size] = 0
-					If Custom->RecvEvent Then
-						Custom->RecvEvent(RecvPack, Size, RecvIP, RecvPort)
+					If Custom->Event.OnRecv Then
+						If Custom->private_Unicode Then
+							Dim wip As WString Ptr = AsciToUnicode(RecvIP)
+							Custom->Event.OnRecv(RecvPack, Size, wip, RecvPort)
+							DeAllocate(wip)
+						Else
+							Custom->Event.OnRecv(RecvPack, Size, RecvIP, RecvPort)
+						EndIf
 					EndIf
 				EndIf
 			Case IOCP_UDP_SEND
-				If Custom->SendEvent Then
-					Custom->SendEvent(0)
+				If Custom->Event.OnSend Then
+					Custom->Event.OnSend(0)
 				EndIf
 			Case IOCP_UDP_ESEND
-				If Custom->SendEvent Then
-					Custom->SendEvent(1)
+				If Custom->Event.OnSend Then
+					Custom->Event.OnSend(1)
 				EndIf
 		End Select
 	End Sub
@@ -45,13 +50,17 @@ Extern XGE_EXTERNCLASS
 	End Destructor
 	
 	' ´´½¨
-	Function xUDP.Create(ip As ZString Ptr, port As UShort, ThreadCountt As UInteger = 1) As Integer XGE_EXPORT_LIB
+	Function xUDP.Create(ip As ZString Ptr, port As UShort, ThreadCountt As UInteger = 1) As HANDLE XGE_EXPORT_LIB
+		private_Unicode = FALSE
 		h_Socket = UDP_Create(ip, port, NULL, @xSock_UDP_Proc, ThreadCountt,Cast(Integer, @This))
-		If h_Socket Then
-			Return TRUE
-		Else
-			Return FALSE
-		EndIf
+		Return h_Socket
+	End Function
+	Function xUDP.Create(ip As WString Ptr, port As UShort, ThreadCountt As UInteger = 1) As HANDLE XGE_EXPORT_LIB
+		private_Unicode = TRUE
+		Dim sip As ZString Ptr = UnicodeToAsci(ip, 0)
+		h_Socket = UDP_Create(sip, port, NULL, @xSock_UDP_Proc, ThreadCountt,Cast(Integer, @This))
+		DeAllocate(sip)
+		Return h_Socket
 	End Function
 	
 	' Ïú»Ù
@@ -76,6 +85,13 @@ Extern XGE_EXTERNCLASS
 				size = strlen(pack)
 			EndIf
 			Return UDP_Write(h_Socket, pack, size, ip, port, Sync)
+		EndIf
+	End Function
+	Function xUDP.Send(pack As Any Ptr, size As UInteger, ip As WString Ptr, port As UShort, sync As Integer = TRUE) As Integer XGE_EXPORT_LIB
+		If h_Socket Then
+			Dim sip As ZString Ptr = UnicodeToAsci(ip, 0)
+			Function = UDP_Write(h_Socket, pack, size, sip, port, Sync)
+			DeAllocate(sip)
 		EndIf
 	End Function
 	

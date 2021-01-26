@@ -1,4 +1,4 @@
-fbc.exe -s gui -dll -export -m xge "xge_oop.bas"
+fbc.exe -s gui -dll -export -m xge "xge_oop.bas" "xge_oop.rc"
 @echo;
 @echo;
 @echo;

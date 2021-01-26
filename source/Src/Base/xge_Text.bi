@@ -25,7 +25,16 @@ Extern XGE_EXTERNMODULE
 		
 		
 		' 加载字体 [ 目前支持 xrf字体 和 truetype字体 ] [ ttc字体包加载时通过param参数指定加载的字体ID ]
-		Function LoadFont(Addr As ZString Ptr, iSize As UInteger, param As Any Ptr = NULL) As UInteger XGE_EXPORT_ALL
+		Function LoadFontA(Addr As ZString Ptr, iSize As UInteger, param As Any Ptr = NULL) As UInteger XGE_EXPORT_ALL
+			If iSize Then
+				Return LoadFontW(Cast(WString Ptr, Addr), iSize, param)
+			Else
+				Dim sf As WString Ptr = AsciToUnicode(Addr, 0)
+				Function = LoadFontW(sf, iSize, param)
+				DeAllocate(sf)
+			EndIf
+		End Function
+		Function LoadFontW(Addr As WString Ptr, iSize As UInteger, param As Any Ptr = NULL) As UInteger XGE_EXPORT_ALL
 			Dim iList As UInteger = xge_fontlist.AppendStruct()
 			If iList Then
 				Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(iList)
@@ -86,7 +95,7 @@ Extern XGE_EXTERNMODULE
 		
 		
 		' 测量文字的宽度和高度
-		Function GetTextWidth(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
+		Function GetTextWidthW(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
 			Dim RetInt As Integer = 0
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
@@ -96,12 +105,12 @@ Extern XGE_EXTERNMODULE
 				If txtLen = 0 Then
 					Return 0
 				EndIf
-				If fd->GetTextWidth_Fast Then
-					Return fd->GetTextWidth_Fast(fd, txt, txtLen, Style, wd)
+				If fd->GetTextWidthW_Fast Then
+					Return fd->GetTextWidthW_Fast(fd, txt, txtLen, Style, wd)
 				Else
 					Dim As Integer w, h
 					For i As Integer = 0 To txtLen - 1
-						fd->WordInfo(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
+						fd->WordInfoW(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
 						RetInt += w + wd
 					Next
 				EndIf
@@ -137,8 +146,8 @@ Extern XGE_EXTERNMODULE
 			EndIf
 			Return RetInt
 		End Function
-		Function GetTextRect(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
-			Dim RetRect As xui.Rect = (0, 0, 0, 0)
+		Function GetTextRectW(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect
+			Dim RetRect As xge_Rect = (0, 0, 0, 0)
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then
@@ -147,8 +156,8 @@ Extern XGE_EXTERNMODULE
 				If txtLen = 0 Then
 					Return RetRect
 				EndIf
-				If fd->GetTextRect_Fast Then
-					Return fd->GetTextRect_Fast(fd, txt, txtLen, Style, align, wd, ld)
+				If fd->GetTextRectW_Fast Then
+					Return fd->GetTextRectW_Fast(fd, txt, txtLen, Style, align, wd, ld)
 				Else
 					' 统计数据
 					Dim LineCount As Integer = 1
@@ -163,7 +172,7 @@ Extern XGE_EXTERNMODULE
 							EndIf
 							LineWidth = 0
 						Else
-							fd->WordInfo(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
+							fd->WordInfoW(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
 							LineWidth += w + wd
 						EndIf
 					Next
@@ -176,8 +185,8 @@ Extern XGE_EXTERNMODULE
 			EndIf
 			Return RetRect
 		End Function
-		Function GetTextRectA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
-			Dim RetRect As xui.Rect = (0, 0, 0, 0)
+		Function GetTextRectA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect
+			Dim RetRect As xge_Rect = (0, 0, 0, 0)
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then
@@ -226,19 +235,19 @@ Extern XGE_EXTERNMODULE
 		
 		
 		' 根据坐标或宽度反推文字的位置
-		Function WidthToPos(cw As Integer, txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
+		Function WidthToPosW(cw As Integer, txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
 			Dim iPos As UInteger = 0
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then
 					txtLen = wcslen(txt)
 				EndIf
-				If fd->WidthToPos_Fast Then
-					Return fd->WidthToPos_Fast(fd, cw, txt, txtLen, Style, wd)
+				If fd->WidthToPosW_Fast Then
+					Return fd->WidthToPosW_Fast(fd, cw, txt, txtLen, Style, wd)
 				Else
 					Dim As Integer w, h
 					For iPos = 0 To txtLen - 1
-						fd->WordInfo(fd, Cast(UShort Ptr, txt)[iPos], Style, @w, @h)
+						fd->WordInfoW(fd, Cast(UShort Ptr, txt)[iPos], Style, @w, @h)
 						cw -= (w + wd)
 						If cw <= 0 Then
 							If cw + (w \ 2) >= 0 Then
@@ -259,7 +268,7 @@ Extern XGE_EXTERNMODULE
 				If txtLen = 0 Then
 					txtLen = strlen(txt)
 				EndIf
-				If fd->WidthToPos_Fast Then
+				If fd->WidthToPosW_Fast Then
 					Return fd->WidthToPosA_Fast(fd, cw, txt, txtLen, Style, wd)
 				Else
 					Dim As Integer iCode, w, h
@@ -271,7 +280,7 @@ Extern XGE_EXTERNMODULE
 							iCode = (Cast(UByte Ptr, txt)[iPos] Shl 8) + Cast(UByte Ptr, txt)[iPos + 1]
 							iPos += 1
 						EndIf
-						fd->WordInfo(fd, iCode, Style, @w, @h)
+						fd->WordInfoW(fd, iCode, Style, @w, @h)
 						cw -= (w + wd)
 						If cw <= 0 Then
 							If cw + (w \ 2) >= 0 Then
@@ -294,8 +303,8 @@ Extern XGE_EXTERNMODULE
 		
 		
 		' 写字
-		Function Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xui.Rect XGE_EXPORT_ALL
-			Dim RetRect As xui.Rect = (px, py, 0, 0)
+		Function DrawW(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xge_Rect XGE_EXPORT_ALL
+			Dim RetRect As xge_Rect = (px, py, 0, 0)
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then
@@ -307,15 +316,15 @@ Extern XGE_EXTERNMODULE
 				If (iColor And &HFF000000) = 0 Then
 					iColor = iColor Or &HFF000000
 				EndIf
-				If fd->DrawLine_Fast Then
-					Return fd->DrawLine_Fast(fd, sf, px, py, txt, txtLen, iColor, Style, wd)
+				If fd->DrawLineW_Fast Then
+					Return fd->DrawLineW_Fast(fd, sf, px, py, txt, txtLen, iColor, Style, wd)
 				Else
 					Dim wx As Integer = 0		' 文字绘制横向偏移
 					Dim As Integer w, h
 					For i As Integer = 0 To txtLen - 1
 						' 渲染文字
-						fd->WordInfo(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
-						fd->DrawWord(fd, sf, px + wx, py, w, h, Cast(UShort Ptr, txt)[i], iColor, Style)
+						fd->WordInfoW(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
+						fd->DrawWordW(fd, sf, px + wx, py, w, h, Cast(UShort Ptr, txt)[i], iColor, Style)
 						wx += w + wd
 					Next
 					RetRect.w = wx
@@ -324,8 +333,8 @@ Extern XGE_EXTERNMODULE
 			EndIf
 			Return RetRect
 		End Function
-		Function DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xui.Rect XGE_EXPORT_ALL
-			Dim RetRect As xui.Rect = (px, py, 0, 0)
+		Function DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xge_Rect XGE_EXPORT_ALL
+			Dim RetRect As xge_Rect = (px, py, 0, 0)
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then
@@ -363,8 +372,8 @@ Extern XGE_EXTERNMODULE
 		End Function
 		
 		' 矩形格式化写字 [ align:对其方式、wd:字间距、ld:行间距 ]
-		Function DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect XGE_EXPORT_ALL
-			Dim RetRect As xui.Rect = (0, 0, 0, 0)
+		Function DrawRectW(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect XGE_EXPORT_ALL
+			Dim RetRect As xge_Rect = (0, 0, 0, 0)
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then
@@ -373,8 +382,8 @@ Extern XGE_EXTERNMODULE
 				If txtLen = 0 Then
 					Return RetRect
 				EndIf
-				If fd->DrawRect_Fast Then
-					Return fd->DrawRect_Fast(fd, sf, px, py, pw, ph, txt, txtLen, iColor, Style, align, wd, ld)
+				If fd->DrawRectW_Fast Then
+					Return fd->DrawRectW_Fast(fd, sf, px, py, pw, ph, txt, txtLen, iColor, Style, align, wd, ld)
 				Else
 					' 统计行数 [垂直居中、居下的时候用]
 					Dim LineCount As Integer = 1
@@ -411,13 +420,13 @@ Extern XGE_EXTERNMODULE
 								Select Case (align And (XGE_ALIGN_CENTER Or XGE_ALIGN_RIGHT))
 									Case XGE_ALIGN_CENTER
 										' 横向居中
-										Draw(sf, px + (pw - DrawOffsetX) \ 2, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
+										DrawW(sf, px + (pw - DrawOffsetX) \ 2, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
 									Case XGE_ALIGN_RIGHT
 										' 横向居右
-										Draw(sf, px + pw - DrawOffsetX, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
+										DrawW(sf, px + pw - DrawOffsetX, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
 									Case Else
 										' 横向居左
-										Draw(sf, px, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
+										DrawW(sf, px, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
 								End Select
 								Cast(UShort Ptr, txt)[i] = 10
 							EndIf
@@ -428,7 +437,7 @@ Extern XGE_EXTERNMODULE
 							EndIf
 							DrawOffsetX = 0
 						Else
-							fd->WordInfo(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
+							fd->WordInfoW(fd, Cast(UShort Ptr, txt)[i], Style, @w, @h)
 							DrawOffsetX += w + wd
 						EndIf
 					Next
@@ -438,13 +447,13 @@ Extern XGE_EXTERNMODULE
 						Select Case (align And (XGE_ALIGN_CENTER Or XGE_ALIGN_RIGHT))
 							Case XGE_ALIGN_CENTER
 								' 横向居中
-								Draw(sf, px + (pw - DrawOffsetX) \ 2, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
+								DrawW(sf, px + (pw - DrawOffsetX) \ 2, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
 							Case XGE_ALIGN_RIGHT
 								' 横向居右
-								Draw(sf, px + pw - DrawOffsetX, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
+								DrawW(sf, px + pw - DrawOffsetX, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
 							Case Else
 								' 横向居左
-								Draw(sf, px, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
+								DrawW(sf, px, DrawOffsetY, DrawSubText, 0, iColor, fontid, Style, wd)
 						End Select
 					EndIf
 					' 计算输出矩形的宽度和坐标
@@ -467,8 +476,8 @@ Extern XGE_EXTERNMODULE
 			EndIf
 			Return RetRect
 		End Function
-		Function DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect XGE_EXPORT_ALL
-			Dim RetRect As xui.Rect = (0, 0, 0, 0)
+		Function DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect XGE_EXPORT_ALL
+			Dim RetRect As xge_Rect = (0, 0, 0, 0)
 			Dim fd As FontDriver Ptr = xge_fontlist.GetPtrStruct(fontid)
 			If fd Then
 				If txtLen = 0 Then

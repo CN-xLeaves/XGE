@@ -102,7 +102,7 @@ End Function
 
 
 ' 加载 xgi 图像
-Function xLoad_xgi(img As xge.Surface Ptr, addr As ZString Ptr, size As UInteger) As Integer
+Function xLoad_xgi(img As xge.Surface Ptr, addr As WString Ptr, size As UInteger) As Integer
 	If size Then
 		' 从内存载入图像
 		size -= SizeOf(xywhGameImage_Head)
@@ -117,11 +117,11 @@ Function xLoad_xgi(img As xge.Surface Ptr, addr As ZString Ptr, size As UInteger
 	Else
 		' 从文件载入图像
 		Dim xgih As xywhGameImage_Head
-		xFile.Read(addr, @xgih, 0, SizeOf(xywhGameImage_Head))
+		xFile_ReadW(addr, @xgih, 0, SizeOf(xywhGameImage_Head))
 		If xLoad_xgi_check(@xgih) Then
 			Dim img_data As Any Ptr = Allocate(xgih.DataSize)
 			If img_data Then
-				xFile.Read(addr, img_data, SizeOf(xywhGameImage_Head), xgih.DataSize)
+				xFile_ReadW(addr, img_data, SizeOf(xywhGameImage_Head), xgih.DataSize)
 				Dim RetInt As Integer = xLoad_xgi_mem(img, @xgih, img_data)
 				DeAllocate(img_data)
 				Return RetInt
@@ -186,9 +186,9 @@ Function xSave_xgi(img As xge.Surface Ptr, file As ZString Ptr, iscomp As Intege
 	EndIf
 	' 写入文件
 	xgih.DataSize = BitmapSize
-	if xFile.Write(file, @xgih, 0, SizeOf(xywhGameImage_Head)) Then
-		if xFile.Write(file, BitmapData, SizeOf(xywhGameImage_Head), BitmapSize) Then
-			xFile.Cut(file, SizeOf(xywhGameImage_Head) + BitmapSize)
+	if xFile_WriteA(file, @xgih, 0, SizeOf(xywhGameImage_Head)) Then
+		if xFile_WriteA(file, BitmapData, SizeOf(xywhGameImage_Head), BitmapSize) Then
+			xFile_CutA(file, SizeOf(xywhGameImage_Head) + BitmapSize)
 			If IsDeAlloca Then
 				DeAllocate(BitmapData)
 			EndIf

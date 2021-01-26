@@ -18,17 +18,17 @@ End Namespace
 
 
 Function InitModuleSystem() As Integer
-	Module.Path = ExePath() & "\Moudle\" & *xIni.GetStr(ExePath & "\setup.ini", "option", "Module") & "\"
+	Module.Path = ExePath() & "\Moudle\" & *xIni_GetStr(ExePath & "\setup.ini", "option", "Module") & "\"
 	Module.File = Module.Path & "moudle.ini"
-	If xFile.Exists(@Module.File) Then
-		Module.Title = *xIni.GetStr(@Module.File, "option", "Title")
-		Module.BackImage = *xIni.GetStr(@Module.File, "option", "BackImage")
-		Module.MapCount = xIni.GetInt(@Module.File, "option", "MapCount")
-		Module.ExpMul = xIni.GetInt(@Module.File, "option", "ExpMul")
-		Module.StartLevel = xIni.GetInt(@Module.File, "option", "StartLevel")
-		Module.TankModel = xIni.GetInt(@Module.File, "option", "TankModel")
-		Module.SpawnTime = xIni.GetInt(@Module.File, "option", "SpawnTime")
-		Module.AddHPTime = xIni.GetInt(@Module.File, "option", "AddHPTime")
+	If xFile_Exists(@Module.File) Then
+		Module.Title = *xIni_GetStr(@Module.File, "option", "Title")
+		Module.BackImage = *xIni_GetStr(@Module.File, "option", "BackImage")
+		Module.MapCount = xIni_GetInt(@Module.File, "option", "MapCount")
+		Module.ExpMul = xIni_GetInt(@Module.File, "option", "ExpMul")
+		Module.StartLevel = xIni_GetInt(@Module.File, "option", "StartLevel")
+		Module.TankModel = xIni_GetInt(@Module.File, "option", "TankModel")
+		Module.SpawnTime = xIni_GetInt(@Module.File, "option", "SpawnTime")
+		Module.AddHPTime = xIni_GetInt(@Module.File, "option", "AddHPTime")
 		If Module.BackImage = "" Then
 			Module.BackImage = "back.bmp"
 		EndIf

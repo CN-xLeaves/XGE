@@ -9,13 +9,18 @@
 
 #Ifndef xywh_library_xge
 	#Define xywh_library_xge
+	
 	#Ifndef XGE_SOURCE_NOLIB
 		#Define XGE_SOURCE_NOLIB
 		#Inclib "xge"
 	#EndIf
+	
 	#Define XGE_EXTERNCLASS "Windows"				' Class 导出方式
 	#Define XGE_EXTERNMODULE "Windows"				' NameSpace 导出方式
 	#Define XGE_EXTERNSTDEXT "Windows"				' 普通函数导出方式
+	
+	/' -------------------------- XUI元素ID最大字符数 -------------------------- '/
+	#Define XGE_XUI_IDSIZE		32
 	
 	
 	
@@ -116,13 +121,13 @@
 	
 	
 	/' -------------------------- 颜色定义 -------------------------- '/
-	#Define MASK_COLOR_24				&HFF00FF
-	#Define MASK_COLOR_32				&HFFFF00FF
-	#Define MASK32_A					&HFF000000
-	#Define MASK32_R					&H00FF0000
-	#Define MASK32_G					&H0000FF00
-	#Define MASK32_B					&H000000FF
-	#Define MASK32						&HFFFFFFFF
+	#Define COLOR_MASK_24				&HFF00FF
+	#Define COLOR_MASK_32				&HFFFF00FF
+	#Define COLOR_A						&HFF000000
+	#Define COLOR_R						&H00FF0000
+	#Define COLOR_G						&H0000FF00
+	#Define COLOR_B						&H000000FF
+	#Define COLOR_32					&HFFFFFFFF
 	
 	
 	/' -------------------------- 镜像定义 -------------------------- '/
@@ -140,12 +145,6 @@
 	#Define XGE_INIT_POSTOP				&H20			' 窗口置顶
 	#Define XGE_INIT_ALPHA				&H40			' 开启alpha混合对于所有基础操作
 	#Define XGE_INIT_HIGHPRIORITY		&H80			' 高优先权给图像处理
-	
-	
-	/' -------------------------- 模块初始化定义 -------------------------- '/
-	#Define XGE_INIT_ALL				(XGE_INIT_GDI Or XGE_INIT_BASS)
-	#Define XGE_INIT_GDI				&H1				' 初始化GDI/GDI+
-	#Define XGE_INIT_BASS				&H2				' 初始化 BASS 模块
 	
 	
 	/' -------------------------- 场景消息定义 -------------------------- '/
@@ -301,8 +300,8 @@
 	
 	/' -------------------------- 文件查找规则 -------------------------- '/
 	#Define XFILE_RULE_NoAttribEx		0				' 不限制
-	#Define XFILE_RULE_FloderOnly		0				' 只查找目录
-	#Define XFILE_RULE_PointFloder		0				' 去除根目录及父级目录
+	#Define XFILE_RULE_FloderOnly		1				' 只查找目录
+	#Define XFILE_RULE_PointFloder		2				' 去除根目录及父级目录
 	
 	
 	
@@ -344,7 +343,7 @@
 	
 	
 	/' -------------------------- 图像结构体 -------------------------- '/
-	Type IMAGE
+	Type FBGFX_IMAGE
 		tpe as UInteger
 		bpp As Integer
 		Width As UInteger
@@ -355,12 +354,42 @@
 	
 	
 	
+	/' -------------------------- 点数据结构 -------------------------- '/
+	Type xge_Coord
+		x As Integer
+		y As Integer
+	End Type
+	
+	
+	
+	/' -------------------------- 矩形数据结构 -------------------------- '/
+	Type xge_Rect
+		Union
+			x As Integer
+			LeftOffset As Integer
+		End Union
+		Union
+			y As Integer
+			TopOffset As Integer
+		End Union
+		Union
+			w As Integer
+			RightOffset As Integer
+		End Union
+		Union
+			h As Integer
+			BottomOffset As Integer
+		End Union
+	End Type
+	
+	
+	
 	/' -------------------------- 数据类型定义 -------------------------- '/
 	Type XGE_SCENE_PROC As Function(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	Type XGE_EVENT_PROC As Sub(eve As XGE_EVENT Ptr)
 	Type XGE_DELAY_PROC As Sub(ms As Integer)
-	Type XGE_BLOAD_PROC As Function(img As Any Ptr, addr As ZString Ptr, size As UInteger) As Integer
-	Type XGE_FLOAD_PROC As Function(fd As Any Ptr, Addr As ZString Ptr, iSize As UInteger, param As Any Ptr) As Integer
+	Type XGE_BLOAD_PROC As Function(img As Any Ptr, addr As WString Ptr, size As UInteger) As Integer
+	Type XGE_FLOAD_PROC As Function(fd As Any Ptr, Addr As WString Ptr, iSize As UInteger, param As Any Ptr) As Integer
 	Type XGE_DRAW_BLEND As Sub(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer)
 	Type XGE_DRAW_CUSTOM As Function(src As UInteger, dst As UInteger, param As Any Ptr) As UInteger
 	
@@ -368,7 +397,10 @@
 	
 	
 	
-	Extern XGE_EXTERNCLASS
+	Extern XGE_EXTERNMODULE
+		
+		
+		
 		/' -------------------------- 栈结构类[结构体] -------------------------- '/
 		Type xStack
 			' 构造/析构
@@ -398,35 +430,6 @@
 				Dim pStackTop As UInteger
 		End Type
 		
-		
-		/' -------------------------- 栈结构类[Int] -------------------------- '/
-		Type xStack_Int
-			' 构造/析构
-			Declare Constructor(max As UInteger)
-			Declare Destructor()
-			
-			' 初始化/卸载
-			Declare Function Init(max As UInteger) As Integer
-			Declare Sub Unit()
-			
-			' 压栈
-			Declare Function Push(dat As Integer) As Integer
-			
-			' 出栈
-			Declare Function Pop() As Integer
-			Declare Function Pop(c As UInteger) As Integer Ptr
-			
-			' 栈顶
-			Declare Function Top() As Integer
-			
-			' 压栈数量
-			Declare Function Count() As UInteger
-			
-			Private:
-				Dim pMaxCount As UInteger
-				Dim pStackMem As Integer Ptr
-				Dim pStackTop As UInteger
-		End Type
 		
 		
 		/' -------------------------- 结构化内存管理器 -------------------------- '/
@@ -474,6 +477,7 @@
 		End Type
 		
 		
+		
 		/' -------------------------- 字符串缓冲区管理器 [UCS2] -------------------------- '/
 		Type xStringBuffer
 			
@@ -517,14 +521,16 @@
 			Declare Sub FreeMemory()
 			
 		End Type
-	End Extern
-	
-	
-	
-	Extern XGE_EXTERNMODULE
+		
+		
+		
 		Namespace xge
-		/' -------------------------- 核心库 -------------------------- '/
-			Declare Function Init(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW, init_mod As Integer = XGE_INIT_ALL, title As ZString Ptr = NULL) As Integer
+			
+			
+			
+			/' -------------------------- 核心库 -------------------------- '/
+			Declare Function InitA(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW, title As ZString Ptr = NULL) As Integer
+			Declare Function InitW(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW, title As WString Ptr = NULL) As Integer
 			Declare Sub Unit()
 			Declare Function SetScreen(w As UInteger, h As UInteger, init_gfx As Integer = XGE_INIT_WINDOW) As Integer
 			Declare Function hWnd() As HANDLE
@@ -537,89 +543,14 @@
 			Declare Function PixAddr() As Any Ptr
 			Declare Function PixSize() As UInteger
 			Declare Function Pitch() As UInteger
-			Declare Function Driver() As ZString Ptr
 			Declare Sub SetSoundVol(tpe As Integer, vol As Integer)
 			Declare Function GetSoundVol(tpe As Integer) As Integer
-			Declare Function Ver(tpe As Integer = 0) As Integer
 			
 			
-			/' -------------------------- 场景库 -------------------------- '/
-			Namespace Scene
-				Declare Function Start(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer
-				Declare Function Cut(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer
-				Declare Sub Stop()
-				Declare Sub StopAll()
-				Declare Sub Pause(flag As Integer = XGE_PAUSE_DRAW Or XGE_PAUSE_FRAME)
-				Declare Function State() As Integer
-				Declare Sub Resume()
-				Declare Function FPS() As UInteger
-				Declare Sub SetFPS(nv As UInteger)
-				Declare Function Stack() As xStack Ptr
-			End Namespace
 			
-			
-			/' -------------------------- 挂钩库 -------------------------- '/
-			Namespace Hook
-				Declare Sub SetDelayProc(proc As XGE_DELAY_PROC)
-				Declare Sub SetEventProc(proc As XGE_EVENT_PROC)
-				Declare Sub SetSceneProc(proc As XGE_SCENE_PROC)
-				Declare Sub SetImageLoadProc(proc As XGE_BLOAD_PROC)
-				Declare Sub SetFontLoadProc(proc As XGE_FLOAD_PROC)
-			End Namespace
-		End Namespace
-		
-		
-		/' -------------------------- 输入库 -------------------------- '/
-		Namespace xInput
-			Declare Function KeyStatus(k As Integer) As Integer
-			Declare Sub MouseStatus(x As Integer Ptr, y As Integer Ptr, w As Integer Ptr, b As Integer Ptr)
-			Declare Function JoyStatus(id As Integer, btn As Integer Ptr, a1 As Single Ptr, a2 As Single Ptr, a3 As Single Ptr, a4 As Single Ptr, a5 As Single Ptr, a6 As Single Ptr, a7 As Single Ptr, a8 As Single Ptr) As Integer
-			Declare Function GetMousePos() As Integer
-			Declare Function SetMousePos(x As Integer, y As Integer) As Integer
-			Declare Function GetMouseX() As Integer
-			Declare Function GetMouseY() As Integer
-			Declare Function GetMouseBtn() As Integer
-			Declare Function GetMouseBtnL() As Integer
-			Declare Function GetMouseBtnR() As Integer
-			Declare Function GetMouseBtnM() As Integer
-			Declare Function GetMouseWhell() As Integer
-		End Namespace
-		
-		
-		/' -------------------------- 文件操作库 -------------------------- '/
-		Namespace xFile
-			Declare Function Create(FilePath As ZString Ptr) As Integer
-			Declare Function Open(FilePath As ZString Ptr, OnlyRead As Integer = 0) As HANDLE
-			Declare Function Close(FileHdr As HANDLE) As Integer
-			Declare Function Exists(FilePath As ZString Ptr) As Integer
-			Declare Function hWrite(FileHdr As HANDLE, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
-			Declare Function Write(FilePath As ZString Ptr, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
-			Declare Function hRead(FileHdr As HANDLE, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
-			Declare Function Read(FilePath As ZString Ptr, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
-			Declare Function eRead(FilePath As ZString Ptr, Buffer As Any Ptr Ptr) As UInteger
-			Declare Function hSize(FileHdr As HANDLE) As UInteger
-			Declare Function Size(FilePath As ZString Ptr) As UInteger
-			Declare Function hCut(FileHdr As HANDLE, FileSize As UInteger) As Integer
-			Declare Function Cut(FilePath As ZString Ptr, FileSize As UInteger) As Integer
-			Declare Function Scan(RootDir As ZString Ptr, Filter As ZString Ptr, Attrib As Integer, AttribEx As Integer, Recursive As Integer, CallBack As Function(Path As ZString Ptr, FindData As WIN32_FIND_DATA Ptr, param As Integer) As Integer, param As Integer = 0) As Integer
-		End Namespace
-		
-		Namespace xIni
-			Declare Function GetStr(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr) As ZString Ptr
-			Declare Function GetInt(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr) As Integer
-			Declare Function SetStr(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr, kValue As ZString Ptr) As Integer
-			Declare Function EnumSec(IniFile As ZString Ptr, OutArr As ZString Ptr Ptr Ptr) As Integer
-			Declare Function EnumKey(IniFile As ZString Ptr, IniSec As ZString Ptr, OutArr As ZString Ptr Ptr Ptr) As Integer
-		End Namespace
-	End Extern
-	
-	
-	
-	Extern XGE_EXTERNCLASS
-		Namespace xge
 			/' -------------------------- 图像类 -------------------------- '/
 			Type Surface
-				img As IMAGE Ptr
+				img As FBGFX_IMAGE Ptr
 				
 				' 构造 [空]
 				Declare Constructor()
@@ -629,6 +560,7 @@
 				
 				' 构造 [加载]
 				Declare Constructor(addr As ZString Ptr, size As UInteger = 0)
+				Declare Constructor(addr As WString Ptr, size As UInteger = 0)
 				
 				' 析构
 				Declare Destructor()
@@ -638,9 +570,11 @@
 				
 				' 载入图像
 				Declare Function Load(addr As ZString Ptr, size As UInteger = 0) As Integer
+				Declare Function Load(addr As WString Ptr, size As UInteger = 0) As Integer
 				
 				' 保存图像
 				Declare Function Save(addr As ZString Ptr, tpe As UInteger = 0, flag As Integer = 0) As Integer
+				Declare Function Save(addr As WString Ptr, tpe As UInteger = 0, flag As Integer = 0) As Integer
 				
 				' 释放图像
 				Declare Sub Free()
@@ -705,6 +639,7 @@
 				
 				' 构造 [加载]
 				Declare Constructor(addr As ZString Ptr, size As UInteger = 0)
+				Declare Constructor(addr As WString Ptr, size As UInteger = 0)
 				
 				' 析构
 				Declare Destructor()
@@ -714,6 +649,7 @@
 				
 				' 载入图像
 				Declare Function Load(addr As ZString Ptr, size As UInteger = 0) As Integer
+				Declare Function Load(addr As WString Ptr, size As UInteger = 0) As Integer
 				
 				' 释放图像
 				Declare Sub Free()
@@ -724,6 +660,15 @@
 				Declare Sub PrintRectFull(x As Integer, y As Integer, w As Integer, h As Integer, c As UInteger)
 				Declare Sub PrintCirc(x As Integer, y As Integer, w As Integer, h As Integer, c As UInteger)
 				Declare Sub PrintCircFull(x As Integer, y As Integer, w As Integer, h As Integer, c As UInteger)
+				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As WString Ptr, px As Integer, flag As Integer, c As UInteger, txt As WString Ptr)
+				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As WString Ptr, px As Integer, flag As Integer, c As UInteger, weight As Integer, txt As WString Ptr)
+				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As WString Ptr, px As Integer, flag As Integer, c1 As UInteger, c2 As UInteger, weight As Integer, txt As WString Ptr)
+				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As WString Ptr, px As Integer, flag As Integer, addr As WString Ptr, size As Integer, txt As WString Ptr)
+				Declare Sub PrintImage(x As Integer, y As Integer, addr As WString Ptr, size As Integer = 0)
+				Declare Sub PrintImageDpi(x As Integer, y As Integer, addr As WString Ptr, size As Integer = 0)
+				Declare Sub PrintImageZoom(x As Integer, y As Integer, w As Integer, h As Integer, addr As WString Ptr, size As Integer = 0)
+				Declare Sub PrintImageEx(x As Integer, y As Integer, w As Integer, h As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer, addr As WString Ptr, size As Integer = 0)
+				Declare Sub PrintImageFull(x As Integer, y As Integer, w As Integer, h As Integer, addr As WString Ptr, size As Integer = 0)
 				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As ZString Ptr, px As Integer, flag As Integer, c As UInteger, txt As ZString Ptr)
 				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As ZString Ptr, px As Integer, flag As Integer, c As UInteger, weight As Integer, txt As ZString Ptr)
 				Declare Sub PrintText(x As Integer, y As Integer, w As Integer, h As Integer, f As ZString Ptr, px As Integer, flag As Integer, c1 As UInteger, c2 As UInteger, weight As Integer, txt As ZString Ptr)
@@ -745,12 +690,14 @@
 				
 				' 构造 [加载]
 				Declare Constructor(tpe As Integer, flag As Integer, addr As ZString Ptr, size As UInteger = 0, max As Integer = 65535)
+				Declare Constructor(tpe As Integer, flag As Integer, addr As WString Ptr, size As UInteger = 0, max As Integer = 65535)
 				
 				' 析构
 				Declare Destructor()
 				
 				' 载入声音
 				Declare Function Load(tpe As Integer, flag As Integer, addr As ZString Ptr, size As UInteger = 0, max As Integer = 65535) As Integer
+				Declare Function Load(tpe As Integer, flag As Integer, addr As WString Ptr, size As UInteger = 0, max As Integer = 65535) As Integer
 				
 				' 释放声音
 				Declare Sub Free()
@@ -767,45 +714,195 @@
 				Protected:
 					pTpe As Integer
 			End Type
+			
+			
+			/' -------------------------- 字体驱动结构体 -------------------------- '/
+			Type FontDriver
+				
+				Font As Any Ptr
+				
+				FontSizeInt As Integer
+				WidthInt As Integer
+				HeightInt As Integer
+				
+				FontSizeFloat As Single
+				WidthFloat As Single
+				HeightFloat As Single
+				
+				Tag As Integer
+				TagFloat As Single
+				TagPtr As Any Ptr
+				
+				' 必要的接口
+				DrawWordW As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
+				DrawWordA As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
+				WordInfoW As Sub(fd As FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
+				WordInfoA As Sub(fd As FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
+				
+				' 清理字库(删除字库的时候用，比如释放内存之类的)
+				FreeFont As Sub(fd As FontDriver Ptr)
+				
+				' 设置字体大小
+				SetFontSize As Sub(fd As FontDriver Ptr, size As UInteger)
+				
+				' 测量文字的宽度和高度
+				GetTextWidthW_Fast As Function(fd As FontDriver Ptr, txt As WString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As Integer
+				GetTextWidthA_Fast As Function(fd As FontDriver Ptr, txt As ZString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As Integer
+				GetTextRectW_Fast As Function(fd As FontDriver Ptr, txt As WString Ptr, txtLen As UInteger, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xge_Rect
+				GetTextRectA_Fast As Function(fd As FontDriver Ptr, txt As ZString Ptr, txtLen As UInteger, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xge_Rect
+				
+				' 根据坐标或宽度反推文字的位置
+				WidthToPosW_Fast As Function(fd As FontDriver Ptr, cw As Integer, txt As WString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As UInteger
+				WidthToPosA_Fast As Function(fd As FontDriver Ptr, cw As Integer, txt As ZString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As UInteger
+				
+				' 输出一行文字
+				DrawLineW_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As WString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, wd As Integer) As xge_Rect
+				DrawLineA_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, wd As Integer) As xge_Rect
+				
+				' 输出一些文字到一个矩形范围内 [ align:对其方式、wd:字间距、ld:行间距 ] [暂未实现自动换行功能]
+				DrawRectW_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As WString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xge_Rect
+				DrawRectA_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xge_Rect
+				
+			End Type
+			
+			
+			/' -------------------------- 文字渲染库 -------------------------- '/
+			Namespace Text
+				
+				' 加载字体 [ 目前支持 xrf字体 和 truetype字体 ] [ ttc字体包加载时通过param参数指定加载的字体ID ]
+				Declare Function LoadFontA(Addr As ZString Ptr, iSize As UInteger, param As Any Ptr = NULL) As UInteger
+				Declare Function LoadFontW(Addr As WString Ptr, iSize As UInteger, param As Any Ptr = NULL) As UInteger
+				
+				' 移除字体 [移除字体后字体编号会变动，慎用]
+				Declare Function RemoveFont(idx As UInteger) As Integer
+				
+				' 取得已加载的字体数量
+				Declare Function FontCount() As Integer
+				
+				' 设置字体大小
+				Declare Sub SetFontSize(idx As UInteger, size As UInteger)
+				
+				' 获取字体大小 [字体高度像素]
+				Declare Function GetFontSize(idx As UInteger) As Integer
+				
+				' 测量文字的宽度和高度
+				Declare Function GetTextWidthW(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
+				Declare Function GetTextWidthA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
+				Declare Function GetTextRectW(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect
+				Declare Function GetTextRectA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect
+				
+				' 根据坐标或宽度反推文字的位置
+				Declare Function WidthToPosW(cw As Integer, txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
+				Declare Function WidthToPosA(cw As Integer, txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
+				
+				' 写字
+				Declare Function DrawW(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xge_Rect
+				Declare Function DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xge_Rect
+				
+				' 矩形格式化写字 [ align:对其方式、wd:字间距、ld:行间距 ]
+				Declare Function DrawRectW(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect
+				Declare Function DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xge_Rect
+				
+			End Namespace
+			
+			
+			
+			/' -------------------------- 场景库 -------------------------- '/
+			Namespace Scene
+				Declare Function Start(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer
+				Declare Function Cut(proc As XGE_SCENE_PROC, lfps As UInteger = 0, sync As Integer = FALSE, param As Integer = 0) As Integer
+				Declare Sub Stop()
+				Declare Sub StopAll()
+				Declare Sub Pause(flag As Integer = XGE_PAUSE_DRAW Or XGE_PAUSE_FRAME)
+				Declare Function State() As Integer
+				Declare Sub Resume()
+				Declare Function FPS() As UInteger
+				Declare Sub SetFPS(nv As UInteger)
+				Declare Function Stack() As xStack Ptr
+			End Namespace
+			
+			
+			
+			/' -------------------------- 挂钩库 -------------------------- '/
+			Namespace Hook
+				Declare Sub SetDelayProc(proc As XGE_DELAY_PROC)
+				Declare Sub SetEventProc(proc As XGE_EVENT_PROC)
+				Declare Sub SetSceneProc(proc As XGE_SCENE_PROC)
+				Declare Sub SetImageLoadProc(proc As XGE_BLOAD_PROC)
+				Declare Sub SetFontLoadProc(proc As XGE_FLOAD_PROC)
+			End Namespace
+			
+			
+			
+			/' -------------------------- 辅助库 -------------------------- '/
+			Namespace Aux
+				Declare Function ScreenShot() As xge.Surface Ptr
+				Declare Function GetPixel(sf As xge.Surface Ptr, x As Integer, y As Integer) As UInteger
+				Declare Function RGB2BGR(c As UInteger) As UInteger
+				Declare Sub SetTitleA(title As ZString Ptr)
+				Declare Sub SetTitleW(title As WString Ptr)
+				Declare Sub SetView(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, f As Integer)
+				Declare Sub ReSetView()
+				Declare Sub SetCoodr(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer = 0)
+				Declare Sub ReSetCoodr()
+				Declare Function MapCoodr(coodr As Integer, tpe As Integer) As Integer
+				Declare Function LockMouse() As Integer
+				Declare Function UnLockMouse() As Integer
+				Declare Function HideCursor() As Integer
+				Declare Function ShowCursor() As Integer
+			End Namespace
+			
+			
+			
+			/' -------------------------- 图形库 -------------------------- '/
+			Namespace Shape
+				Declare Sub Pixel(sf As xge.Surface Ptr, x As Integer, y As Integer, c As Integer)
+				Declare Sub Lines(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
+				Declare Sub LinesEx(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer)
+				Declare Sub Rect(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
+				Declare Sub RectEx(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer)
+				Declare Sub RectFull(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
+				Declare Sub Circ(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer)
+				Declare Sub CircFull(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer)
+				Declare Sub CircEx(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, a As Single)
+				Declare Sub CircFullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, a As Single)
+				Declare Sub CircArc(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, s As Integer, e As Integer, a As Single)
+				Declare Sub Full(sf As xge.Surface Ptr, x As Integer, y As Integer, c As Integer, f As Integer)
+				Declare Sub FullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, p As Any Ptr, f As Integer)
+			End Namespace
+			
 		End Namespace
+		
+		
+		
+		/' -------------------------- 输入库 -------------------------- '/
+		Namespace xInput
+			Declare Function KeyStatus(k As Integer) As Integer
+			Declare Sub MouseStatus(x As Integer Ptr, y As Integer Ptr, w As Integer Ptr, b As Integer Ptr)
+			Declare Function JoyStatus(id As Integer, btn As Integer Ptr, a1 As Single Ptr, a2 As Single Ptr, a3 As Single Ptr, a4 As Single Ptr, a5 As Single Ptr, a6 As Single Ptr, a7 As Single Ptr, a8 As Single Ptr) As Integer
+			Declare Function GetMousePos() As Integer
+			Declare Function SetMousePos(x As Integer, y As Integer) As Integer
+			Declare Function GetMouseX() As Integer
+			Declare Function GetMouseY() As Integer
+			Declare Function GetMouseBtn() As Integer
+			Declare Function GetMouseBtnL() As Integer
+			Declare Function GetMouseBtnR() As Integer
+			Declare Function GetMouseBtnM() As Integer
+			Declare Function GetMouseWhell() As Integer
+		End Namespace
+		
 		
 		
 		/' -------------------------- 界面库 -------------------------- '/
 		Namespace xui
 			
-			' 点数据结构
-			Type Coord
-				x As Integer
-				y As Integer
-			End Type
-			
-			' 矩形数据结构
-			Type Rect
-				Union
-					x As Integer
-					LeftOffset As Integer
-				End Union
-				Union
-					y As Integer
-					TopOffset As Integer
-				End Union
-				Union
-					w As Integer
-					RightOffset As Integer
-				End Union
-				Union
-					h As Integer
-					BottomOffset As Integer
-				End Union
-			End Type
-			
 			
 			' 布局数据结构
 			Type Layout
 				Ruler As Integer			' 布局尺度 [ 参考定义前缀 : XUI_LAYOUT_RULER ]
-				RectBox As xui.Rect			' 外框大小 [ 单位是像素，浮动布局时这个数据无效 ]
-				Rect As xui.Rect			' 最终坐标 [ 这个数据会在运行时产生 ]
-				ScreenCoord As xui.Coord	' 在屏幕上的最终坐标 [ 以游戏左上角为起点，这个数据会在运行时产生 ]
+				RectBox As xge_Rect			' 外框大小 [ 单位是像素，浮动布局时这个数据无效 ]
+				Rect As xge_Rect			' 最终坐标 [ 这个数据会在运行时产生 ]
+				ScreenCoord As xge_Coord	' 在屏幕上的最终坐标 [ 以游戏左上角为起点，这个数据会在运行时产生 ]
 				w As Integer				' 布局宽度
 				h As Integer				' 布局高度
 			End Type
@@ -824,65 +921,6 @@
 				FillColor As UInteger
 				TextColor As UInteger
 				Hide As Integer
-			End Type
-			
-			
-			' 列表项结构体
-			Type List_Item_BasicStruct							' 列表项结构体 [基础结构]
-				Checked As Integer								' 选中状态
-				Tag As Integer									' 附加数据
-				Text As ZString Ptr								' 显示文本
-				TextColor As UInteger							' 文本颜色
-				UserData As Any Ptr								' 用户自定义数据开始的位置 [这个数据是不存在的，用于提取指针]
-			End Type
-			
-			' 列表项集合管理器
-			Type List_ItemSet Extends xBsmm						' 列表项集合管理器
-				Parent As Any Ptr								' 父元素指针
-				
-				' 构造函数
-				Declare Constructor()
-				
-				' 列表项数量
-				Declare Function Count() As UInteger
-				
-				' 添加列表项
-				Declare Function Append(sVal As ZString Ptr, Tag As Integer = 0) As UInteger
-				Declare Function Insert(iPos As UInteger, sVal As ZString Ptr, Tag As Integer = 0) As UInteger
-				
-				' 删除列表项
-				Declare Function Remove(iPos As UInteger) As Integer
-				Declare Sub Clear()
-				
-				' 获取/设置 列表项的标题
-				Declare Property Text(iPos As UInteger) As ZString Ptr
-				Declare Property Text(iPos As UInteger, sVal As ZString Ptr)
-				
-				' 获取/设置 列表项的附加数据
-				Declare Property Tag(iPos As UInteger) As Integer
-				Declare Property Tag(iPos As UInteger, iVal As Integer)
-				
-				' 选中列表项
-				Declare Property Selected(iPos As UInteger) As Integer
-				Declare Property Selected(iPos As UInteger, iStk As Integer)
-				
-				' 统计选中列表项的数量
-				Declare Function SelectCount() As UInteger
-				
-				' 选择所有列表项
-				Declare Sub SelectAll()
-				
-				' 取消所有选中的列表项
-				Declare Sub SelectClear()
-				
-				' 反选所有列表项
-				Declare Sub SelectInverse()
-				
-				' 设置用户自定义数据结构大小 [默认为0，只能在还没有列表项时调用]
-				Declare Sub SetUserDataSize(bc As UInteger)
-				
-				' 获取用户自定义数据指针
-				Declare Function UserData(iPos As UInteger) As Any Ptr
 			End Type
 			
 			
@@ -921,6 +959,65 @@
 				OnUserDraw As Sub(ele As Any Ptr) = NULL
 				' 大小改变事件
 				OnSize As Sub(ele As Any Ptr) = NULL
+			End Type
+			
+			
+			' 列表项结构体
+			Type List_Item_BasicStruct							' 列表项结构体 [基础结构]
+				Checked As Integer								' 选中状态
+				Tag As Integer									' 附加数据
+				Text As WString Ptr								' 显示文本
+				TextColor As UInteger							' 文本颜色
+				UserData As Any Ptr								' 用户自定义数据开始的位置 [这个数据是不存在的，用于提取指针]
+			End Type
+			
+			' 列表项集合管理器
+			Type List_ItemSet Extends xBsmm						' 列表项集合管理器
+				Parent As Any Ptr								' 父元素指针
+				
+				' 构造函数
+				Declare Constructor()
+				
+				' 列表项数量
+				Declare Function Count() As UInteger
+				
+				' 添加列表项
+				Declare Function Append(sVal As WString Ptr, Tag As Integer = 0) As UInteger
+				Declare Function Insert(iPos As UInteger, sVal As WString Ptr, Tag As Integer = 0) As UInteger
+				
+				' 删除列表项
+				Declare Function Remove(iPos As UInteger) As Integer
+				Declare Sub Clear()
+				
+				' 获取/设置 列表项的标题
+				Declare Property Text(iPos As UInteger) As WString Ptr
+				Declare Property Text(iPos As UInteger, sVal As WString Ptr)
+				
+				' 获取/设置 列表项的附加数据
+				Declare Property Tag(iPos As UInteger) As Integer
+				Declare Property Tag(iPos As UInteger, iVal As Integer)
+				
+				' 选中列表项
+				Declare Property Selected(iPos As UInteger) As Integer
+				Declare Property Selected(iPos As UInteger, iStk As Integer)
+				
+				' 统计选中列表项的数量
+				Declare Function SelectCount() As UInteger
+				
+				' 选择所有列表项
+				Declare Sub SelectAll()
+				
+				' 取消所有选中的列表项
+				Declare Sub SelectClear()
+				
+				' 反选所有列表项
+				Declare Sub SelectInverse()
+				
+				' 设置用户自定义数据结构大小 [默认为0，只能在还没有列表项时调用]
+				Declare Sub SetUserDataSize(bc As UInteger)
+				
+				' 获取用户自定义数据指针
+				Declare Function UserData(iPos As UInteger) As Any Ptr
 			End Type
 			
 			
@@ -985,29 +1082,29 @@
 			
 			' 元素基类
 			Type Element
-				ClassID As Integer					' 类识别编号，仅用于识别，没有其他意义 0x10000 以内的编号为引擎预留 [0=Element]
-				LayoutMode As Integer				' 布局模式 [ 参考定义前缀 : XUI_LAYOUT ]
-				Layout As xui.Layout				' 布局数据
-				ClassEvent As ElementEvent			' 事件
-				Childs As ElementList				' 子元素数据
-				Parent As Element Ptr = NULL		' 父元素指针
-				Visible As Integer = -1				' 是否显示 [参与布局和绘制的开关] [使用布局的话修改后必须重新应用布局]
-				DrawBuffer As xge.Surface Ptr		' 绘制缓冲区
-				NeedRedraw As Integer = -1			' 需要重绘标记
-				Identifier As ZString * 32			' 元素ID [相当于引擎附加数据，用户可以将ID映射到脚本语言中处理事件]
-				DrawRange As Integer = 0			' 绘制元素范围
-				TagInt As Integer					' 附加数据
-				TagPtr As Any Ptr					' 附加数据
+				ClassID As Integer						' 类识别编号，仅用于识别，没有其他意义 0x10000 以内的编号为引擎预留 [0=Element]
+				LayoutMode As Integer					' 布局模式 [ 参考定义前缀 : XUI_LAYOUT ]
+				Layout As xui.Layout					' 布局数据
+				ClassEvent As ElementEvent				' 事件
+				Childs As ElementList					' 子元素数据
+				Parent As Element Ptr = NULL			' 父元素指针
+				Visible As Integer = -1					' 是否显示 [参与布局和绘制的开关] [使用布局的话修改后必须重新应用布局]
+				DrawBuffer As xge.Surface Ptr			' 绘制缓冲区
+				NeedRedraw As Integer = -1				' 需要重绘标记
+				Identifier As WString * XGE_XUI_IDSIZE	' 元素ID [相当于引擎附加数据，用户可以将ID映射到脚本语言中处理事件]
+				DrawRange As Integer = 0				' 绘制元素范围
+				TagInt As Integer						' 附加数据
+				TagPtr As Any Ptr						' 附加数据
 				
 				' 构造函数
 				Declare Constructor()
-				Declare Constructor(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL)
+				Declare Constructor(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As WString Ptr = NULL)
 				
 				' 析构函数
 				Declare Destructor()
 				
 				' 填写基础数据
-				Declare Sub InitElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL)
+				Declare Sub InitElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As WString Ptr = NULL)
 				
 				' 应用布局
 				Declare Sub LayoutApply()
@@ -1025,8 +1122,8 @@
 			
 			' 按钮类
 			Type Button Extends xui.Element
-				Text As ZString Ptr								' 按钮的标题
-				TextOffset As xui.Coord							' 按钮标题坐标偏移
+				Text As WString Ptr								' 按钮的标题
+				TextOffset As xge_Coord							' 按钮标题坐标偏移
 				TextFont As UInteger							' 按钮标题的字体
 				
 				Mode As Integer									' 工作模式 [1=复选框、2=单选框、其他=无状态按钮]
@@ -1056,8 +1153,8 @@
 			
 			' 标签类
 			Type Label Extends xui.Element
-				Text As ZString Ptr								' 标题
-				TextOffset As xui.Coord							' 标题显示偏移
+				Text As WString Ptr								' 标题
+				TextOffset As xge_Coord							' 标题显示偏移
 				TextColor As UInteger							' 标题颜色
 				TextFont As UInteger							' 标题字体
 				TextAlign As Integer							' 标题对齐方式
@@ -1069,7 +1166,7 @@
 			
 			' 容器类
 			Type Frame Extends xui.Element
-				Text As ZString Ptr								' 标题
+				Text As WString Ptr								' 标题
 				TextColor As UInteger							' 标题颜色
 				TextFont As UInteger							' 标题字体
 				BackStyle As xui.BackStyle_Struct				' 背景样式
@@ -1079,7 +1176,7 @@
 			' 图像类
 			Type Image Extends xui.Element
 				Image As xge.Surface Ptr						' 图像对象指针
-				ImageOffset As xui.Coord						' 图像绘制偏移
+				ImageOffset As xge_Coord						' 图像绘制偏移
 				BorderWidth As UInteger							' 边框宽度
 				BorderColor As UInteger							' 边框颜色
 			End Type
@@ -1130,7 +1227,7 @@
 			
 			' 滚动视图类
 			Type ScrollView Extends xui.Element
-				View As xui.Rect								' 视图 [ x+y=视图绘制位置、w+h=视图完整大小 ]
+				View As xge_Rect								' 视图 [ x+y=视图绘制位置、w+h=视图完整大小 ]
 				ScrollBar As Integer							' 滚动条显示状态
 				BorderWidth As UInteger							' 边框宽度
 				BorderColor As UInteger							' 边框颜色
@@ -1229,8 +1326,8 @@
 				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
 				private_ViewX As UInteger						' 视图横坐标 [用于处理输入文字超出范围的情况] [暂未实现]
 				private_Buffer As xStringBuffer					' 文字缓冲区
-				private_Offset As xui.Coord						' 文字绘制偏移 [用于排版、计算坐标]
-				private_Caret As xui.Rect						' 插入符的像素位置和大小
+				private_Offset As xge_Coord						' 文字绘制偏移 [用于排版、计算坐标]
+				private_Caret As xge_Rect						' 插入符的像素位置和大小
 				private_CaretTick As UInteger					' 插入符上次闪烁的时间
 				private_CaretShow As Integer					' 插入符显示状态
 				private_CaretPos As UInteger					' 插入符位置
@@ -1245,7 +1342,7 @@
 			' 窗口类
 			Type Window Extends xui.Element
 				
-				Text As ZString Ptr								' 标题
+				Text As WString Ptr								' 标题
 				TextColor As UInteger							' 标题颜色
 				TextFont As UInteger							' 标题字体
 				BackStyle As xui.BackStyle_Struct				' 背景样式
@@ -1259,8 +1356,8 @@
 				
 				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
 				private_DragMode As Integer						' 是否开始拖动
-				private_Drag As xui.Coord						' 拖动窗口时点击的坐标
-				private_DragWinPos As xui.Coord					' 拖动窗口时窗口的坐标
+				private_Drag As xge_Coord						' 拖动窗口时点击的坐标
+				private_DragWinPos As xge_Coord					' 拖动窗口时窗口的坐标
 			End Type
 			
 			
@@ -1293,56 +1390,56 @@
 			Declare Sub LayoutApply()
 			
 			' 创建基础元素
-			Declare Function CreateElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As ZString Ptr = NULL) As xui.Element Ptr
+			Declare Function CreateElement(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sIdentifier As WString Ptr = NULL) As xui.Element Ptr
 			
 			' 创建标签元素
-			Declare Function CreateLabel(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.Label Ptr
+			Declare Function CreateLabel(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.Label Ptr
 			
 			' 创建容器元素
-			Declare Function CreateFrame(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As ZString Ptr = NULL, sIdentifier As ZString Ptr = NULL) As xui.Frame Ptr
+			Declare Function CreateFrame(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As WString Ptr = NULL, sIdentifier As WString Ptr = NULL) As xui.Frame Ptr
 			
 			' 创建图像元素
-			Declare Function CreateImage(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, pImage As xge.Surface Ptr = NULL, sIdentifier As ZString Ptr = NULL) As xui.Image Ptr
+			Declare Function CreateImage(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, pImage As xge.Surface Ptr = NULL, sIdentifier As WString Ptr = NULL) As xui.Image Ptr
 			
 			' 创建按钮元素
-			Declare Function CreateButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
+			Declare Function CreateButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr
 			
 			' 创建选择按钮元素
-			Declare Function CreateCheckButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
-			Declare Function CreateRadioButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
+			Declare Function CreateCheckButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr
+			Declare Function CreateRadioButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr
 			
 			' 创建复选框元素
-			Declare Function CreateCheckBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
+			Declare Function CreateCheckBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr
 			
 			' 创建单选框元素
-			Declare Function CreateRadioBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
+			Declare Function CreateRadioBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr
 			
 			' 创建超链接元素
-			Declare Function CreateHyperLink(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr
+			Declare Function CreateHyperLink(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr
 			
 			' 创建纵向滚动条
-			Declare Function CreateVScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 18, h As Integer = 200, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr
+			Declare Function CreateVScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 18, h As Integer = 200, sIdentifier As WString Ptr = NULL) As xui.ScrollBar Ptr
 			
 			' 创建横向滚动条
-			Declare Function CreateHScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 18, sIdentifier As ZString Ptr = NULL) As xui.ScrollBar Ptr
+			Declare Function CreateHScrollBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 18, sIdentifier As WString Ptr = NULL) As xui.ScrollBar Ptr
 			
 			' 创建滚动视图
-			Declare Function CreateScrollView(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 200, vw As Integer = 200, vh As Integer = 200, sIdentifier As ZString Ptr = NULL) As xui.ScrollView Ptr
+			Declare Function CreateScrollView(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 200, h As Integer = 200, vw As Integer = 200, vh As Integer = 200, sIdentifier As WString Ptr = NULL) As xui.ScrollView Ptr
 			
 			' 创建列表框
-			Declare Function CreateListBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 120, h As Integer = 200, TextColor As UInteger = &HFF000000, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.ListBox Ptr
+			Declare Function CreateListBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 120, h As Integer = 200, TextColor As UInteger = &HFF000000, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.ListBox Ptr
 			
 			' 创建行编辑框
-			Declare Function CreateLineEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.LineEdit Ptr
+			Declare Function CreateLineEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.LineEdit Ptr
 			
 			' 创建密码编辑框
-			Declare Function CreatePassWordEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.LineEdit Ptr
+			Declare Function CreatePassWordEdit(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.LineEdit Ptr
 			
 			' 创建进度条
-			Declare Function CreateProgressBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sIdentifier As ZString Ptr = NULL) As xui.ProgressBar Ptr
+			Declare Function CreateProgressBar(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sIdentifier As WString Ptr = NULL) As xui.ProgressBar Ptr
 			
 			' 创建窗口
-			Declare Function CreateBaseWindow(x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As ZString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.Window Ptr
+			Declare Function CreateBaseWindow(x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As WString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.Window Ptr
 			
 		End Namespace
 		
@@ -1351,30 +1448,36 @@
 		/' -------------------------- 网络库 -------------------------- '/
 		Namespace xSock
 			
-			Type ServerEvent
-				recv As Sub(client As HANDLE, pack As Any Ptr, size As UInteger)
-				send As Sub(client As HANDLE, code As Integer)
-				Accept As Sub(client As HANDLE)
-				Disconn As Sub(client As HANDLE)
+			Type Event_Server
+				OnRecv As Sub(client As HANDLE, pack As Any Ptr, size As UInteger)
+				OnSend As Sub(client As HANDLE, code As Integer)
+				OnAccept As Sub(client As HANDLE)
+				OnDisconn As Sub(client As HANDLE)
 			End Type
 			
-			Type ClientEvent
-				recv As Sub(pack As Any Ptr, size As UInteger)
-				send As Sub(code As Integer)
-				Disconn As Sub()
+			Type Event_Client
+				OnRecv As Sub(pack As Any Ptr, size As UInteger)
+				OnSend As Sub(code As Integer)
+				OnDisconn As Sub()
+			End Type
+			
+			Type Event_UDP
+				OnRecv As Sub(pack As Any Ptr, size As UInteger, ip As Any Ptr, port As Integer)
+				OnSend As Sub(code As Integer)
 			End Type
 			
 			Type xServer
 				Section As CRITICAL_SECTION
 				
 				' 事件
-				Event As ServerEvent
+				Event As Event_Server
 				
 				' 析构
 				Declare Destructor()
 				
 				' 创建
 				Declare Function Create(ip As ZString Ptr, port As UShort, max As UInteger = 1000, ThreadCountt As UInteger = 1) As Integer
+				Declare Function Create(ip As WString Ptr, port As UShort, max As UInteger = 1000, ThreadCountt As UInteger = 1) As Integer
 				
 				' 销毁
 				Declare Sub Destroy()
@@ -1390,6 +1493,7 @@
 				
 				' 获取客户端信息
 				Declare Function GetClientInfo(client As HANDLE, ip As ZString Ptr Ptr, port As UInteger Ptr) As Integer
+				Declare Function GetClientInfo(client As HANDLE, ip As WString Ptr Ptr, port As UInteger Ptr) As Integer
 				
 				' 内部事件函数
 				#Ifdef XGE_SOURCE_BUILD
@@ -1397,34 +1501,35 @@
 					Declare Sub DisconnProc(client As HANDLE)
 				#EndIf
 				
-				Private:
-					h_Socket As HANDLE
-					c_Max As UInteger
-					c_Conn As UInteger
-					c_Enter As UInteger
-					c_Leave As UInteger
-					c_List As HANDLE Ptr
-					c_FindCursor As UInteger
-					c_AddIndex As UInteger
-					
-					' 添加到客户端列表
-					Declare Function AddClientList(client As HANDLE) As Integer
-					
-					' 从客户端列表删除
-					Declare Function DelClientList(client As HANDLE) As Integer
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
+				h_Socket As HANDLE
+				c_Max As UInteger
+				c_Conn As UInteger
+				c_Enter As UInteger
+				c_Leave As UInteger
+				c_List As HANDLE Ptr
+				c_FindCursor As UInteger
+				c_AddIndex As UInteger
+				
+				' 添加到客户端列表
+				Declare Function AddClientList(client As HANDLE) As Integer
+				
+				' 从客户端列表删除
+				Declare Function DelClientList(client As HANDLE) As Integer
 			End Type
 	
 			Type xClient
 				Section As CRITICAL_SECTION
 				
 				' 事件
-				Event As ClientEvent
+				Event As Event_Client
 				
 				' 析构
 				Declare Destructor()
 				
 				' 连接
 				Declare Function Connect(ip As ZString Ptr, port As UShort) As Integer
+				Declare Function Connect(ip As WString Ptr, port As UShort) As Integer
 				
 				' 断开
 				Declare Sub Close()
@@ -1435,20 +1540,20 @@
 				' 发送
 				Declare Function Send(pack As Any Ptr, size As UInteger, sync As Integer = TRUE) As Integer
 				
-				Private:
-					h_Client As HANDLE
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
+				h_Client As HANDLE
 			End Type
 			
 			Type xUDP
-				' 事件函数
-				RecvEvent As Sub(pack As Any Ptr, size As UInteger, ip As ZString Ptr, port As Integer)
-				SendEvent As Sub(code As Integer)
+				' 事件
+				Event As Event_UDP
 				
 				' 析构
 				Declare Destructor()
 				
 				' 创建
-				Declare Function Create(ip As ZString Ptr, port As UShort, ThreadCountt As UInteger = 1) As Integer
+				Declare Function Create(ip As ZString Ptr, port As UShort, ThreadCountt As UInteger = 1) As HANDLE
+				Declare Function Create(ip As WString Ptr, port As UShort, ThreadCountt As UInteger = 1) As HANDLE
 				
 				' 销毁
 				Declare Sub Destroy()
@@ -1457,157 +1562,16 @@
 				Declare Function Status() As Integer
 				
 				' 发送
-				Declare Function Send(pack As Any Ptr, size As UInteger, ip As ZString Ptr, port As UShort, sync As Integer = TRUE) As Integer
+				Declare Function send(pack As Any Ptr, size As UInteger, ip As ZString Ptr, port As UShort, sync As Integer = TRUE) As Integer
+				Declare Function send(pack As Any Ptr, size As UInteger, ip As WString Ptr, port As UShort, sync As Integer = TRUE) As Integer
 				
-				Private:
-					h_Socket As HANDLE
+				' 不公开的属性 [但我没有隐藏这些细节，方便二次开发]
+				h_Socket As HANDLE
+				private_Unicode As Integer
 			End Type
 			
 		End Namespace
 		
-	End Extern
-	
-	
-	
-	Namespace xge
-		
-		Namespace Text
-			
-			/' -------------------------- 字体驱动结构体 -------------------------- '/
-			Type FontDriver
-				
-				Font As Any Ptr
-				
-				FontSizeInt As Integer
-				WidthInt As Integer
-				HeightInt As Integer
-				
-				FontSizeFloat As Single
-				WidthFloat As Single
-				HeightFloat As Single
-				
-				Tag As Integer
-				TagFloat As Single
-				TagPtr As Any Ptr
-				
-				' 必要的接口
-				DrawWord As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
-				DrawWordA As Sub(fd As FontDriver Ptr, sf As xge.Surface Ptr, px As Integer, py As Integer, w As Integer, h As Integer, iCode As UInteger, iColor As Integer, Style As Integer)
-				WordInfo As Sub(fd As FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
-				WordInfoA As Sub(fd As FontDriver Ptr, iCode As Integer, Style As Integer, w As Integer Ptr, h As Integer Ptr)
-				
-				' 清理字库(删除字库的时候用，比如释放内存之类的)
-				FreeFont As Sub(fd As FontDriver Ptr)
-				
-				' 设置字体大小
-				SetFontSize As Sub(fd As FontDriver Ptr, size As UInteger)
-				
-				' 测量文字的宽度和高度
-				GetTextWidth_Fast As Function(fd As FontDriver Ptr, txt As WString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As Integer
-				GetTextWidthA_Fast As Function(fd As FontDriver Ptr, txt As ZString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As Integer
-				GetTextRect_Fast As Function(fd As FontDriver Ptr, txt As WString Ptr, txtLen As UInteger, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
-				GetTextRectA_Fast As Function(fd As FontDriver Ptr, txt As ZString Ptr, txtLen As UInteger, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
-				
-				' 根据坐标或宽度反推文字的位置
-				WidthToPos_Fast As Function(fd As FontDriver Ptr, cw As Integer, txt As WString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As UInteger
-				WidthToPosA_Fast As Function(fd As FontDriver Ptr, cw As Integer, txt As ZString Ptr, txtLen As UInteger, Style As Integer, wd As Integer) As UInteger
-				
-				' 输出一行文字
-				DrawLine_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As WString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, wd As Integer) As xui.Rect
-				DrawLineA_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, wd As Integer) As xui.Rect
-				
-				' 输出一些文字到一个矩形范围内 [ align:对其方式、wd:字间距、ld:行间距 ] [暂未实现自动换行功能]
-				DrawRect_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As WString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
-				DrawRectA_Fast As Function(fd As FontDriver Ptr, sf As xge.Surface Ptr, x As Integer, y As Integer, w As Integer, h As Integer, txt As ZString Ptr, txtLen As UInteger, iColor As Integer, Style As Integer, align As Integer, wd As Integer, ld As Integer) As xui.Rect
-				
-			End Type
-			
-		End Namespace
-		
-	End Namespace
-	
-	
-	
-	Extern XGE_EXTERNMODULE
-		
-		Namespace xge
-			
-			/' -------------------------- 文字渲染库 -------------------------- '/
-			Namespace Text
-				
-				' 加载字体 [ 目前支持 xrf字体 和 truetype字体 ] [ ttc字体包加载时通过param参数指定加载的字体ID ]
-				Declare Function LoadFont(Addr As ZString Ptr, iSize As UInteger, param As Any Ptr = NULL) As UInteger
-				
-				' 移除字体 [移除字体后字体编号会变动，慎用]
-				Declare Function RemoveFont(idx As UInteger) As Integer
-				
-				' 取得已加载的字体数量
-				Declare Function FontCount() As Integer
-				
-				' 设置字体大小
-				Declare Sub SetFontSize(idx As UInteger, size As UInteger)
-				
-				' 获取字体大小 [字体高度像素]
-				Declare Function GetFontSize(idx As UInteger) As Integer
-				
-				' 测量文字的宽度和高度
-				Declare Function GetTextWidth(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
-				Declare Function GetTextWidthA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As Integer
-				Declare Function GetTextRect(txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
-				Declare Function GetTextRectA(txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
-				
-				' 根据坐标或宽度反推文字的位置
-				Declare Function WidthToPos(cw As Integer, txt As WString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
-				Declare Function WidthToPosA(cw As Integer, txt As ZString Ptr, txtLen As UInteger = 0, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As UInteger
-				
-				' 写字
-				Declare Function Draw(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As WString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xui.Rect
-				Declare Function DrawA(sf As xge.Surface Ptr, px As Integer, py As Integer, txt As ZString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, wd As Integer = 0) As xui.Rect
-				
-				' 矩形格式化写字 [ align:对其方式、wd:字间距、ld:行间距 ]
-				Declare Function DrawRect(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As WString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
-				Declare Function DrawRectA(sf As xge.Surface Ptr, px As Integer, py As Integer, pw As Integer, ph As Integer, txt As ZString Ptr, txtLen As UInteger = 0, iColor As UInteger = &HFFFFFFFF, fontid As Integer = 1, Style As Integer = 0, align As Integer = XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE, wd As Integer = 0, ld As Integer = 0) As xui.Rect
-				
-			End Namespace
-			
-			
-			/' -------------------------- 辅助库 -------------------------- '/
-			Namespace Aux
-				Declare Function ScreenShot() As xge.Surface Ptr
-				Declare Function GetPixel(sf As xge.Surface Ptr, x As Integer, y As Integer) As UInteger
-				Declare Function RGB2BGR(c As UInteger) As UInteger
-				Declare Sub SetTitle(title As ZString Ptr)
-				Declare Sub SetView(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, f As Integer)
-				Declare Sub ReSetView()
-				Declare Sub SetCoodr(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer = 0)
-				Declare Sub ReSetCoodr()
-				Declare Function MapCoodr(coodr As Integer, tpe As Integer) As Integer
-				Declare Function LockMouse() As Integer
-				Declare Function UnLockMouse() As Integer
-				Declare Function HideCursor() As Integer
-				Declare Function ShowCursor() As Integer
-			End Namespace
-			
-			
-			/' -------------------------- 图形库 -------------------------- '/
-			Namespace Shape
-				Declare Sub Pixel(sf As xge.Surface Ptr, x As Integer, y As Integer, c As Integer)
-				Declare Sub Lines(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
-				Declare Sub LinesEx(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer)
-				Declare Sub Rect(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
-				Declare Sub RectEx(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, s As Integer)
-				Declare Sub RectFull(sf As xge.Surface Ptr, x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer)
-				Declare Sub Circ(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer)
-				Declare Sub CircFull(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer)
-				Declare Sub CircEx(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, a As Single)
-				Declare Sub CircFullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, a As Single)
-				Declare Sub CircArc(sf As xge.Surface Ptr, x As Integer, y As Integer, r As Integer, c As Integer, s As Integer, e As Integer, a As Single)
-				Declare Sub Full(sf As xge.Surface Ptr, x As Integer, y As Integer, c As Integer, f As Integer)
-				Declare Sub FullEx(sf As xge.Surface Ptr, x As Integer, y As Integer, p As ZString Ptr, f As Integer)
-			End Namespace
-			
-			
-		End Namespace
 	End Extern
 	
 	
@@ -1626,9 +1590,6 @@
 	Extern XGE_EXTERNSTDEXT
 		/' -------------------------- 混合渲染库 -------------------------- '/
 		Declare Function Blend_Custom(src As xge.Surface Ptr, px As Integer, py As Integer, cx As Integer, cy As Integer, cw As Integer, ch As Integer,dst As xge.Surface Ptr, bk As XGE_DRAW_BLEND, param As Integer) As Integer
-		Declare Sub Blend_Gray(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer)
-		Declare Sub Blend_Mirr(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer)
-		Declare Sub Blend_Shade(SrcAddr As Any Ptr, SrcPitch As Integer, SrcLineS As Integer, DstAddr As Any Ptr, DstPitch As Integer, DstLineS As Integer, w As Integer, h As Integer, param As Integer)
 		Declare Sub SetShadeData(w As Integer, h As Integer, d As Any Ptr)
 		Declare Sub MakeShadeData(sf As xge.Surface Ptr, sd As UByte Ptr)
 		
@@ -1647,16 +1608,91 @@
 		
 		
 		/' -------------------------- 其他易用性函数库 -------------------------- '/
-		Declare Function Clip_GetText() As WString Ptr
-		Declare Function Clip_SetText(Text As WString Ptr, Size As UInteger = 0) As Integer
-		Declare Function Clip_GetTextA() As ZString Ptr
-		Declare Function Clip_SetTextA(Text As ZString Ptr, Size As UInteger = 0) As Integer
-		Declare Function Split(sText As ZString Ptr, sSep As ZString Ptr) As ZString Ptr Ptr
 		Declare Sub xui_DrawBackStyle(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr)
-		Declare Sub xui_DrawBackStyle_Rect(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr, rc As xui.Rect Ptr)
-		Declare Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As ZString Ptr, fontid As UInteger, CaptionOffset As xui.Coord Ptr)
+		Declare Sub xui_DrawBackStyle_Rect(ele As xui.Element Ptr, bs As xui.BackStyle_Struct Ptr, rc As xge_Rect Ptr)
+		Declare Sub xui_DrawBackStyle_Text(ele As xui.Element Ptr, bs As xui.BackStyle_Text_Struct Ptr, sText As WString Ptr, fontid As UInteger, CaptionOffset As xge_Coord Ptr)
+		
+		
+		/' -------------------------- 文件操作库 -------------------------- '/
+		Declare Function xFile_CreateA(FilePath As ZString Ptr) As Integer
+		Declare Function xFile_CreateW(FilePath As WString Ptr) As Integer
+		Declare Function xFile_OpenA(FilePath As ZString Ptr, OnlyRead As Integer = 0) As HANDLE
+		Declare Function xFile_OpenW(FilePath As WString Ptr, OnlyRead As Integer = 0) As HANDLE
+		Declare Function xFile_Close(FileHdr As HANDLE) As Integer
+		Declare Function xFile_ExistsA(FilePath As ZString Ptr) As Integer
+		Declare Function xFile_ExistsW(FilePath As WString Ptr) As Integer
+		Declare Function xFile_hwrite(FileHdr As HANDLE, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
+		Declare Function xFile_WriteA(FilePath As ZString Ptr, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
+		Declare Function xFile_WriteW(FilePath As WString Ptr, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
+		Declare Function xFile_hRead(FileHdr As HANDLE, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
+		Declare Function xFile_ReadA(FilePath As ZString Ptr, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
+		Declare Function xFile_ReadW(FilePath As WString Ptr, Buffer As Any Ptr, Addr As UInteger, Length As UInteger) As UInteger
+		Declare Function xFile_hSize(FileHdr As HANDLE) As UInteger
+		Declare Function xFile_SizeA(FilePath As ZString Ptr) As UInteger
+		Declare Function xFile_SizeW(FilePath As WString Ptr) As UInteger
+		Declare Function xFile_hCut(FileHdr As HANDLE, FileSize As UInteger) As Integer
+		Declare Function xFile_CutA(FilePath As ZString Ptr, FileSize As UInteger) As Integer
+		Declare Function xFile_CutW(FilePath As WString Ptr, FileSize As UInteger) As Integer
+		Declare Function xFile_ScanA(RootDir As ZString Ptr, Filter As ZString Ptr, Attrib As Integer, AttribEx As Integer, Recursive As Integer, CallBack As Function(Path As ZString Ptr, FindData As WIN32_FIND_DATAA Ptr, param As Integer) As Integer, param As Integer = 0) As Integer
+		Declare Function xFile_ScanW(RootDir As WString Ptr, Filter As WString Ptr, Attrib As Integer, AttribEx As Integer, Recursive As Integer, CallBack As Function(Path As WString Ptr, FindData As WIN32_FIND_DATAW Ptr, param As Integer) As Integer, param As Integer = 0) As Integer
+		
+		
+		/' -------------------------- ini 文件操作库 -------------------------- '/
+		Declare Function xIni_GetStrA(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr) As ZString Ptr
+		Declare Function xIni_GetStrW(IniFile As WString Ptr, IniSec As WString Ptr, IniKey As WString Ptr) As WString Ptr
+		Declare Function xIni_GetIntA(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr) As Integer
+		Declare Function xIni_GetIntW(IniFile As WString Ptr, IniSec As WString Ptr, IniKey As WString Ptr) As Integer
+		Declare Function xIni_SetStrA(IniFile As ZString Ptr, IniSec As ZString Ptr, IniKey As ZString Ptr, kValue As ZString Ptr) As Integer
+		Declare Function xIni_SetStrW(IniFile As WString Ptr, IniSec As WString Ptr, IniKey As WString Ptr, kValue As WString Ptr) As Integer
+		
+		
+		/' -------------------------- 剪贴板操作库 -------------------------- '/
+		Declare Function xClip_GetTextW() As WString Ptr
+		Declare Function xClip_SetTextW(Text As WString Ptr, Size As UInteger = 0) As Integer
+		Declare Function xClip_GetTextA() As ZString Ptr
+		Declare Function xClip_SetTextA(Text As ZString Ptr, Size As UInteger = 0) As Integer
 	End Extern
 	
+	
+	
+	' Unicode
+	#Ifdef UNICODE
+		
+		#Define xFile_Create			xFile_CreateW
+		#Define xFile_Open				xFile_OpenW
+		#Define xFile_Exists			xFile_ExistsW
+		#Define xFile_Write				xFile_WriteW
+		#Define xFile_Read				xFile_ReadW
+		#Define xFile_Size				xFile_SizeW
+		#Define xFile_Cut				xFile_CutW
+		#Define xFile_Scan				xFile_ScanW
+		
+		#Define xIni_GetStr				xIni_GetStrW
+		#Define xIni_GetInt				xIni_GetIntW
+		#Define xIni_SetStr				xIni_SetStrW
+		
+		#Define xClip_GetText			xClip_GetTextW
+		#Define xClip_SetText			xClip_SetTextW
+		
+	#Else
+		
+		#Define xFile_Create			xFile_CreateA
+		#Define xFile_Open				xFile_OpenA
+		#Define xFile_Exists			xFile_ExistsA
+		#Define xFile_Write				xFile_WriteA
+		#Define xFile_Read				xFile_ReadA
+		#Define xFile_Size				xFile_SizeA
+		#Define xFile_Cut				xFile_CutA
+		#Define xFile_Scan				xFile_ScanA
+		
+		#Define xIni_GetStr				xIni_GetStrA
+		#Define xIni_GetInt				xIni_GetIntA
+		#Define xIni_SetStr				xIni_SetStrA
+		
+		#Define xClip_GetText			xClip_GetTextA
+		#Define xClip_SetText			xClip_SetTextA
+		
+	#EndIf
 	
 	
 #EndIf

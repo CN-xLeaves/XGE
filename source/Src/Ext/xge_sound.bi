@@ -23,6 +23,9 @@ Extern XGE_EXTERNCLASS
 	Constructor Sound(tpe As Integer, flag As Integer, addr As ZString Ptr, size As UInteger = 0, max As Integer = 65535) XGE_EXPORT_OBJ
 		Load(tpe, flag, addr, size, max)
 	End Constructor
+	Constructor Sound(tpe As Integer, flag As Integer, addr As WString Ptr, size As UInteger = 0, max As Integer = 65535) XGE_EXPORT_OBJ
+		Load(tpe, flag, addr, size, max)
+	End Constructor
 	
 	' Îö¹¹
 	Destructor Sound() XGE_EXPORT_OBJ
@@ -59,6 +62,15 @@ Extern XGE_EXTERNCLASS
 		If SoundObj Then
 			pTpe = tpe
 			Return TRUE
+		EndIf
+	End Function
+	Function Sound.Load(tpe As Integer, flag As Integer, addr As WString Ptr, size As UInteger = 0, max As Integer = 65535) As Integer XGE_EXPORT_OBJ
+		If size Then
+			Return Load(tpe, flag, Cast(ZString Ptr, addr), size, max)
+		Else
+			Dim sf As ZString Ptr = UnicodeToAsci(addr, 0)
+			Function = Load(tpe, flag, sf, size, max)
+			DeAllocate(sf)
 		EndIf
 	End Function
 	

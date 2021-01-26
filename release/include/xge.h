@@ -9,14 +9,17 @@
 
 #ifndef xywh_library_xge
 	#define xywh_library_xge
-
-
-
+	
+	/* -------------------------- XUI元素ID最大字符数 -------------------------- */
+	#Define XGE_XUI_IDSIZE		32
+	
+	
+	
 	/* -------------------------- 基础头文件 -------------------------- */
 	#include <windows.h>
-
-
-
+	
+	
+	
 	/* -------------------------- 按键扫描码 -------------------------- */
 	#define SC_ESCAPE					0x01
 	#define SC_1						0x02
@@ -104,24 +107,25 @@
 	#define SC_LWIN						0x5B
 	#define SC_RWIN						0x5C
 	#define SC_MENU						0x5D
-
-
+	
+	
 	/* -------------------------- 颜色定义 -------------------------- */
-	#define MASK_COLOR_24				0xFF00FF
-	#define MASK_COLOR_32				0xFFFF00FF
-	#define MASK32_R					0xFF0000
-	#define MASK32_G					0x00FF00
-	#define MASK32_B					0x0000FF
-	#define MASK32						0xFFFFFF
-
-
+	#define COLOR_MASK_24				0xFF00FF
+	#define COLOR_MASK_32				0xFFFF00FF
+	#define COLOR_A						0xFF000000
+	#define COLOR_R						0x00FF0000
+	#define COLOR_G						0x0000FF00
+	#define COLOR_B						0x000000FF
+	#define COLOR_32					0xFFFFFFFF
+	
+	
 	/* -------------------------- 镜像定义 -------------------------- */
 	#define XGE_BLEND_MIRR_H			1				// 水平
 	#define XGE_BLEND_MIRR_V			2				// 垂直
-	#define XGE_BLEND_MIRR_HV			3
-	#define XGE_BLEND_MIRR_VH			3
-
-
+	#define XGE_BLEND_MIRR_HV			3				// 水平 + 垂直
+	#define XGE_BLEND_MIRR_VH			3				// 水平 + 垂直
+	
+	
 	/* -------------------------- 初始化定义 -------------------------- */
 	#define XGE_INIT_WINDOW				0x00			// 窗口模式
 	#define XGE_INIT_FULLSCREEN			0x01			// 全屏模式
@@ -130,15 +134,8 @@
 	#define XGE_INIT_POSTOP				0x20			// 窗口置顶
 	#define XGE_INIT_ALPHA				0x40			// 开启alpha混合对于所有基础操作
 	#define XGE_INIT_HIGHPRIORITY		0x80			// 图像库高优先权给图像处理
-
-
-	/* -------------------------- 模块初始化定义 -------------------------- */
-	#define XGE_INIT_ALL				(XGE_INIT_GDI | XGE_INIT_DDT | XGE_INIT_BASS)
-	#define XGE_INIT_GDI				0x1				// 初始化GDI/GDI+
-	#define XGE_INIT_DDT				0x2				// 初始化 DDT 模块 (按照屏幕大小)
-	#define XGE_INIT_BASS				0x4				// 初始化 BASS 模块
-
-
+	
+	
 	/* -------------------------- 场景消息定义 -------------------------- */
 	#define XGE_MSG_NULL				0x00			// 空消息
 	#define XGE_MSG_LOADRES				0x01			// 载入资源
@@ -146,21 +143,22 @@
 	#define XGE_MSG_FRAME				0x03			// 框架函数
 	#define XGE_MSG_DRAW				0x04			// 绘图函数
 	#define XGE_MSG_ERROR				0x05			// 错误处理
-	#define XGE_MSG_LOSTFOCUS			0x06			// 丢失焦点
-	#define XGE_MSG_GOTFOCUS			0x07			// 获得焦点
-	#define XGE_MSG_MOUSE_MOVE			0x08			// 鼠标移动
-	#define XGE_MSG_MOUSE_DOWN			0x09			// 鼠标按下
-	#define XGE_MSG_MOUSE_UP			0x0A			// 鼠标弹起
-	#define XGE_MSG_MOUSE_DCLICK		0x0B			// 鼠标双击
-	#define XGE_MSG_MOUSE_WHELL			0x0C			// 滚轮滚动
-	#define XGE_MSG_KEY_DOWN			0x0D			// 按键按下
-	#define XGE_MSG_KEY_UP				0x0E			// 按键弹起
-	#define XGE_MSG_KEY_REPEAT			0x0F			// 按键按住
-	#define XGE_MSG_MOUSE_ENTER			0x10			// 鼠标移入
-	#define XGE_MSG_MOUSE_EXIT			0x11			// 鼠标离开
-	#define XGE_MSG_CLOSE				0x12			// 窗口关闭
-
-
+	#define XGE_MSG_MOUSE_MOVE			0x101			// 鼠标移动
+	#define XGE_MSG_MOUSE_DOWN			0x102			// 鼠标按下
+	#define XGE_MSG_MOUSE_UP			0x103			// 鼠标弹起
+	#define XGE_MSG_MOUSE_CLICK			0x104			// 鼠标单击
+	#define XGE_MSG_MOUSE_DCLICK		0x105			// 鼠标双击
+	#define XGE_MSG_MOUSE_WHELL			0x106			// 滚轮滚动
+	#define XGE_MSG_KEY_DOWN			0x201			// 按键按下
+	#define XGE_MSG_KEY_UP				0x202			// 按键弹起
+	#define XGE_MSG_KEY_REPEAT			0x203			// 按键按住
+	#define XGE_MSG_MOUSE_ENTER			0x301			// 鼠标移入
+	#define XGE_MSG_MOUSE_EXIT			0x302			// 鼠标离开
+	#define XGE_MSG_LOSTFOCUS			0x311			// 丢失焦点
+	#define XGE_MSG_GOTFOCUS			0x312			// 获得焦点
+	#define XGE_MSG_CLOSE				0x321			// 窗口关闭
+	
+	
 	/* -------------------------- 暂停定义 -------------------------- */
 	#define XGE_PAUSE_DRAW				0x01			// 暂停绘制
 	#define XGE_PAUSE_FRAME				0x02			// 暂停场景框架
@@ -169,6 +167,11 @@
 	/* -------------------------- 文件类型定义 -------------------------- */
 	#define XGE_IMG_FMT_BMP				0
 	#define XGE_IMG_FMT_XGI				1
+	
+	
+	/* -------------------------- XGI文件相关定义 -------------------------- */
+	#define XGI_FLAG_LZ4				1				// 是否启用 LZ4 压缩
+	#define XGI_FLAG_B16				2				// 是否为 16 位图像
 
 
 	/* -------------------------- 音频类型定义 -------------------------- */
@@ -230,6 +233,64 @@
 	#define XGE_FONT_BOLDITALIC			0x30			// 粗体 + 斜体
 	#define XGE_FONT_UNDERLINE			0x40			// 下划线
 	#define XGE_FONT_SRTIKEOUT			0x80			// 删除线
+	
+	
+	/* -------------------------- GUI布局方式定义 -------------------------- */
+	#define XUI_LAYOUT_COORD			0				' 布局系统 - 浮动布局，根据坐标决定位置
+	#define XUI_LAYOUT_L2R				1				' 布局系统 - 横向布局 [从左到右]
+	#define XUI_LAYOUT_R2L				2				' 布局系统 - 横向布局 [从右到左]
+	#define XUI_LAYOUT_T2B				3				' 布局系统 - 纵向布局 [从上到下]
+	#define XUI_LAYOUT_B2T				4				' 布局系统 - 纵向布局 [从下到上]
+	
+	
+	/* -------------------------- GUI布局尺度定义 -------------------------- */
+	#define XUI_LAYOUT_RULER_COORD		-1				' 布局尺度 - 绝对坐标 [打破父控件的布局方案]
+	#define XUI_LAYOUT_RULER_PIXEL		0				' 布局尺度 - 像素
+	#define XUI_LAYOUT_RULER_RATIO		1				' 布局尺度 - 剩余百分比
+	
+	
+	/* -------------------------- 元素 ClassID 定义 -------------------------- */
+	#define XUI_CLASS_ELEMENT			0				' 基本元素
+	#define XUI_CLASS_BUTTON			1				' 按钮(包含单选、复选类元素)
+	#define XUI_CLASS_STATIC			2				' 静态元素(包含标签、图片等)
+	#define XUI_CLASS_SCROLLBAR			3				' 滚动条(包含横向和纵向)
+	#define XUI_CLASS_SCROLLVIEW		4				' 滚动视图
+	#define XUI_CLASS_LISTBOX			5				' 列表框
+	#define XUI_CLASS_COMBOBOX			6				' 组合框
+	#define XUI_CLASS_PROGRESSBAR		7				' 进度条
+	#define XUI_CLASS_SLIDER			8				' 滑块
+	#define XUI_CLASS_ANIMATBOX			9				' 动画
+	#define XUI_CLASS_LINEEDIT			10				' 行编辑框
+	#define XUI_CLASS_TEXTBOX			11				' 全功能文本编辑框
+	#define XUI_CLASS_WINDOW			12				' 动画
+	#define XUI_CLASS_USER				&H10000			' 用户自定义元素的开始ID
+	
+	
+	/* -------------------------- 元素滚动条显示状态定义 -------------------------- */
+	#define XUI_SCROLL_V				1				' 显示纵向滚动条
+	#define XUI_SCROLL_H				2				' 显示横向滚动条
+	#define XUI_SCROLL_VH				3				' 横向和纵向滚动条都显示
+	#define XUI_SCROLL_HV				3				' 横向和纵向滚动条都显示
+	
+	
+	/* -------------------------- 元素进度条显示状态定义 -------------------------- */
+	#define XUI_PROGRESSBAR_HIDE		0				' 不显示
+	#define XUI_PROGRESSBAR_PERCENT		1				' 显示百分比
+	#define XUI_PROGRESSBAR_VALUE		2				' 显示数值
+	
+	
+	/* -------------------------- XUI IME 相关事件ID定义 -------------------------- */
+	#define XUI_IME_INPUT				0				' IME传递输入数据
+	#define XUI_IME_STARTCOMPOSITION	1				' IME开始输入
+	#define XUI_IME_COMPTEXT			2				' IME输入变动
+	#define XUI_IME_ENDCOMPOSITION		3				' IME输入结束
+	#define XUI_IME_CHAR				4				' WM_CHAR
+	
+	
+	/* -------------------------- 文件查找规则 -------------------------- */
+	#define XFILE_RULE_NoAttribEx		0				' 不限制
+	#define XFILE_RULE_FloderOnly		1				' 只查找目录
+	#define XFILE_RULE_PointFloder		2				' 去除根目录及父级目录
 
 
 	/* -------------------------- 消息结构体 -------------------------- */
@@ -257,15 +318,26 @@
 				int param3;
 				int param4;
 			};
-			int button;
-			int z;
+			struct
+			{
+				int mx;
+				int my;
+				int button;
+			};
+			struct
+			{
+				int zx;
+				int zy;
+				int z;
+				int nz;
+			};
 			int w;
 		};
 	};
 
 
 	/* -------------------------- 图像结构体 -------------------------- */
-	struct IMAGE
+	struct FBGFX_IMAGE
 	{
 		unsigned int tpe;
 		int bpp;
@@ -274,13 +346,50 @@
 		unsigned int Pitch;
 		unsigned char reserved[12];
 	};
+	
+	
+	
+	/* -------------------------- 点数据结构 -------------------------- */
+	struct xge_Coord
+	{
+		int x;
+		int y;
+	};
+	
+	
+	
+	/* -------------------------- 矩形数据结构 -------------------------- */
+	struct xge_Rect
+	{
+		union
+		{
+			int x;
+			int LeftOffset;
+		};
+		union
+		{
+			int y;
+			int TopOffset;
+		};
+		union
+		{
+			int w;
+			int RightOffset;
+		};
+		union
+		{
+			int h;
+			int BottomOffset;
+		};
+	};
 
 
 	/* -------------------------- 数据类型定义 -------------------------- */
 	typedef int (CALLBACK *XGE_SCENE_PROC)(int msg, int param, XGE_EVENT *eve);
 	typedef void (CALLBACK *XGE_EVENT_PROC)(XGE_EVENT *eve);
 	typedef void (CALLBACK *XGE_DELAY_PROC)(int ms);
-	typedef int (CALLBACK *XGE_BLOAD_PROC)(void* img, char* addr, unsigned int size);
+	typedef int (CALLBACK *XGE_BLOAD_PROC)(void* img, wchar_t* addr, unsigned int size);
+	typedef int (CALLBACK *XGE_FLOAD_PROC)(void* fd, wchar_t* addr, unsigned int size, void* param);
 	typedef void (CALLBACK *XGE_DRAW_BLEND)(void* SrcAddr, int SrcPitch, int SrcLineS, void* DstAddr, int DstPitch, int DstLineS, int w, int h, int param);
 	typedef unsigned int (CALLBACK *XGE_DRAW_CUSTOM)(unsigned int src, unsigned int dst, void* param);
 
@@ -329,45 +438,107 @@
 		void* pStackMem;
 		unsigned int pStackTop;
 	};
-
-
-	/* -------------------------- 栈结构类[Int] -------------------------- */
-	class xStack_Int
+	
+	
+	
+	/* -------------------------- 结构化内存管理器 -------------------------- */
+	class xBsmm
 	{
-	public:
-		// 构造/析构
-		_stdcall xStack_Int(unsigned int max);
-		_stdcall ~xStack_Int();
-
-		// 初始化/卸载
-		_stdcall int Init(unsigned int max);
-		_stdcall void Unit();
-
-		// 压栈
-		_stdcall int Push(int dat);
-
-		// 出栈
-		_stdcall int Pop();
-		_stdcall int* Pop(unsigned int c);
-
-		// 栈顶
-		_stdcall int Top();
-
-		// 压栈数量
-		_stdcall unsigned int Count();
-
-	private:
-		unsigned int pMaxCount;
-		int* pStackMem;
-		unsigned int pStackTop;
+		// 管理器内存指针
+		void* StructMemory;
+		
+		// 成员占用内存长度
+		unsigned int StructLenght;
+		
+		// 管理器中存在多少成员
+		unsigned int StructCount;
+		
+		// 已经申请的结构数量
+		unsigned int AllocCount;
+		
+		// 预分配内存步长
+		unsigned int AllocStep;
+		
+		// 构造函数
+		_stdcall xBsmm();
+		_stdcall xBsmm(unsigned int iItemLenght, unsigned int PreassignStep = 32, unsigned int PreassignLenght = 0);
+		
+		// 析构函数
+		_stdcall ~xBsmm();
+		
+		// 添加成员
+		_stdcall unsigned int InsertStruct(unsigned int iPos, unsigned int iCount = 1);
+		_stdcall unsigned int AppendStruct(unsigned int iCount = 1);
+		
+		// 删除成员
+		_stdcall int DeleteStruct(unsigned int iPos, unsigned int iCount = 1);
+		
+		// 移动成员
+		_stdcall int SwapStruct(unsigned int iPosA, unsigned int iPosB);
+		
+		// 获取成员指针
+		_stdcall void* GetPtrStruct(unsigned int iPos);
+		
+		// 分配内存
+		_stdcall int CallocMemory(unsigned int iCount);
+		
+		// 重置（释放资源）
+		_stdcall void ReInitManage();
 	};
-
-
+	
+	
+	
+	/* -------------------------- 字符串缓冲区管理器 [UCS2] -------------------------- */
+	class xStringBuffer
+	{
+		// 内存指针
+		wcahr_t* BufferMemory;
+		
+		// 数据长度
+		unsigned int BufferLenght;
+		
+		// 已经申请的内存长度
+		unsigned int AllocLenght;
+		
+		// 预分配内存步长
+		unsigned int AllocStep;
+		
+		// 附加数据
+		int Tag;
+		
+		// 构造函数
+		_stdcall xStringBuffer();
+		
+		// 析构函数
+		_stdcall ~xStringBuffer();
+		
+		// 设置数据
+		_stdcall int SetText(wcahr_t* sText, unsigned int iTextSize = 0);
+		
+		// 追加写数据
+		_stdcall int AppendText(wcahr_t* sText, unsigned int iTextSize = 0);
+		
+		// 插入写数据
+		_stdcall int InsertText(unsigned int iPos, unsigned int iSize, wcahr_t* sText, unsigned int iTextSize = 0);
+		
+		// 删除数据
+		_stdcall int DeleteText(unsigned int iPos, unsigned int iSize);
+		
+		// 分配内存
+		_stdcall int MallocMemory(unsigned int iLenght);
+		
+		// 释放内存
+		_stdcall void FreeMemory();
+	};
+	
+	
 	/* -------------------------- 核心库 -------------------------- */
 	namespace xge
 	{
-		_stdcall int Init(unsigned int w, unsigned int h, int init_gfx = XGE_INIT_WINDOW, int init_mod = XGE_INIT_ALL, char* title = NULL);
+		_stdcall int InitA(unsigned int w, unsigned int h, int init_gfx = XGE_INIT_WINDOW, char* title = NULL);
+		_stdcall int InitW(unsigned int w, unsigned int h, int init_gfx = XGE_INIT_WINDOW, wchar_t* title = NULL);
 		_stdcall void Unit();
+		_stdcall int SetScreen(unsigned int w, unsigned int h, int init_gfx = XGE_INIT_WINDOW);
 		_stdcall HANDLE hWnd();
 		_stdcall void Clear();
 		_stdcall void Lock();
@@ -378,60 +549,15 @@
 		_stdcall void* PixAddr();
 		_stdcall unsigned int PixSize();
 		_stdcall unsigned int Pitch();
-		_stdcall char* Driver();
 		_stdcall void SetSoundVol(int tpe, int vol);
 		_stdcall int GetSoundVol(int tpe);
-		_stdcall int Ver(int tpe = 0);
-
-
-		/* -------------------------- 场景库 -------------------------- */
-		namespace Scene
-		{
-			_stdcall int Start(XGE_SCENE_PROC proc, unsigned int lfps = 0, int sync = FALSE, int param = 0);
-			_stdcall int Cut(XGE_SCENE_PROC proc, unsigned int lfps = 0, int sync = FALSE, int param = 0);
-			_stdcall void Stop(int sc = 0);
-			_stdcall void StopAll(int sc = 0);
-			_stdcall void Pause(int flag = XGE_PAUSE_DRAW | XGE_PAUSE_FRAME);
-			_stdcall int State();
-			_stdcall void Resume();
-			_stdcall unsigned int FPS();
-			_stdcall xStack* Stack();
-		};
-
-
-		/* -------------------------- 挂钩库 -------------------------- */
-		namespace Hook
-		{
-			_stdcall void SetDelayProc(XGE_DELAY_PROC proc);
-			_stdcall void SetEventProc(XGE_EVENT_PROC proc);
-			_stdcall void SetSceneProc(XGE_SCENE_PROC proc);
-			_stdcall void SetBLoadProc(XGE_BLOAD_PROC proc);
-		};
-
-
-		/* -------------------------- 输入库 -------------------------- */
-		namespace xInput
-		{
-			_stdcall int KeyStatus(int k);
-			_stdcall void MouseStatus(int *x, int *y, int *w, int *b);
-			_stdcall int JoystickStatus(int id, int *btn, float *a1, float *a2, float *a3, float *a4, float *a5, float *a6, float *a7, float *a8);
-			_stdcall int GetMousePos();
-			_stdcall int SetMousePos(int x, int y);
-			_stdcall int GetMouseX();
-			_stdcall int GetMouseY();
-			_stdcall int GetMouseBtn();
-			_stdcall int GetMouseBtnL();
-			_stdcall int GetMouseBtnR();
-			_stdcall int GetMouseBtnM();
-			_stdcall int GetMouseWheel();
-		};
 
 
 		/* -------------------------- 图像类 -------------------------- */
 		class Surface
 		{
 		public:
-			IMAGE* img;
+			FBGFX_IMAGE* img;
 
 			// 构造 [空]
 			_stdcall Surface();
@@ -441,6 +567,7 @@
 
 			// 构造 [加载]
 			_stdcall Surface(char* addr, unsigned int size = 0);
+			_stdcall Surface(wchar_t* addr, unsigned int size = 0);
 
 			// 析构
 			_stdcall ~Surface();
@@ -450,9 +577,11 @@
 
 			// 载入图像
 			_stdcall int Load(char* addr, unsigned int size = 0);
+			_stdcall int Load(wchar_t* addr, unsigned int size = 0);
 
 			// 保存图像
 			_stdcall int Save(char* addr, unsigned int tpe = 0, int flag = 0);
+			_stdcall int Save(wchar_t* addr, unsigned int tpe = 0, int flag = 0);
 
 			// 释放图像
 			_stdcall void Free();
@@ -479,6 +608,8 @@
 			_stdcall void DrawEx_Alpha(int x, int y, int cx, int cy, int cw, int ch, xge::Surface* sf = NULL);
 			_stdcall void Draw_Alpha2(int x, int y, int a, xge::Surface* sf = NULL);
 			_stdcall void DrawEx_Alpha2(int x, int y, int cx, int cy, int cw, int ch, int a, xge::Surface* sf = NULL);
+			_stdcall void Draw_Trans(int x, int y, xge::Surface* sf = NULL);
+			_stdcall void DrawEx_Trans(int x, int y, int cx, int cy, int cw, int ch, xge::Surface* sf = NULL);
 			_stdcall void Draw_And(int x, int y, xge::Surface* sf = NULL);
 			_stdcall void DrawEx_And(int x, int y, int cx, int cy, int cw, int ch, xge::Surface* sf = NULL);
 			_stdcall void Draw_Or(int x, int y, xge::Surface* sf = NULL);
@@ -501,7 +632,7 @@
 
 
 		/* -------------------------- Gdi图像类 -------------------------- */
-		class GdiSurface// : public Surface
+		class GdiSurface : public Surface
 		{
 		public:
 			HANDLE hDC;
@@ -517,6 +648,7 @@
 
 			// 构造 [加载]
 			_stdcall GdiSurface(char* addr, unsigned int size = 0);
+			_stdcall GdiSurface(wchar_t* addr, unsigned int size = 0);
 
 			// 析构
 			_stdcall ~GdiSurface();
@@ -526,6 +658,7 @@
 
 			// 载入图像
 			_stdcall int Load(char* addr, unsigned int size = 0);
+			_stdcall int Load(wchar_t* addr, unsigned int size = 0);
 
 			// 释放图像
 			_stdcall void Free();
@@ -536,6 +669,15 @@
 			_stdcall void PrintRectFull(int x, int y, int w, int h, unsigned int c);
 			_stdcall void PrintCirc(int x, int y, int w, int h, unsigned int c);
 			_stdcall void PrintCircFull(int x, int y, int w, int h, unsigned int c);
+			_stdcall void PrintText(int x, int y, int w, int h, wchar_t* f, int px, int flag, unsigned int c, wchar_t* txt);
+			_stdcall void PrintText(int x, int y, int w, int h, wchar_t* f, int px, int flag, unsigned int c, int weight, wchar_t* txt);
+			_stdcall void PrintText(int x, int y, int w, int h, wchar_t* f, int px, int flag, unsigned int c1, unsigned int c2, int weight, wchar_t* txt);
+			_stdcall void PrintText(int x, int y, int w, int h, wchar_t* f, int px, int flag, wchar_t* addr, int size, wchar_t* txt);
+			_stdcall void PrintImage(int x, int y, wchar_t* addr, int size);
+			_stdcall void PrintImageDpi(int x, int y, wchar_t* addr, int size);
+			_stdcall void PrintImageZoom(int x, int y, int w, int h, wchar_t* addr, int size);
+			_stdcall void PrintImageEx(int x, int y, int w, int h, int cx, int cy, int cw, int ch, wchar_t* addr, int size);
+			_stdcall void PrintImageFull(int x, int y, int w, int h, wchar_t* addr, int size);
 			_stdcall void PrintText(int x, int y, int w, int h, char* f, int px, int flag, unsigned int c, char* txt);
 			_stdcall void PrintText(int x, int y, int w, int h, char* f, int px, int flag, unsigned int c, int weight, char* txt);
 			_stdcall void PrintText(int x, int y, int w, int h, char* f, int px, int flag, unsigned int c1, unsigned int c2, int weight, char* txt);
@@ -545,54 +687,6 @@
 			_stdcall void PrintImageZoom(int x, int y, int w, int h, char* addr, int size);
 			_stdcall void PrintImageEx(int x, int y, int w, int h, int cx, int cy, int cw, int ch, char* addr, int size);
 			_stdcall void PrintImageFull(int x, int y, int w, int h, char* addr, int size);
-		};
-
-
-		/* -------------------------- 渲染对象基类 -------------------------- */
-		class RenderBaseObject
-		{
-		public:
-			int x;
-			int y;
-			int Priority;
-			int Enabled;
-			int Visible;
-
-			_stdcall virtual void Disp() = 0;
-			_stdcall virtual void Draw(int px, int py) = 0;
-		};
-
-
-		/* -------------------------- 渲染对象类 -------------------------- */
-		class RenderObject : public RenderBaseObject
-		{
-		public:
-			xge::Surface* img;
-			xge::Surface* Parent;
-			int cut;
-			int cx;
-			int cy;
-			int cw;
-			int ch;
-			int AutoFree;
-
-			// 空构造
-			_stdcall RenderObject();
-
-			// 从现有 Surface 创建
-			_stdcall RenderObject(xge::Surface* sf, int px = 0, int py = 0, int pl = 0, xge::Surface* p = NULL);
-
-			// 自动创建和释放 Surface
-			_stdcall RenderObject(char* addr, unsigned int size, int px = 0, int py = 0, int pl = 0, xge::Surface* p = NULL);
-
-			// 析构
-			_stdcall ~RenderObject();
-
-			// 裁剪
-			_stdcall void SetCut(int iscut, int cut_x = 0, int cut_y = 0, int cut_w = 0, int cut_h = 0);
-
-			// 渲染
-			_stdcall void Draw(int px, int py);
 		};
 
 
@@ -607,12 +701,14 @@
 
 			// 构造 [加载]
 			_stdcall Sound(int tpe, int flag, char* addr, unsigned int size = 0, int max = 65535);
+			_stdcall Sound(int tpe, int flag, wchar_t* addr, unsigned int size = 0, int max = 65535);
 
 			// 析构
 			_stdcall ~Sound();
 
 			// 载入声音
 			_stdcall int Load(int tpe, int flag, char* addr, unsigned int size = 0, int max = 65535);
+			_stdcall int Load(int tpe, int flag, wchar_t* addr, unsigned int size = 0, int max = 65535);
 
 			// 释放声音
 			_stdcall void Free();
@@ -631,13 +727,41 @@
 		};
 
 
+		/* -------------------------- 场景库 -------------------------- */
+		namespace Scene
+		{
+			_stdcall int Start(XGE_SCENE_PROC proc, unsigned int lfps = 0, int sync = FALSE, int param = 0);
+			_stdcall int Cut(XGE_SCENE_PROC proc, unsigned int lfps = 0, int sync = FALSE, int param = 0);
+			_stdcall void Stop(int sc = 0);
+			_stdcall void StopAll(int sc = 0);
+			_stdcall void Pause(int flag = XGE_PAUSE_DRAW | XGE_PAUSE_FRAME);
+			_stdcall int State();
+			_stdcall void Resume();
+			_stdcall unsigned int FPS();
+			_stdcall void SetFPS(unsigned int nv);
+			_stdcall xStack* Stack();
+		};
+
+
+		/* -------------------------- 挂钩库 -------------------------- */
+		namespace Hook
+		{
+			_stdcall void SetDelayProc(XGE_DELAY_PROC proc);
+			_stdcall void SetEventProc(XGE_EVENT_PROC proc);
+			_stdcall void SetSceneProc(XGE_SCENE_PROC proc);
+			_stdcall void SetBLoadProc(XGE_BLOAD_PROC proc);
+			_stdcall void SetFontLoadProc(XGE_FLOAD_PROC proc);
+		};
+
+
 		/* -------------------------- 辅助库 -------------------------- */
 		namespace Aux
 		{
 			_stdcall xge::Surface* ScreenShot();
 			_stdcall unsigned int GetPixel(int x, int y, xge::Surface* sf = NULL);
 			_stdcall unsigned int RGB2BGR(unsigned int c);
-			_stdcall void SetTitle(char* title);
+			_stdcall void SetTitleA(char* title);
+			_stdcall void SetTitleW(wchar_t* title);
 			_stdcall void SetView(int x1, int y1, int x2, int y2, int c, int f);
 			_stdcall void ReSetView();
 			_stdcall void SetCoodr(int x1, int y1, int x2, int y2, int c = 0);
@@ -665,19 +789,26 @@
 			_stdcall void CircFullEx(int x, int y, int r, int c, float a, xge::Surface* sf = NULL);
 			_stdcall void CircArc(int x, int y, int r, int c, int s, int e, float a, xge::Surface* sf = NULL);
 			_stdcall void Full(int x, int y, int c, int f, xge::Surface* sf = NULL);
-			_stdcall void FullEx(int x, int y, char* p, int f, xge::Surface* sf = NULL);
+			_stdcall void FullEx(int x, int y, void* p, int f, xge::Surface* sf = NULL);
 		};
+	};
 
 
-		/* -------------------------- Gdi画字库 -------------------------- */
-		namespace ddt
-		{
-			_stdcall void Init(int mw, int mh);
-			_stdcall void Draw(int x, int y, int w, int h, char* f, int px, int flag, int c, char* txt, xge::Surface* sf = NULL);
-			_stdcall void Draw(int x, int y, int w, int h, char* f, int px, int flag, int c, int weight, char* txt, xge::Surface* sf = NULL);
-			_stdcall void Draw(int x, int y, int w, int h, char* f, int px, int flag, int c1, int c2, int weight, char* txt, xge::Surface* sf = NULL);
-			_stdcall void Draw(int x, int y, int w, int h, char* f, int px, int flag, char* addr, int size, char* txt, xge::Surface* sf = NULL);
-		};
+	/* -------------------------- 输入库 -------------------------- */
+	namespace xInput
+	{
+		_stdcall int KeyStatus(int k);
+		_stdcall void MouseStatus(int *x, int *y, int *w, int *b);
+		_stdcall int JoystickStatus(int id, int *btn, float *a1, float *a2, float *a3, float *a4, float *a5, float *a6, float *a7, float *a8);
+		_stdcall int GetMousePos();
+		_stdcall int SetMousePos(int x, int y);
+		_stdcall int GetMouseX();
+		_stdcall int GetMouseY();
+		_stdcall int GetMouseBtn();
+		_stdcall int GetMouseBtnL();
+		_stdcall int GetMouseBtnR();
+		_stdcall int GetMouseBtnM();
+		_stdcall int GetMouseWheel();
 	};
 
 
@@ -788,9 +919,6 @@
 	{
 		/* -------------------------- 混合渲染库 -------------------------- */
 		_stdcall int Blend_Custom(xge::Surface* src, int px, int py, int cx, int cy, int cw, int ch, xge::Surface* dst, XGE_DRAW_BLEND bk, int param);
-		_stdcall void Blend_Gray(void* SrcAddr, int SrcPitch, int SrcLineS, void* DstAddr, int DstPitch, int DstLineS, int w, int h, int param);
-		_stdcall void Blend_Mirr(void* SrcAddr, int SrcPitch, int SrcLineS, void* DstAddr, int DstPitch, int DstLineS, int w, int h, int param);
-		_stdcall void Blend_Shade(void* SrcAddr, int SrcPitch, int SrcLineS, void* DstAddr, int DstPitch, int DstLineS, int w, int h, int param);
 		_stdcall void SetShadeData(int w, int h, void* d);
 		_stdcall void MakeShadeData(xge::Surface* sf, char* sd);
 

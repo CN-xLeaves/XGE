@@ -11,7 +11,7 @@ Sub xui_class_Window_OnDraw(ele As xui.Window Ptr)
 			xge.shape.Rect(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->BackStyle.BorderColor)
 			xge.shape.RectFull(ele->DrawBuffer, 1, 1, ele->Layout.Rect.w - 2, WordHeight + 5, ele->BackStyle.BorderColor)
 			xge.shape.RectFull(ele->DrawBuffer, 1, WordHeight + 6, ele->Layout.Rect.w - 2, ele->Layout.Rect.h - 2, ele->BackStyle.FillColor)
-			xge.Text.DrawRectA(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, WordHeight + 6, ele->Text, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, 0, 0, ele->Layout.Rect.w - 1, WordHeight + 6, ele->Text, 0, ele->TextColor, ele->TextFont, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		EndIf
 	EndIf
 End Sub
@@ -39,6 +39,7 @@ Function xui_class_Window_OnMouseUp(ele As xui.Window Ptr, x As Integer, y As In
 		ele->private_DragMode = FALSE
 		ele->Layout.ScreenCoord.x = ele->Parent->Layout.ScreenCoord.x + ele->Layout.Rect.x
 		ele->Layout.ScreenCoord.y = ele->Parent->Layout.ScreenCoord.y + ele->Layout.Rect.y
+		ele->LayoutApply()
 		If ele->Event.OnMove Then
 			ele->Event.OnMove(ele)
 		EndIf
@@ -82,7 +83,7 @@ Namespace xui
 	
 	
 	' 创建窗口
-	Function CreateBaseWindow(x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As ZString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As ZString Ptr = NULL) As xui.Window Ptr XGE_EXPORT_ALL
+	Function CreateBaseWindow(x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, iLayoutMode As Integer = XUI_LAYOUT_COORD, sCaption As WString Ptr, TextColor As UInteger = &HFFFFFFFF, TextFont As UInteger = 1, sIdentifier As WString Ptr = NULL) As xui.Window Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Window Ptr = New xui.Window()
 		' 基础属性赋值
 		ele->InitElement(XUI_LAYOUT_RULER_COORD, x, y, w, h, iLayoutMode, sIdentifier)

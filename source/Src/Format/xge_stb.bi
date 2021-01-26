@@ -21,16 +21,18 @@ End Extern
 
 
 
-Function xLoad_stb(img As xge.Surface Ptr, addr As ZString Ptr, size As UInteger) As Integer
+Function xLoad_stb(img As xge.Surface Ptr, addr As WString Ptr, size As UInteger) As Integer
 	Dim As Integer w, h, c
 	Dim src As Any Ptr
 	' 载入数据
 	If size Then
 		' 从内存加载
-		src = stbi_load_from_memory(addr, size, @w, @h, @c, 4)
+		src = stbi_load_from_memory(Cast(Any Ptr, addr), size, @w, @h, @c, 4)
 	Else
 		' 从文件加载
-		src = stbi_load(addr, @w, @h, @c, 4)
+		Dim st As ZString Ptr = UnicodeToAsci(addr)
+		src = stbi_load(st, @w, @h, @c, 4)
+		DeAllocate(st)
 	EndIf
 	' 创建图像
 	If src Then

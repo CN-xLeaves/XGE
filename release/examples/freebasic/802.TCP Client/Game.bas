@@ -48,9 +48,9 @@ Function DlgProc(ByVal hWin As HWND, ByVal uMsg As UINT, ByVal wParam As WPARAM,
 			TextRecv.Bind(hWin, 1005)
 			BtnCreate.Bind(hWin, 1008)
 			LabelState.Bind(hWin, 1009)
-			tcp.Event.Recv = Cast(Any Ptr, @my_tcp_RecvEvent)
-			tcp.Event.Send = Cast(Any Ptr, @my_tcp_SendEvent)
-			tcp.Event.Disconn = Cast(Any Ptr, @my_tcp_CloseEvent)
+			tcp.Event.OnRecv = Cast(Any Ptr, @my_tcp_RecvEvent)
+			tcp.Event.OnSend = Cast(Any Ptr, @my_tcp_SendEvent)
+			tcp.Event.OnDisconn = Cast(Any Ptr, @my_tcp_CloseEvent)
 		Case WM_COMMAND
 			id=LoWord(wParam)
 			Event=HiWord(wParam)

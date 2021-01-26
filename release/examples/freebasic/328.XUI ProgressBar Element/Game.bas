@@ -54,7 +54,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 		Case XGE_MSG_MOUSE_EXIT			' mouse leave
 			
 		Case XGE_MSG_LOADRES			' load resources
-			xge.Text.LoadFont("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
+			xge.Text.LoadFontW("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 			ui = xui.GetRootElement()
 			
 			' Create progress bar elements
@@ -82,6 +82,6 @@ End Function
 
 
 
-xge.Init(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE - XUI ProgressBar Element")
+xge.InitW(640, 480, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, "XGE - XUI ProgressBar Element")
 xge.Scene.Start(@MainScene, 40)
 xge.Unit()

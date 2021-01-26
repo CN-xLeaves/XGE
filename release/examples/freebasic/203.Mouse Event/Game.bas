@@ -6,13 +6,13 @@
 
 ' Scene function
 Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
-	Static buf As ZString * 256
+	Static buf As WString * 256
 	Select Case msg
 		Case XGE_MSG_FRAME				' frame Logic processing
 			
 		Case XGE_MSG_DRAW				' draw
 			xge.Clear()
-			xge.Text.DrawRectA(NULL, 0, 0, 800, 600, @buf, 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(NULL, 0, 0, 800, 600, @buf, 0, &HFF00, 1, 0, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case XGE_MSG_MOUSE_MOVE			' mouse move
 			
 		Case XGE_MSG_MOUSE_DOWN			' mouse down
@@ -41,7 +41,7 @@ Function MainScene(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As In
 			
 		Case XGE_MSG_LOADRES			' load resources
 			' load font (This logic is executed only once, before the scene starts)
-			xge.Text.LoadFont("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
+			xge.Text.LoadFontW("..\..\..\res\font\xrf\simsun_16px_ucs2.xrf", 0)
 			buf = "while status : 0"
 		Case XGE_MSG_FREERES			' unload resources
 			' remove font (This logic is executed only once, at the end of the scene)
@@ -53,6 +53,6 @@ End Function
 
 
 
-xge.Init(800, 600, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, XGE_INIT_ALL, "XGE - Mouse Event")
+xge.InitW(800, 600, XGE_INIT_WINDOW Or XGE_INIT_ALPHA, "XGE - Mouse Event")
 xge.Scene.Start(@MainScene, 40)
 xge.Unit()

@@ -25,24 +25,24 @@ Sub xui_class_CheckBox_OnDraw(ele As xui.Button Ptr)
 			xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->HotStyle.BorderColor)
 			xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->HotStyle.BorderColor)
 			xge.shape.RectFull(ele->DrawBuffer, 4, 4, 16, 16, (ele->HotStyle.FillColor And &H00FFFFFF) Or &H40000000)
-			xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case 2
 			xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->PressStyle.BorderColor)
 			xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->PressStyle.BorderColor)
 			xge.shape.RectFull(ele->DrawBuffer, 4, 4, 16, 16, ele->PressStyle.FillColor)
-			xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' 处理选中的状态
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
 				xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->CheckStyle.FillColor)
 				xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->CheckStyle.FillColor)
 				xge.shape.RectFull(ele->DrawBuffer, 7, 7, 13, 13, ele->CheckStyle.BorderColor)
-				xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			Else
 				xge.shape.Rect(ele->DrawBuffer, 2, 2, 18, 18, ele->NormalStyle.BorderColor)
 				xge.shape.Rect(ele->DrawBuffer, 3, 3, 17, 17, ele->NormalStyle.BorderColor)
 				xge.shape.RectFull(ele->DrawBuffer, 4, 4, 16, 16, (ele->NormalStyle.FillColor And &H00FFFFFF) Or &H40000000)
-				xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select
 End Sub
@@ -54,24 +54,24 @@ Sub xui_class_RadioBox_OnDraw(ele As xui.Button Ptr)
 			xge.shape.CircFull(ele->DrawBuffer, 10, 10, 8, (ele->HotStyle.FillColor And &H00FFFFFF) Or &H40000000)
 			xge.shape.Circ(ele->DrawBuffer, 10, 10, 9, ele->HotStyle.BorderColor)
 			xge.shape.Circ(ele->DrawBuffer, 10, 10, 8, ele->HotStyle.BorderColor)
-			xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case 2
 			xge.shape.CircFull(ele->DrawBuffer, 10, 10, 8, ele->PressStyle.FillColor)
 			xge.shape.Circ(ele->DrawBuffer, 10, 10, 9, ele->PressStyle.BorderColor)
 			xge.shape.Circ(ele->DrawBuffer, 10, 10, 8, ele->PressStyle.BorderColor)
-			xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' 处理选中的状态
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
 				xge.shape.Circ(ele->DrawBuffer, 10, 10, 9, ele->CheckStyle.FillColor)
 				xge.shape.Circ(ele->DrawBuffer, 10, 10, 8, ele->CheckStyle.FillColor)
 				xge.shape.CircFull(ele->DrawBuffer, 10, 10, 4, ele->CheckStyle.BorderColor)
-				xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			Else
 				xge.shape.CircFull(ele->DrawBuffer, 10, 10, 8, (ele->NormalStyle.FillColor And &H00FFFFFF) Or &H40000000)
 				xge.shape.Circ(ele->DrawBuffer, 10, 10, 9, ele->NormalStyle.BorderColor)
 				xge.shape.Circ(ele->DrawBuffer, 10, 10, 8, ele->NormalStyle.BorderColor)
-				xge.Text.DrawRectA(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, 24 + ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - (24 + ele->TextOffset.x), 20, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, 0, XGE_ALIGN_LEFT Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select
 End Sub
@@ -80,15 +80,15 @@ End Sub
 Sub xui_class_HyperLink_OnDraw(ele As xui.Button Ptr)
 	Select Case ele->private_Status
 		Case 1
-			xge.Text.DrawRectA(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->HotStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case 2
-			xge.Text.DrawRectA(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+			xge.Text.DrawRectW(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->PressStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 		Case Else
 			' 处理选中的状态
 			If (ele->Mode <> 0) And (ele->Checked <> 0) Then
-				xge.Text.DrawRectA(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->CheckStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 			Else
-				xge.Text.DrawRectA(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
+				xge.Text.DrawRectW(ele->DrawBuffer, ele->TextOffset.x, ele->TextOffset.y, ele->Layout.Rect.w - 1, ele->Layout.Rect.h - 1, ele->Text, 0, ele->NormalStyle.TextColor, ele->TextFont, XGE_FONT_UNDERLINE, XGE_ALIGN_CENTER Or XGE_ALIGN_MIDDLE)
 			EndIf
 	End Select
 End Sub
@@ -260,7 +260,7 @@ Extern XGE_EXTERNCLASS
 Namespace xui
 	
 	' 创建按钮
-	Function CreateButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
+	Function CreateButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Button Ptr = New xui.Button()
 		' 基础属性赋值
 		ele->ClassID = XUI_CLASS_BUTTON
@@ -302,7 +302,7 @@ Namespace xui
 	End Function
 	
 	' 创建选择按钮
-	Function CreateCheckButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
+	Function CreateCheckButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Button Ptr = CreateButton(iLayoutRuler, x, y, w, h, sCaption, sIdentifier)
 		If ele Then
 			' 设置类参数
@@ -310,7 +310,7 @@ Namespace xui
 		EndIf
 		Return ele
 	End Function
-	Function CreateRadioButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
+	Function CreateRadioButton(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Button Ptr = CreateButton(iLayoutRuler, x, y, w, h, sCaption, sIdentifier)
 		If ele Then
 			' 设置类参数
@@ -320,7 +320,7 @@ Namespace xui
 	End Function
 	
 	' 创建复选框
-	Function CreateCheckBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
+	Function CreateCheckBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Button Ptr = CreateButton(iLayoutRuler, x, y, w, h, sCaption, sIdentifier)
 		If ele Then
 			' 设置类参数
@@ -331,7 +331,7 @@ Namespace xui
 	End Function
 	
 	' 创建单选框
-	Function CreateRadioBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
+	Function CreateRadioBox(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Button Ptr = CreateButton(iLayoutRuler, x, y, w, h, sCaption, sIdentifier)
 		If ele Then
 			' 设置类参数
@@ -342,7 +342,7 @@ Namespace xui
 	End Function
 	
 	' 创建超链接
-	Function CreateHyperLink(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As ZString Ptr, sIdentifier As ZString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
+	Function CreateHyperLink(iLayoutRuler As Integer = XUI_LAYOUT_RULER_PIXEL, x As Integer = 0, y As Integer = 0, w As Integer = 80, h As Integer = 24, sCaption As WString Ptr, sIdentifier As WString Ptr = NULL) As xui.Button Ptr XGE_EXPORT_ALL
 		Dim ele As xui.Button Ptr = CreateButton(iLayoutRuler, x, y, w, h, sCaption, sIdentifier)
 		If ele Then
 			' 设置类参数

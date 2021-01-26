@@ -46,8 +46,15 @@ Extern XGE_EXTERNMODULE
 	End Function
 	
 	' 改变窗口标题
-	Sub XGE_EXPORT_Aux_SetTitle(title As ZString Ptr) XGE_EXPORT_ALL
+	Sub XGE_EXPORT_Aux_SetTitleA(title As ZString Ptr) XGE_EXPORT_ALL
 		WindowTitle(*title)
+	End Sub
+	
+	' 改变窗口标题
+	Sub XGE_EXPORT_Aux_SetTitleW(title As WString Ptr) XGE_EXPORT_ALL
+		Dim st As ZString Ptr = UnicodeToAsci(title)
+		WindowTitle(*st)
+		DeAllocate(st)
 	End Sub
 	
 	' 设置可视区域
