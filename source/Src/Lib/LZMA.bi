@@ -120,7 +120,7 @@ Returns:
 	dictSize			字典大小
 	numThreads		线程数量
 '/
-Declare Function LzmaCompress StdCall(ByVal dest as ubyte ptr,ByRef destLen as size_t,ByVal src as const ubyte ptr,ByVal srcLen as size_t,ByVal outProps as ubyte ptr,_
+declare function LzmaCompress(ByVal dest as ubyte ptr,ByVal destLen as size_t Ptr,ByVal src as const ubyte ptr,ByVal srcLen as size_t,ByVal outProps as ubyte ptr,_
 								ByRef outPropsSize as size_t, _           ' outPropsSize must be = 5 
                 byval level as integer = -1,_             ' 0 <= level <= 9, default = 5 
                 byval dictSize as uinteger = 0, _         ' default = (1 << 24) 
@@ -151,50 +151,6 @@ Returns:
   SZ_ERROR_INPUT_EOF   - it needs more bytes in input buffer (src)
 '/
 
-Declare Function LzmaUncompress StdCall(ByVal dest as ubyte Ptr,ByRef destLen as size_t,ByVal src as const ubyte ptr,ByRef srcLen as size_t,ByVal props as const ubyte ptr,ByVal propsSize as size_t) as integer
+declare function LzmaUncompress(ByVal dest as ubyte Ptr,ByVal destLen as size_t Ptr,ByVal src as const ubyte ptr,ByVal srcLen as size_t Ptr,ByVal props as const ubyte ptr,ByVal propsSize as size_t) as integer
 
-End Extern
-
-
-
-Type Lzma_FileHdr Field = 1
-	FileSize As UInteger											' 压缩前文件大小
-	CompLevel As Byte													' 压缩等级
-	LzmaProp(0 To LZMA_PROPS_SIZE-1) As Byte	' Props
-End Type
-
-
-
-Function CompressBuffer_Lzma(ByVal InBuffer As Any Ptr,ByVal InBufferSize As Integer,ByRef OutBuffer As Any Ptr,ByVal Level As Integer) As Integer
-	Dim Hdr As Lzma_FileHdr Ptr = Allocate(SizeOf(Lzma_FileHdr) + InBufferSize)
-	Dim Dst As Any Ptr = Cast(Any Ptr,Hdr) + SizeOf(Lzma_FileHdr)
-	Dim DstSize As UInteger = InBufferSize
-	Hdr->FileSize = InBufferSize
-	Hdr->CompLevel = Level
-	Dim LzmaRet As Integer = LzmaCompress(Dst, DstSize, InBuffer, InBufferSize, @Hdr->LzmaProp(0), LZMA_PROPS_SIZE, Level)
-	If LzmaRet = SZ_OK Then
-		Hdr = ReAllocate(Hdr,SizeOf(Lzma_FileHdr) + DstSize)
-		OutBuffer = Hdr
-		Return SizeOf(Lzma_FileHdr) + DstSize
-	Else
-		DeAllocate(Hdr)
-		OutBuffer = Cast(Any Ptr,LzmaRet)
-		Return 0
-	EndIf
-End Function
-
-Function DeCompressBuffer_Lzma(ByVal InBuffer As Any Ptr,ByVal InBufferSize As Integer,ByRef OutBuffer As Any Ptr) As Integer
-	Dim Hdr As Lzma_FileHdr Ptr = InBuffer
-	Dim Scr As Any Ptr = InBuffer + SizeOf(Lzma_FileHdr)
-	Dim Dst As Any Ptr = Allocate(Hdr->FileSize)
-	Dim OutLen As UInteger = Hdr->FileSize
-	Dim LzmaRet As Integer = LzmaUncompress(Dst, OutLen, Scr, InBufferSize-SizeOf(Lzma_FileHdr), @Hdr->LzmaProp(0), LZMA_PROPS_SIZE)
-	If LzmaRet = SZ_OK Then
-		OutBuffer = Dst
-		Return OutLen
-	Else
-		DeAllocate(Dst)
-		OutBuffer = Cast(Any Ptr,LzmaRet)
-		Return 0
-	EndIf
-End Function
+end Extern

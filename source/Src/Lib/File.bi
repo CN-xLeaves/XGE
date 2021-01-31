@@ -162,6 +162,26 @@
 			CloseHandle(FileHdr)
 		End Function
 		
+		' 获取临时文件名 [使用%lld表示随机部分]
+		Function xFile_TempPathA(sPath As ZString Ptr) As ZString Ptr XGE_EXPORT_ALL
+			Dim pMemory As Any Ptr = AllocTempMemory(MAX_PATH)
+			Dim iRnd As Double = Rnd()
+			sprintf(pMemory, sPath, iRnd)
+			If xFile_ExistsA(pMemory) Then
+				Return xFile_TempPathA(sPath)
+			EndIf
+			Return pMemory
+		End Function
+		Function xFile_TempPathW(sPath As WString Ptr) As WString Ptr XGE_EXPORT_ALL
+			Dim pMemory As Any Ptr = AllocTempMemory(MAX_PATH * SizeOf(WString))
+			Dim iRnd As Double = Rnd()
+			swprintf(pMemory, sPath, iRnd)
+			If xFile_ExistsW(pMemory) Then
+				Return xFile_TempPathW(sPath)
+			EndIf
+			Return pMemory
+		End Function
+		
 		' 遍历文件
 		Function xFile_ScanA(RootDir As ZString Ptr, Filter As ZString Ptr, Attrib As Integer, AttribEx As Integer, Recursive As Integer, CallBack As Function(Path As ZString Ptr, FindData As WIN32_FIND_DATAA Ptr, param As Integer = 0) As Integer, param As Integer) As Integer XGE_EXPORT_ALL
 			Dim FindData As WIN32_FIND_DATAA

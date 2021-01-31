@@ -8,7 +8,8 @@
 
 EXTERN_C_BEGIN
 
-#define MY_STDAPI int MY_STD_CALL
+//#define MY_STDAPI int MY_STD_CALL
+#define MY_STDAPI int
 
 #define LZMA_PROPS_SIZE 5
 

@@ -13,6 +13,15 @@
 @copy /B /Y ".\release\library\xge.dll" ".\release\examples\freebasic\bin\xge.dll"
 @copy /B /Y ".\release\library\bass.dll" ".\release\examples\freebasic\bin\bass.dll"
 @echo;
+@copy /B /Y ".\release\library\xge.dll" ".\release\examples\freebasic\900.xPack5\xge.dll"
+@copy /B /Y ".\release\library\bass.dll" ".\release\examples\freebasic\900.xPack5\bass.dll"
+@echo;
+@copy /B /Y ".\release\library\xge.dll" ".\release\examples\freebasic\901.ResManage\xge.dll"
+@copy /B /Y ".\release\library\bass.dll" ".\release\examples\freebasic\901.ResManage\bass.dll"
+@echo;
+@copy /B /Y ".\release\library\xge.dll" ".\release\examples\freebasic\902.xBsmm\xge.dll"
+@copy /B /Y ".\release\library\bass.dll" ".\release\examples\freebasic\902.xBsmm\bass.dll"
+@echo;
 @copy /B /Y ".\release\library\libxge.dll.a" ".\release\templet\FreeBASIC\FbEdit\Lib\libxge.dll.a"
 @copy /B /Y ".\release\library\xge.dll" ".\release\templet\FreeBASIC\FbEdit\release\xge.dll"
 @copy /B /Y ".\release\library\bass.dll" ".\release\templet\FreeBASIC\FbEdit\release\bass.dll"

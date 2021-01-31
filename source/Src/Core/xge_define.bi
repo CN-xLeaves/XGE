@@ -153,4 +153,3 @@ Dim Shared xge_xui_VScroll_Triangle As xge.Surface Ptr
 Dim Shared xge_xui_HScroll_Triangle As xge.Surface Ptr
 
 
-

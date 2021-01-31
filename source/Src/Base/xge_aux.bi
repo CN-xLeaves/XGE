@@ -45,6 +45,15 @@ Extern XGE_EXTERNMODULE
 		Return c
 	End Function
 	
+	' 获取随机数
+	Function XGE_EXPORT_Aux_RandInt(min As UInteger = 0, max As UInteger = &HFFFFFFFF) As Integer XGE_EXPORT_ALL
+		Dim uint As UInteger = (Rnd * (max - min)) + min
+		Return Cast(Integer, uint)
+	End Function
+	Function XGE_EXPORT_Aux_RandDouble() As Double XGE_EXPORT_ALL
+		Return Rnd()
+	End Function
+	
 	' 改变窗口标题
 	Sub XGE_EXPORT_Aux_SetTitleA(title As ZString Ptr) XGE_EXPORT_ALL
 		WindowTitle(*title)

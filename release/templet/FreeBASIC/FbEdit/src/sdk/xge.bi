@@ -20,13 +20,14 @@
 	#Define XGE_EXTERNSTDEXT "Windows"				' 普通函数导出方式
 	
 	/' -------------------------- XUI元素ID最大字符数 -------------------------- '/
-	#Define XGE_XUI_IDSIZE		32
+	#Define XGE_XUI_IDSIZE			32
 	
 	
 	
 	/' -------------------------- 基础头文件 -------------------------- '/
 	#Include Once "Crt.bi"
 	#Include Once "Windows.bi"
+	#Include Once "win\shlwapi.bi"
 	#Include Once "Win\GdiPlus.bi"
 	
 	
@@ -384,6 +385,90 @@
 	
 	
 	
+	/' -------------------------- xPack相关定义 -------------------------- '/
+	
+	' 版本信息
+	#Define XPACK_VERSION			&H054B5058		' 文件头识别信息 [xpk5]
+	#Define XPACK_VERSION_COMP		&H05435058		' 文件头识别信息 [xpc5] (压缩了LDB数据段的文件包)
+	
+	' 默认压缩算法
+	#Define XPACK_COMPRESS_NULL		0				' 不使用压缩算法
+	#Define XPACK_COMPRESS_LZ4		1				' LZ4  压缩算法
+	#Define XPACK_COMPRESS_LZMA		2				' LZMA 压缩算法
+	
+	' 文件类型
+	#Define XPACK_TYPE_BINARY		0				' 二进制文件
+	#Define XPACK_TYPE_TEXT			1				' 文本文件
+	#Define XPACK_TYPE_IMAGE		2				' 图像文件
+	#Define XPACK_TYPE_SOUND		3				' 声音文件
+	#Define XPACK_TYPE_FONT			4				' 字体文件
+	#Define XPACK_TYPE_SCRIPT		5				' 脚本文件
+	#Define XPACK_TYPE_XTABLE		6				' xTable 数据库文件
+	#Define XPACK_TYPE_ANIMAT		7				' 动画文件
+	
+	' 文件标记
+	#Define XPACK_FILEFLAG_CUSE		1				' 常用文件 [暂无实际意义]
+	
+	' 错误ID
+	#Define XPACK_ERROR_FILEOPEN	1				' 无法打开文件
+	#Define XPACK_ERROR_READONLY	2				' 只读模式
+	#Define XPACK_ERROR_FILEXIST	3				' 文件不存在
+	#Define XPACK_ERROR_PACKOPEN	4				' 没有打开文件包
+	#Define XPACK_ERROR_MEMALLOC	5				' 内存分配错误
+	#Define XPACK_ERROR_VERERROR	6				' 文件包版本不兼容
+	#Define XPACK_ERROR_DECOMPER	7				' 解压缩数据失败
+	
+	' 文件头 [24byte]
+	Type xPack_HeadInfo Field = 1
+		PackVer As UInteger							' 标志头 [xpk5、xpc5]
+		FileCount As UInteger						' 文件数量
+		LDB_Addr As UInteger						' 文件列表段偏移
+		LDB_Size As UInteger						' 文件列表段长度
+		LDB_Hash As Integer							' 文件列表段HASH值
+		PackExtSize As UShort						' 文件包附加数据大小
+		FileExtSize As UShort						' 文件信息附加数据大小
+	End Type
+	
+	' 文件信息基础结构 [24byte]
+	Type xPack_FileInfo Field = 1
+		FileAddr As UInteger						' 文件位置
+		DataSize As UInteger						' 文件数据大小
+		FileSize As UInteger						' 文件实际大小
+		FileHash As Integer							' 文件HASH值
+		FileIndex As UInteger						' 文件编号
+		Compress As UByte							' 文件使用的压缩算法
+		FileType As UByte							' 文件类型 [0=binary、1=Text、2=Image、3=Sound、4=Font、5=Script、6=xTable、7=Animat]
+		FileFlag As UShort							' 文件位标记
+	End Type
+	
+	
+	
+	/' -------------------------- ResManage 相关定义 -------------------------- '/
+	
+	' 资源索引 [20byte]
+	Type ResManage_Item Field = 1
+		ResIndex As UInteger						' 资源索引
+		ResPack As Any Ptr							' 文件包对象
+		ResPos As UInteger							' 文件在文件包对象的数据位置 (是数据位置不是索引)
+		Union
+			AddOrder As ULongInt					' 添加顺序 (用于去重)
+			Type
+				ObjectCache As Any Ptr				' 对象缓存
+				RefCount As UShort					' 引用计数
+				FileType As UByte					' 文件类型
+				LoadType As UByte					' 载入类型
+			End Type
+		End Union
+	End Type
+	
+	' 区间映射表
+	Type ResManage_RangeMap
+		ResIndex As UInteger
+		IndexPos As UInteger
+	End Type
+	
+	
+	
 	/' -------------------------- 数据类型定义 -------------------------- '/
 	Type XGE_SCENE_PROC As Function(msg As Integer, param As Integer, eve As XGE_EVENT Ptr) As Integer
 	Type XGE_EVENT_PROC As Sub(eve As XGE_EVENT Ptr)
@@ -463,6 +548,9 @@
 			' 删除成员
 			Declare Function DeleteStruct(iPos As UInteger, iCount As UInteger = 1) As Integer
 			
+			' 批量删除成员
+			Declare Sub DeleteStructs(iPosArray As UInteger Ptr, iCount As UInteger, bSort As Integer = FALSE)
+			
 			' 移动成员
 			Declare Function SwapStruct(iPosA As UInteger, iPosB As UInteger) As Integer
 			
@@ -520,6 +608,67 @@
 			' 释放内存
 			Declare Sub FreeMemory()
 			
+		End Type
+		
+		
+		
+		/' -------------------------- xPack 5.0 文件包系统 -------------------------- '/
+		Type xPack
+			
+			' 文件头信息
+			HeadInfo As xPack_HeadInfo Ptr
+			
+			' 最后一次错误ID
+			LastError As Integer
+			
+			' 构造和析构
+			Declare Constructor()
+			Declare Constructor(sFile As ZString Ptr, bReadOnly As Integer = FALSE)
+			Declare Constructor(sFile As WString Ptr, bReadOnly As Integer = FALSE)
+			Declare Destructor()
+			
+			' 打开文件包
+			Declare Function Open(sFile As ZString Ptr, bReadOnly As Integer = FALSE) As Integer
+			Declare Function Open(sFile As WString Ptr, bReadOnly As Integer = FALSE) As Integer
+			
+			' 保存文件包
+			Declare Sub Save()
+			
+			' 关闭文件包
+			Declare Sub Close()
+			
+			' 获取文件数量
+			Declare Function Count() As UInteger
+			
+			' 添加文件
+			Declare Function AppendFile(sFile As ZString Ptr, iIndex As UInteger, iComp As Integer = XPACK_COMPRESS_LZ4) As Any Ptr
+			Declare Function AppendFile(sFile As WString Ptr, iIndex As UInteger, iComp As Integer = XPACK_COMPRESS_LZ4) As Any Ptr
+			Declare Function AppendMemory(pMemory As Any Ptr, iSize As UInteger, iIndex As UInteger, iComp As Integer = XPACK_COMPRESS_LZ4) As Any Ptr
+			
+			' 删除文件
+			Declare Sub RemoveFile(iIndex As UInteger)
+			
+			' 解压文件
+			Declare Function UnPackFile(iIndex As UInteger, sFile As ZString Ptr) As Integer
+			Declare Function UnPackFile(iIndex As UInteger, sFile As WString Ptr) As Integer
+			Declare Function UnPackMemory(iIndex As UInteger, pMemory As Any Ptr Ptr) As Any Ptr
+			
+			' 获取文件信息
+			Declare Function GetFileInfo(iIndex As UInteger) As Any Ptr
+			
+			' 获取包扩展数据结构体指着
+			Declare Function GetPackExtData() As Any Ptr
+			
+			' 内部数据
+			FileHdr As HANDLE			' 文件句柄
+			LDB As xBsmm				' 文件列表
+			OnlyRead As Integer			' 只读模式
+			
+			' 内部函数
+			Declare Function IndexToPos(iIndex As UInteger) As UInteger
+			Declare Sub Private_RemoveFile(iPos As UInteger)
+			Declare Sub Private_AppendMemory(pMemory As Any Ptr, iSize As UInteger, iIndex As UInteger, FileInfo As xPack_FileInfo Ptr, iComp As Integer = XPACK_COMPRESS_LZ4)
+			Declare Function Private_UnPackMemory(FileInfo As xPack_FileInfo Ptr, pMemory As Any Ptr) As Integer
 		End Type
 		
 		
@@ -716,6 +865,57 @@
 			End Type
 			
 			
+			/' -------------------------- 资源管理系统 -------------------------- '/
+			Type ResManage
+				PackList As xBsmm
+				IndexList As xBsmm
+				RangeList As xBsmm
+				IndexMin As UInteger
+				IndexMax As UInteger
+				
+				' 构造 [空]
+				Declare Constructor()
+				
+				' 析构
+				Declare Destructor()
+				
+				' 载入文件包
+				Declare Function AddPack(sPath As ZString Ptr) As UInteger
+				Declare Function AddPack(sPath As WString Ptr) As UInteger
+				
+				' 释放文件包
+				Declare Sub FreePack(iPos As UInteger)
+				
+				' 创建索引
+				Declare Sub CreateIndex()
+				
+				' 清空索引
+				Declare Sub ClearIndex()
+				
+				' 根据索引获取信息位置
+				Declare Function IndexToPos(index As UInteger) As UInteger
+				Declare Function IndexToItem(index As UInteger) As ResManage_Item Ptr
+				
+				' 载入图片
+				Declare Function LoadPicture(index As UInteger) As xge.Surface Ptr
+				
+				' 载入音乐
+				Declare Function LoadMusic(index As UInteger, flag As Integer = 0) As xge.Sound Ptr
+				Declare Function LoadSample(index As UInteger, flag As Integer = 0) As xge.Sound Ptr
+				
+				' 载入字体 (通过文本模块释放)
+				Declare Function LoadFont(index As UInteger) As UInteger
+				
+				' 载入任意数据
+				Declare Function LoadBinary(index As UInteger) As Any Ptr
+				
+				' 释放资源
+				Declare Sub FreeAll()
+				Declare Sub FreeRes(index As UInteger)
+				
+			End Type
+			
+			
 			/' -------------------------- 字体驱动结构体 -------------------------- '/
 			Type FontDriver
 				
@@ -839,6 +1039,8 @@
 				Declare Function ScreenShot() As xge.Surface Ptr
 				Declare Function GetPixel(sf As xge.Surface Ptr, x As Integer, y As Integer) As UInteger
 				Declare Function RGB2BGR(c As UInteger) As UInteger
+				Declare Function RandInt(min As UInteger = 0, max As UInteger = &HFFFFFFFF) As Integer
+				Declare Function RandDouble() As Double
 				Declare Sub SetTitleA(title As ZString Ptr)
 				Declare Sub SetTitleW(title As WString Ptr)
 				Declare Sub SetView(x1 As Integer, y1 As Integer, x2 As Integer, y2 As Integer, c As Integer, f As Integer)
@@ -1594,6 +1796,12 @@
 		Declare Sub MakeShadeData(sf As xge.Surface Ptr, sd As UByte Ptr)
 		
 		
+		/' -------------------------- 临时内存管理 -------------------------- '/
+		Declare Function AllocTempMemory(size As UInteger) As Any Ptr
+		Declare Sub AddTempMemory(pMemory As Any Ptr)
+		Declare Sub FreeTempMemory()
+		
+		
 		/' -------------------------- 字符集转换库 -------------------------- '/
 		Declare Function AsciToUnicode(ZStrPtr As ZString Ptr, ZStrLen As UInteger = 0) As WString Ptr
 		Declare Function UnicodeToAsci(WStrPtr As WString Ptr, WStrLen As UInteger = 0) As ZString Ptr
@@ -1633,6 +1841,8 @@
 		Declare Function xFile_hCut(FileHdr As HANDLE, FileSize As UInteger) As Integer
 		Declare Function xFile_CutA(FilePath As ZString Ptr, FileSize As UInteger) As Integer
 		Declare Function xFile_CutW(FilePath As WString Ptr, FileSize As UInteger) As Integer
+		Declare Function xFile_TempPathA(sPath As ZString Ptr) As ZString Ptr
+		Declare Function xFile_TempPathW(sPath As WString Ptr) As WString Ptr
 		Declare Function xFile_ScanA(RootDir As ZString Ptr, Filter As ZString Ptr, Attrib As Integer, AttribEx As Integer, Recursive As Integer, CallBack As Function(Path As ZString Ptr, FindData As WIN32_FIND_DATAA Ptr, param As Integer) As Integer, param As Integer = 0) As Integer
 		Declare Function xFile_ScanW(RootDir As WString Ptr, Filter As WString Ptr, Attrib As Integer, AttribEx As Integer, Recursive As Integer, CallBack As Function(Path As WString Ptr, FindData As WIN32_FIND_DATAW Ptr, param As Integer) As Integer, param As Integer = 0) As Integer
 		
@@ -1651,6 +1861,13 @@
 		Declare Function xClip_SetTextW(Text As WString Ptr, Size As UInteger = 0) As Integer
 		Declare Function xClip_GetTextA() As ZString Ptr
 		Declare Function xClip_SetTextA(Text As ZString Ptr, Size As UInteger = 0) As Integer
+		
+		
+		/' -------------------------- xPack 5.0 函数 -------------------------- '/
+		Declare Function xPack_CreateA(sFile As ZString Ptr, iPackExt As UShort = 0, iFileExt As UShort = 0) As UInteger
+		Declare Function xPack_CreateW(sFile As WString Ptr, iPackExt As UShort = 0, iFileExt As UShort = 0) As UInteger
+		Declare Function xPack_ReBuildA(sFile As ZString Ptr) As ZString Ptr
+		Declare Function xPack_ReBuildW(sFile As WString Ptr) As WString Ptr
 	End Extern
 	
 	
@@ -1665,6 +1882,7 @@
 		#Define xFile_Read				xFile_ReadW
 		#Define xFile_Size				xFile_SizeW
 		#Define xFile_Cut				xFile_CutW
+		#Define xFile_TempPath			xFile_TempPathW
 		#Define xFile_Scan				xFile_ScanW
 		
 		#Define xIni_GetStr				xIni_GetStrW
@@ -1673,6 +1891,9 @@
 		
 		#Define xClip_GetText			xClip_GetTextW
 		#Define xClip_SetText			xClip_SetTextW
+		
+		#Define xPack_Create			xPack_CreateW
+		#Define xPack_ReBuild			xPack_ReBuildW
 		
 	#Else
 		
@@ -1683,6 +1904,7 @@
 		#Define xFile_Read				xFile_ReadA
 		#Define xFile_Size				xFile_SizeA
 		#Define xFile_Cut				xFile_CutA
+		#Define xFile_TempPath			xFile_TempPathA
 		#Define xFile_Scan				xFile_ScanA
 		
 		#Define xIni_GetStr				xIni_GetStrA
@@ -1691,6 +1913,9 @@
 		
 		#Define xClip_GetText			xClip_GetTextA
 		#Define xClip_SetText			xClip_SetTextA
+		
+		#Define xPack_Create			xPack_CreateA
+		#Define xPack_ReBuild			xPack_ReBuildA
 		
 	#EndIf
 	

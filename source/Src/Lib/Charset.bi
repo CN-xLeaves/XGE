@@ -9,7 +9,6 @@
 
 #Ifndef xywh_library_char
 	#Define xywh_library_char
-	Dim Shared xywh_library_auto_memory As Any Ptr
 	
 	
 	
@@ -60,46 +59,46 @@
 		
 		
 		
-		Function A2W(AStr As ZString Ptr,ALen As UInteger=0) As WString Ptr XGE_EXPORT_LIB
-			DeAllocate(xywh_library_auto_memory)
-			xywh_library_auto_memory = AsciToUnicode(AStr,ALen)
-			Return xywh_library_auto_memory
+		Function A2W(AStr As ZString Ptr, ALen As UInteger = 0) As WString Ptr XGE_EXPORT_LIB
+			Dim pMemory As Any Ptr = AsciToUnicode(AStr, ALen)
+			AddTempMemory(pMemory)
+			Return pMemory
 		End Function
 		
-		Function W2A(UStr As WString Ptr,ULen As UInteger=0) As ZString Ptr XGE_EXPORT_LIB
-			DeAllocate(xywh_library_auto_memory)
-			xywh_library_auto_memory = UnicodeToAsci(UStr,ULen)
-			Return xywh_library_auto_memory
+		Function W2A(UStr As WString Ptr, ULen As UInteger = 0) As ZString Ptr XGE_EXPORT_LIB
+			Dim pMemory As Any Ptr = UnicodeToAsci(UStr, ULen)
+			AddTempMemory(pMemory)
+			Return pMemory
 		End Function
 		
-		Function W2U(UStr As WString Ptr,ULen As UInteger=0) As ZString Ptr XGE_EXPORT_LIB
-			DeAllocate(xywh_library_auto_memory)
-			xywh_library_auto_memory = UnicodeToUTF8(UStr,ULen)
-			Return xywh_library_auto_memory
+		Function W2U(UStr As WString Ptr, ULen As UInteger = 0) As ZString Ptr XGE_EXPORT_LIB
+			Dim pMemory As Any Ptr = UnicodeToUTF8(UStr, ULen)
+			AddTempMemory(pMemory)
+			Return pMemory
 		End Function
 		
-		Function U2W(UStr As ZString Ptr,ULen As UInteger=0) As WString Ptr XGE_EXPORT_LIB
-			DeAllocate(xywh_library_auto_memory)
-			xywh_library_auto_memory = UTF8ToUnicode(UStr,ULen)
-			Return xywh_library_auto_memory
+		Function U2W(UStr As ZString Ptr, ULen As UInteger = 0) As WString Ptr XGE_EXPORT_LIB
+			Dim pMemory As Any Ptr = UTF8ToUnicode(UStr, ULen)
+			AddTempMemory(pMemory)
+			Return pMemory
 		End Function
 		
-		Function A2U(ZStr As ZString Ptr,ZLen As UInteger=0) As ZString Ptr XGE_EXPORT_LIB
-			DeAllocate(xywh_library_auto_memory)
+		Function A2U(ZStr As ZString Ptr, ZLen As UInteger = 0) As ZString Ptr XGE_EXPORT_LIB
 			Dim TempPtr As Any Ptr
 			TempPtr = AsciToUnicode(ZStr,ZLen)
-			xywh_library_auto_memory = UnicodeToUTF8(TempPtr,0)
+			Dim pMemory As Any Ptr = UnicodeToUTF8(TempPtr,0)
 			DeAllocate(TempPtr)
-			Return xywh_library_auto_memory
+			AddTempMemory(pMemory)
+			Return pMemory
 		End Function
 		
-		Function U2A(UStr As ZString Ptr,ULen As UInteger=0) As ZString Ptr XGE_EXPORT_LIB
-			DeAllocate(xywh_library_auto_memory)
+		Function U2A(UStr As ZString Ptr, ULen As UInteger = 0) As ZString Ptr XGE_EXPORT_LIB
 			Dim TempPtr As Any Ptr
 			TempPtr = UTF8ToUnicode(UStr,ULen)
-			xywh_library_auto_memory = UnicodeToAsci(TempPtr,0)
+			Dim pMemory As Any Ptr = UnicodeToAsci(TempPtr,0)
 			DeAllocate(TempPtr)
-			Return xywh_library_auto_memory
+			AddTempMemory(pMemory)
+			Return pMemory
 		End Function
 	End Extern
 #EndIf

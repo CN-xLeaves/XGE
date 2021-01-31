@@ -9,14 +9,14 @@ Dim Shared ModuleList As xGui.xComboBox
 Function ScanFile(Path As ZString Ptr, FindData As WIN32_FIND_DATA Ptr, param As Integer = 0) As Integer
 	Dim ModulePath As ZString * MAX_PATH = *Path & FindData->cFileName & "\"
 	Dim ModuleFile As ZString * MAX_PATH = *Path & FindData->cFileName & "\moudle.ini"
-	If xFile.Exists(@ModuleFile) Then
+	If xFile_Exists(@ModuleFile) Then
 		Dim idx As UInteger = mm.AppendStruct()
 		Dim Info As ModuleInfo Ptr = mm.GetPtrStruct(idx)
 		If Info Then
 			Info->ModulePath = ModulePath
 			Info->ModuleFile = ModuleFile
 			Info->ModuleName = FindData->cFileName
-			Info->ModuleTitle = *xIni.GetStr(ModuleFile, "option", "Title")
+			Info->ModuleTitle = *xIni_GetStr(ModuleFile, "option", "Title")
 		EndIf
 	EndIf
 	Return 0
@@ -30,8 +30,8 @@ Function GameLoaderProc(ByVal hWin As HWND, ByVal uMsg As UINT, ByVal wParam As 
 	Select Case uMsg
 		Case WM_INITDIALOG
 			ModuleList.Bind(hWin,1001)
-			xFile.Scan(ExePath & "\Moudle\", "*", 0, XFILE_RULE_FloderOnly Or XFILE_RULE_PointFloder, FALSE, @ScanFile)
-			Dim CurModule As ZString Ptr = xIni.GetStr(ExePath & "\setup.ini", "option", "Module")
+			xFile_Scan(ExePath & "\Moudle\", "*", 0, XFILE_RULE_FloderOnly Or XFILE_RULE_PointFloder, FALSE, @ScanFile)
+			Dim CurModule As ZString Ptr = xIni_GetStr(ExePath & "\setup.ini", "option", "Module")
 			Dim Info As ModuleInfo Ptr
 			For i As Integer = 1 To mm.StructCount
 				Info = mm.GetPtrStruct(i)
@@ -53,7 +53,7 @@ Function GameLoaderProc(ByVal hWin As HWND, ByVal uMsg As UINT, ByVal wParam As 
 					Case 1002		' Start Game
 						Dim idx As Integer = ModuleList.ItemData(ModuleList.ListIndex)
 						Dim Info As ModuleInfo Ptr = mm.GetPtrStruct(idx)
-						xIni.SetStr(ExePath & "\setup.ini", "option", "Module", @Info->ModuleName)
+						xIni_SetStr(ExePath & "\setup.ini", "option", "Module", @Info->ModuleName)
 						xShell("""" & ExePath & "\Game.exe""",SW_SHOW)
 						EndDialog(hWin, 0)
 					Case 1003		' Module Edit

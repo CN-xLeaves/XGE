@@ -1,16 +1,16 @@
 
 
 
-' 资源目录
-Dim Shared ResPath As ZString * MAX_PATH
-
-
-
 ' 全局配置
 Dim Shared ViewHP As Integer
 Dim Shared ViewLevel As Integer
 Dim Shared ViewHP_Value As Integer
 Dim Shared CheatMode As Integer
+
+
+
+' 资源管理器
+Dim Shared Res As xge.ResManage
 
 
 

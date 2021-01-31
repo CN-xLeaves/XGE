@@ -9,23 +9,27 @@
 
 ' 加载全局资源
 Function LoadRes() As Integer
-	ResPath = ExePath() & "\Res\"
-	img_Logo = New xge.Surface(ResPath & "Logo.bmp", 0)
-	img_MapTile = New xge.Surface(ResPath & "map.bmp", 0)
-	img_Boom = New xge.Surface(ResPath & "boom.bmp", 0)
-	img_Tank1 = New xge.Surface(ResPath & "tank01.bmp", 0)
-	img_Tank2 = New xge.Surface(ResPath & "tank02.bmp", 0)
-	img_Tank3 = New xge.Surface(ResPath & "tank03.bmp", 0)
-	img_Tank4 = New xge.Surface(ResPath & "tank04.bmp", 0)
-	img_BackImage = New xge.Surface(ResPath & Module.BackImage, 0)
-	img_PassImage = New xge.Surface(ResPath & "Pass.bmp", 0)
-	img_EndImage = New xge.Surface(ResPath & "End.bmp", 0)
+	Res.AddPack(ExePath() & "\res.xpk")
+	Res.CreateIndex()
 	
-	se_Boom = New xge.Sound(XGE_SOUND_SAMPLE, 0, ResPath & "boom.ogg", 0)
-	se_Fire = New xge.Sound(XGE_SOUND_SAMPLE, 0, ResPath & "fire.ogg", 0)
+	Res.LoadFont(1)
+	Res.LoadFont(2)
 	
-	xge.Text.LoadFontA(ResPath & "simsun_12px_gb2312.xrf", 0)
-	xge.Text.LoadFontA(ResPath & "simsun_16px_gb2312.xrf", 0)
+	img_Logo = Res.LoadPicture(100)
+	img_BackImage = Res.LoadPicture(101)
+	img_PassImage = Res.LoadPicture(102)
+	img_EndImage = Res.LoadPicture(103)
+	
+	img_Tank1 = Res.LoadPicture(200)
+	img_Tank2 = Res.LoadPicture(201)
+	img_Tank3 = Res.LoadPicture(202)
+	img_Tank4 = Res.LoadPicture(203)
+	
+	img_Boom = Res.LoadPicture(300)
+	img_MapTile = Res.LoadPicture(301)
+	
+	se_Fire = Res.LoadSample(400)
+	se_Boom = Res.LoadSample(401)
 	
 	' 载入设置
 	ViewHP = xIni_GetInt(ExePath & "\setup.ini", "option", "ViewHP")
@@ -40,20 +44,7 @@ End Function
 
 ' 释放全局资源
 Sub FreeRes()
-	Delete img_Logo
-	Delete img_MapTile
-	Delete img_Boom
-	Delete img_Tank1
-	Delete img_Tank2
-	Delete img_Tank3
-	Delete img_Tank4
-	Delete img_BackImage
-	Delete img_PassImage
-	Delete img_EndImage
-	
-	Delete se_Boom
-	Delete se_Fire
-	
+	Res.FreeAll()
 	xge.Text.RemoveFont(2)
 	xge.Text.RemoveFont(1)
 End Sub

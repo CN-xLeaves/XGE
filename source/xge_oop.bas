@@ -36,6 +36,11 @@
 
 
 
+' -------------------------- ResManage区间索引创建阈值
+#Define XGE_RM_RINDEXTV		256
+
+
+
 ' -------------------------- 函数导出开关
 #Define XGE_EXPORT_OBJ Export
 #Define XGE_EXPORT_SDK
@@ -82,6 +87,8 @@
 #Define XGE_EXPORT_Aux_ScreenShot		ScreenShot
 #Define XGE_EXPORT_Aux_GetPixel			GetPixel
 #Define XGE_EXPORT_Aux_RGB2BGR			RGB2BGR
+#Define XGE_EXPORT_Aux_RandInt			RandInt
+#Define XGE_EXPORT_Aux_RandDouble		RandDouble
 #Define XGE_EXPORT_Aux_SetTitleA		SetTitleA
 #Define XGE_EXPORT_Aux_SetTitleW		SetTitleW
 #Define XGE_EXPORT_Aux_SetView			SetView
@@ -143,9 +150,10 @@
 
 
 ' 基础 SDK 引用
+#Include "Src\Lib\AutoMemory.bi"
+#Include "Src\LIB\Charset.bi"
 #Include "Src\LIB\File.bi"
 #Include "Src\Lib\ini.bi"
-#Include "Src\LIB\Charset.bi"
 #Include "Src\Lib\ClipBoard.bi"
 #Include "Src\LIB\xStack.bi"
 #Include "Src\Lib\xBsmm.bi"
@@ -154,7 +162,7 @@
 #Include "Src\LIB\Iocp.bi"
 '#Include "Src\Lib\Split.bi"
 #Include "Src\Lib\Lz4.bi"
-'#Include "Src\Lib\LZMA.bi"
+#Include "Src\Lib\LZMA.bi"
 
 
 ' xywh Game Engine 引擎全局定义
@@ -179,6 +187,8 @@
 #Include "Src\Ext\xge_xSock_UDP.bi"
 '#Include "Src\Ext\xge_ddt.bi"
 '#Include "Src\Ext\xge_renderobj.bi"
+#Include "Src\Ext\xPack.bi"
+#Include "Src\Ext\xge_ResManage.bi"
 
 
 ' xywh Game Engine 界面库

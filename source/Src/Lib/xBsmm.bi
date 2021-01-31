@@ -8,6 +8,12 @@
 
 
 
+Function PosArraySortProc Cdecl (p1 As UInteger Ptr, p2 As UInteger Ptr) As Integer
+	Return *p1 - *p2
+End Function
+
+
+
 Extern XGE_EXTERNCLASS
 
 
@@ -80,6 +86,44 @@ Function xBsmm.DeleteStruct(iPos As UInteger, iCount As UInteger = 1) As Integer
 		EndIf
 	EndIf
 End Function
+
+' 批量删除成员 (不能重复，没有排序的话必须设置bSort)
+Sub xBsmm.DeleteStructs(iPosArray As UInteger Ptr, iCount As UInteger, bSort As Integer = FALSE) XGE_EXPORT_OBJ
+	If iCount Then
+		' 排序便于按照顺序依次删除
+		If bSort Then
+			qsort(iPosArray, iCount, SizeOf(UInteger), Cast(Any Ptr, @PosArraySortProc))
+		EndIf
+		' 开始删除
+		Dim DelCount As UInteger = 0
+		For i As UInteger = 0 To (iCount - 2)
+			If iPosArray[i] > 0 Then
+				' 编号超过后面的数据不处理
+				If iPosArray[i] > StructCount Then
+					Exit For
+				EndIf
+				' 移动数据
+				DelCount += 1
+				Dim dattop As Any Ptr = StructMemory + (iPosArray[i] * StructLenght)
+				Dim datlen As UInteger
+				datlen = (iPosArray[i + 1] - iPosArray[i] - 1) * StructLenght
+				If datlen Then
+					memmove(dattop - (DelCount * StructLenght), dattop, datlen)
+				EndIf
+			EndIf
+		Next
+		' 补充处理
+		If iPosArray[iCount-1] < StructCount Then
+			DelCount += 1
+			Dim dattop As Any Ptr = StructMemory + (iPosArray[iCount-1] * StructLenght)
+			Dim datlen As UInteger = (StructCount - iPosArray[iCount-1]) * StructLenght
+			memmove(dattop - (DelCount * StructLenght), dattop, datlen)
+		ElseIf iPosArray[iCount-1] = StructCount Then
+			DelCount += 1
+		EndIf
+		StructCount -= DelCount
+	EndIf
+End Sub
 
 ' 移动成员
 Function xBsmm.SwapStruct(iPosA As UInteger, iPosB As UInteger) As Integer XGE_EXPORT_OBJ

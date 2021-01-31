@@ -19,11 +19,11 @@ Dim Shared SelMapObj As Tank_Map
 
 
 Sub LoadModuleInfo()
-	Con_Mod_GameName.Text = xIni.GetStr(@EditModule->ModuleFile, "option", "Title")
-	Con_Mod_InitLevel.Text = Str(xIni.GetInt(@EditModule->ModuleFile, "option", "StartLevel"))
-	Con_Mod_ExpMul.Text = Str(xIni.GetInt(@EditModule->ModuleFile, "option", "ExpMul"))
-	Con_Mod_TankP1.Index = xIni.GetInt(@EditModule->ModuleFile, "option", "TankModel")
-	MapCount = xIni.GetInt(@EditModule->ModuleFile, "option", "MapCount")
+	Con_Mod_GameName.Text = xIni_GetStr(@EditModule->ModuleFile, "option", "Title")
+	Con_Mod_InitLevel.Text = Str(xIni_GetInt(@EditModule->ModuleFile, "option", "StartLevel"))
+	Con_Mod_ExpMul.Text = Str(xIni_GetInt(@EditModule->ModuleFile, "option", "ExpMul"))
+	Con_Mod_TankP1.Index = xIni_GetInt(@EditModule->ModuleFile, "option", "TankModel")
+	MapCount = xIni_GetInt(@EditModule->ModuleFile, "option", "MapCount")
 	Dim i As Integer
 	For i = 1 To MapCount
 		Con_MapList.AddItem(i & ".map")
@@ -33,11 +33,11 @@ End Sub
 
 
 Sub SaveModuleInfo()
-	xIni.SetStr(@EditModule->ModuleFile, "option", "Title", Con_Mod_GameName.Text)
-	xIni.SetStr(@EditModule->ModuleFile, "option", "StartLevel", Con_Mod_InitLevel.Text)
-	xIni.SetStr(@EditModule->ModuleFile, "option", "ExpMul", Con_Mod_ExpMul.Text)
-	xIni.SetStr(@EditModule->ModuleFile, "option", "TankModel", Str(Con_Mod_TankP1.Index))
-	xIni.SetStr(@EditModule->ModuleFile, "option", "MapCount", Str(MapCount))
+	xIni_SetStr(@EditModule->ModuleFile, "option", "Title", Con_Mod_GameName.Text)
+	xIni_SetStr(@EditModule->ModuleFile, "option", "StartLevel", Con_Mod_InitLevel.Text)
+	xIni_SetStr(@EditModule->ModuleFile, "option", "ExpMul", Con_Mod_ExpMul.Text)
+	xIni_SetStr(@EditModule->ModuleFile, "option", "TankModel", Str(Con_Mod_TankP1.Index))
+	xIni_SetStr(@EditModule->ModuleFile, "option", "MapCount", Str(MapCount))
 	MessageBox(Con_MWindow.hWnd, "Module 信息保存完毕！", "Info :", MB_ICONINFORMATION)
 End Sub
 
@@ -88,7 +88,7 @@ Function ModuleEditProc(ByVal hWin As HWND, ByVal uMsg As UINT, ByVal wParam As 
 			If Event=LBN_SELCHANGE Then
 				Select Case id
 					Case 1121			' 读取地图信息
-						If xFile.Exists(EditModule->ModulePath & "\" & *Con_MapList.Text) = 0 Then
+						If xFile_Exists(EditModule->ModulePath & "\" & *Con_MapList.Text) = 0 Then
 							ResToFile(200, EditModule->ModulePath & "\" & *Con_MapList.Text)
 						EndIf
 						SelMapObj.Load(EditModule->ModulePath & "\" & *Con_MapList.Text)

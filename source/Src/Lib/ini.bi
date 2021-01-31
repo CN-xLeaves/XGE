@@ -8,7 +8,6 @@
 
 
 ' -------------------------- 其他数据
-Dim Shared xge_global_snull As ZString * 4 = !"\0\0\0"					' 空字符串
 
 
 
